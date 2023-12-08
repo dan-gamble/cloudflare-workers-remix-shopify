@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
-import { useActionData, useNavigation, useSubmit } from "@remix-run/react";
+import { useActionData, useLoaderData, useNavigation, useSubmit } from '@remix-run/react'
 import {
   Page,
   Layout,
@@ -14,11 +14,15 @@ import {
   Link,
   InlineStack,
 } from "@shopify/polaris";
+import { shops } from "~/utils/db/schema.server";
+import { eq } from 'drizzle-orm'
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
-  await context.shopify.authenticate.admin(request);
+  const { session } = await context.shopify.authenticate.admin(request);
 
-  return null;
+  return json(
+    await context.db.select().from(shops).where(eq(shops.shopDomain, session.shop))
+  );
 };
 
 export const action = async ({ context, request }: ActionFunctionArgs) => {

@@ -9,6 +9,11 @@ kv_namespaces = [
   { binding = "APP_TEMPLATE_REMIX_DEV", id = "8968cadbc0ed4b7c9e08f5dc5c4ec811" }
 ]
 
+[[d1_databases]]
+binding = "DB" # i.e. available in your Worker on env.DB
+database_name = "app-template-remix"
+database_id = "3334a842-d77a-4d9b-bf94-2d075db444b9"
+
 [site]
   bucket = "./public"
 

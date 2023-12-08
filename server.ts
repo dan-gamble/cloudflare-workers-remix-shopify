@@ -5,6 +5,7 @@ import * as build from '@remix-run/dev/server-build'
 import __STATIC_CONTENT_MANIFEST from '__STATIC_CONTENT_MANIFEST'
 import { createShopifyApp } from '~/utils/shopify.server'
 import type { Env } from './remix.env'
+import { createDb } from '~/utils/db/db.server'
 
 const MANIFEST = JSON.parse(__STATIC_CONTENT_MANIFEST)
 const handleRemixRequest = createRequestHandler(build, process.env.NODE_ENV)
@@ -40,7 +41,8 @@ export default {
       )
     } catch (error) {}
 
-    const shopify = createShopifyApp(env)
+    const db = createDb(env)
+    const shopify = createShopifyApp(env, db)
 
     // This sends a log to our queue
     // let log = {
@@ -53,6 +55,7 @@ export default {
     try {
       const loadContext: AppLoadContext = {
         env,
+        db,
         shopify,
       }
       return await handleRemixRequest(request, loadContext)

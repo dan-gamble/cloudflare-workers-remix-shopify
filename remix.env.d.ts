@@ -3,6 +3,7 @@
 /// <reference types="@cloudflare/workers-types" />
 
 import type { createShopifyApp } from '~/utils/shopify.server'
+import type { Database } from '~/utils/db/db.server'
 
 interface Env {
   __STATIC_CONTENT: Fetcher;
@@ -13,6 +14,7 @@ interface Env {
   SHOP_CUSTOM_DOMAIN?: string;
   APP_TEMPLATE_REMIX_DEV: KVNamespace;
   QUEUE: Queue
+  DB: D1Database
 }
 
 declare module '__STATIC_CONTENT_MANIFEST' {
@@ -22,6 +24,7 @@ declare module '__STATIC_CONTENT_MANIFEST' {
 
 interface LoadContext {
   env: Env
+  db: Database
   shopify: ReturnType<typeof createShopifyApp>
 }
 

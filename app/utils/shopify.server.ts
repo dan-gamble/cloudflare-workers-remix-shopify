@@ -9,10 +9,12 @@ import {
 } from '@shopify/shopify-app-remix'
 import { KVSessionStorage } from '@shopify/shopify-app-session-storage-kv'
 import type { Env } from '../../remix.env'
+import { Database } from '~/utils/db/db.server'
+import { shops } from './db/schema.server'
 
 // let shopify: ReturnType<typeof shopifyApp>
 
-export function createShopifyApp (env: Env) {
+export function createShopifyApp (env: Env, db: Database) {
   const shopify = shopifyApp({
     apiKey: env.SHOPIFY_API_KEY,
     apiSecretKey: env.SHOPIFY_API_SECRET || '',
@@ -34,8 +36,28 @@ export function createShopifyApp (env: Env) {
       },
     },
     hooks: {
-      afterAuth: async ({ session }) => {
+      afterAuth: async ({ admin, session }) => {
         shopify.registerWebhooks({ session })
+
+        const response = await admin.graphql(
+          `#query
+            query appId {
+              app {
+                id
+              }
+            }
+          `
+        )
+        // @ts-ignore
+        const { data: { app } } = await response.json()
+
+        await db
+          .insert(shops)
+          .values({
+            appId: app!.id,
+            shopDomain: session.shop,
+          })
+          .onConflictDoNothing()
       },
     },
     future: {
