@@ -1,0 +1,11 @@
+name = "remix"
+roles = ["backend", "frontend"]
+webhooks_path = "/webhooks"
+port = 8080
+
+[commands]
+dev = "npm run cf:dev"
+
+[hmr_server]
+http_paths = ["/ping"]
+port = 8082

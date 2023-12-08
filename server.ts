@@ -1,29 +1,29 @@
-import { getAssetFromKV } from "@cloudflare/kv-asset-handler";
-import type { AppLoadContext } from "@remix-run/cloudflare";
-import { createRequestHandler, logDevReady } from "@remix-run/cloudflare";
-import * as build from "@remix-run/dev/server-build";
-import __STATIC_CONTENT_MANIFEST from "__STATIC_CONTENT_MANIFEST";
+import { getAssetFromKV } from '@cloudflare/kv-asset-handler'
+import type { AppLoadContext } from '@remix-run/cloudflare'
+import { createRequestHandler, logDevReady } from '@remix-run/cloudflare'
+import * as build from '@remix-run/dev/server-build'
+import __STATIC_CONTENT_MANIFEST from '__STATIC_CONTENT_MANIFEST'
+import { createShopifyApp } from '~/utils/shopify.server'
+import type { Env } from './remix.env'
 
-const MANIFEST = JSON.parse(__STATIC_CONTENT_MANIFEST);
-const handleRemixRequest = createRequestHandler(build, process.env.NODE_ENV);
+const MANIFEST = JSON.parse(__STATIC_CONTENT_MANIFEST)
+const handleRemixRequest = createRequestHandler(build, process.env.NODE_ENV)
 
-if (process.env.NODE_ENV === "development") {
-  logDevReady(build);
+if (process.env.NODE_ENV === 'development') {
+  logDevReady(build)
 }
 
 export default {
-  async fetch(
+  async fetch (
     request: Request,
-    env: {
-      __STATIC_CONTENT: Fetcher;
-    },
-    ctx: ExecutionContext
+    env: Env,
+    ctx: ExecutionContext,
   ): Promise<Response> {
     try {
-      const url = new URL(request.url);
-      const ttl = url.pathname.startsWith("/build/")
+      const url = new URL(request.url)
+      const ttl = url.pathname.startsWith('/build/')
         ? 60 * 60 * 24 * 365 // 1 year
-        : 60 * 5; // 5 minutes
+        : 60 * 5 // 5 minutes
       return await getAssetFromKV(
         {
           request,
@@ -36,18 +36,34 @@ export default {
             browserTTL: ttl,
             edgeTTL: ttl,
           },
-        }
-      );
+        },
+      )
     } catch (error) {}
+
+    const shopify = createShopifyApp(env)
+
+    // This sends a log to our queue
+    // let log = {
+    //   url: request.url,
+    //   method: request.method,
+    //   headers: Object.fromEntries(request.headers),
+    // }
+    // await env.QUEUE.send(log)
 
     try {
       const loadContext: AppLoadContext = {
         env,
-      };
-      return await handleRemixRequest(request, loadContext);
+        shopify,
+      }
+      return await handleRemixRequest(request, loadContext)
     } catch (error) {
-      console.log(error);
-      return new Response("An unexpected error occurred", { status: 500 });
+      console.log(error)
+      return new Response('An unexpected error occurred', { status: 500 })
     }
   },
-};
+
+  async queue (batch: MessageBatch, env: Env) {
+    let messages = JSON.stringify(batch.messages)
+    console.log(`consumed from our queue: ${messages}`)
+  }
+}

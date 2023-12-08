@@ -5,8 +5,19 @@ main = "./build/index.js"
 # https://developers.cloudflare.com/workers/platform/compatibility-dates
 compatibility_date = "2023-04-20"
 
+kv_namespaces = [
+  { binding = "APP_TEMPLATE_REMIX_DEV", id = "8968cadbc0ed4b7c9e08f5dc5c4ec811" }
+]
+
 [site]
   bucket = "./public"
 
 [build]
   command = "npm run build"
+
+[[queues.producers]]
+queue = "app-template-remix-queue"
+binding = "QUEUE"
+
+[[queues.consumers]]
+queue = "app-template-remix-queue"

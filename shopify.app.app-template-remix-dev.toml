@@ -1,0 +1,29 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+name = "App Template - Remix (Dev)"
+client_id = "b14ef573974868defef46ffddd7343d3"
+application_url = "https://app-template-remix.beeayo.com"
+embedded = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "write_products"
+use_legacy_install_flow = true
+
+[auth]
+redirect_urls = [
+  "https://app-template-remix.beeayo.com/auth/callback",
+  "https://app-template-remix.beeayo.com/auth/shopify/callback",
+  "https://app-template-remix.beeayo.com/api/auth/callback",
+  "https://app-template-remix.beeayo.com/.shopify/graphiql/auth/callback"
+]
+
+[webhooks]
+api_version = "2023-10"
+
+[pos]
+embedded = false
+
+[build]
+automatically_update_urls_on_dev = false
+dev_store_url = "bao-checkout-2.myshopify.com"
