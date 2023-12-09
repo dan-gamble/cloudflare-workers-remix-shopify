@@ -12,22 +12,22 @@
 
 /** @type {import('@remix-run/dev').AppConfig} */
 export default {
-  ignoredRouteFiles: ["**/.*"],
-  server: "./server.ts",
-  serverConditions: ["workerd", "worker", "browser"],
+  ignoredRouteFiles: ['**/.*'],
+  server: './server.ts',
+  serverConditions: ['workerd', 'worker', 'browser'],
   serverDependenciesToBundle: [
     // bundle everything except the virtual module for the static content manifest provided by wrangler
-    /^(?!.*\b__STATIC_CONTENT_MANIFEST\b).*$/,
+    /^(?!.*\b__STATIC_CONTENT_MANIFEST\b).*$/
   ],
-  serverMainFields: ["browser", "module", "main"],
+  serverMainFields: ['browser', 'module', 'main'],
   serverMinify: true,
-  serverModuleFormat: "esm",
-  serverPlatform: "neutral",
+  serverModuleFormat: 'esm',
+  serverPlatform: 'neutral',
 
   dev: { port: process.env.HMR_SERVER_PORT || 8082 },
-  future: {},
+  future: {}
   // appDirectory: "app",
   // assetsBuildDirectory: "public/build",
   // publicPath: "/build/",
   // serverBuildPath: "build/index.js",
-};
+}

@@ -32,9 +32,7 @@
       "indexes": {
         "index_sessions_on_shop": {
           "name": "index_sessions_on_shop",
-          "columns": [
-            "shop_domain"
-          ],
+          "columns": ["shop_domain"],
           "isUnique": true
         }
       },

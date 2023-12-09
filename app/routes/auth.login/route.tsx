@@ -1,5 +1,9 @@
 import { useState } from 'react'
-import type { ActionFunctionArgs, LinksFunction, LoaderFunctionArgs } from '@remix-run/cloudflare'
+import type {
+  ActionFunctionArgs,
+  LinksFunction,
+  LoaderFunctionArgs,
+} from '@remix-run/cloudflare'
 import { json } from '@remix-run/cloudflare'
 import {
   AppProvider as PolarisAppProvider,
@@ -16,9 +20,11 @@ import polarisStyles from '@shopify/polaris/build/esm/styles.css'
 
 import { loginErrorMessage } from './error.server'
 
-export const links: LinksFunction = () => [{ rel: 'stylesheet', href: polarisStyles }]
+export const links: LinksFunction = () => [
+  { rel: 'stylesheet', href: polarisStyles },
+]
 
-export async function loader ({ context, request }: LoaderFunctionArgs) {
+export async function loader({ context, request }: LoaderFunctionArgs) {
   const errors = loginErrorMessage(await context.shopify.login(request))
 
   return json({
@@ -27,7 +33,7 @@ export async function loader ({ context, request }: LoaderFunctionArgs) {
   })
 }
 
-export async function action ({ context, request }: ActionFunctionArgs) {
+export async function action({ context, request }: ActionFunctionArgs) {
   const errors = loginErrorMessage(await context.shopify.login(request))
 
   return json({
@@ -35,7 +41,7 @@ export async function action ({ context, request }: ActionFunctionArgs) {
   })
 }
 
-export default function Auth () {
+export default function Auth() {
   const { polarisTranslations } = useLoaderData<typeof loader>()
   const loaderData = useLoaderData<typeof loader>()
   const actionData = useActionData<typeof action>()

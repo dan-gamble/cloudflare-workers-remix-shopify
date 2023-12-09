@@ -16,7 +16,7 @@ import { AppIdDocument } from '~/generated/graphql'
 
 // let shopify: ReturnType<typeof shopifyApp>
 
-export function createShopifyApp (env: Env, db: Database) {
+export function createShopifyApp(env: Env, db: Database) {
   const shopify = shopifyApp({
     apiKey: env.SHOPIFY_API_KEY,
     apiSecretKey: env.SHOPIFY_API_SECRET || '',
@@ -58,11 +58,9 @@ export function createShopifyApp (env: Env, db: Database) {
       v3_webhookAdminContext: true,
       v3_authenticatePublic: true,
     },
-    ...(
-      env.SHOP_CUSTOM_DOMAIN
-        ? { customShopDomains: [env.SHOP_CUSTOM_DOMAIN] }
-        : {}
-    ),
+    ...(env.SHOP_CUSTOM_DOMAIN
+      ? { customShopDomains: [env.SHOP_CUSTOM_DOMAIN] }
+      : {}),
   })
 
   return shopify

@@ -11,20 +11,26 @@ import type * as React from 'react'
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      ['ui-title-bar']: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
-      ['ui-nav-menu']: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+      ['ui-title-bar']: React.DetailedHTMLProps<
+        React.HTMLAttributes<HTMLElement>,
+        HTMLElement
+      >
+      ['ui-nav-menu']: React.DetailedHTMLProps<
+        React.HTMLAttributes<HTMLElement>,
+        HTMLElement
+      >
     }
   }
 }
 
 interface Env {
-  __STATIC_CONTENT: Fetcher;
-  SHOPIFY_API_KEY: string;
-  SHOPIFY_API_SECRET: string;
-  SCOPES: string;
-  SHOPIFY_APP_URL: string;
-  SHOP_CUSTOM_DOMAIN?: string;
-  KV: KVNamespace;
+  __STATIC_CONTENT: Fetcher
+  SHOPIFY_API_KEY: string
+  SHOPIFY_API_SECRET: string
+  SCOPES: string
+  SHOPIFY_APP_URL: string
+  SHOP_CUSTOM_DOMAIN?: string
+  KV: KVNamespace
   QUEUE: Queue
   DB: D1Database
 }

@@ -4,13 +4,13 @@ export type Timings = Record<
   string,
   Array<
     { desc?: string } & (
-    | { time: number; start?: never }
-    | { time?: never; start: number }
+      | { time: number; start?: never }
+      | { time?: never; start: number }
     )
   >
 >
 
-export function makeTimings (type: string, desc?: string) {
+export function makeTimings(type: string, desc?: string) {
   const timings: Timings = {
     [type]: [{ desc, start: performance.now() }],
   }
@@ -24,11 +24,11 @@ export function makeTimings (type: string, desc?: string) {
   return timings
 }
 
-function createTimer (type: string, desc?: string) {
+function createTimer(type: string, desc?: string) {
   const start = performance.now()
 
   return {
-    end (timings: Timings) {
+    end(timings: Timings) {
       let timingType = timings[type]
 
       if (!timingType) {
@@ -41,7 +41,7 @@ function createTimer (type: string, desc?: string) {
   }
 }
 
-export async function time<ReturnType> (
+export async function time<ReturnType>(
   fn: Promise<ReturnType> | (() => ReturnType | Promise<ReturnType>),
   {
     type,
@@ -63,7 +63,7 @@ export async function time<ReturnType> (
   return result
 }
 
-export function getServerTimeHeader (timings?: Timings) {
+export function getServerTimeHeader(timings?: Timings) {
   if (!timings) return ''
   return Object.entries(timings)
     .map(([key, timingInfos]) => {
@@ -88,14 +88,14 @@ export function getServerTimeHeader (timings?: Timings) {
     .join(',')
 }
 
-export function combineServerTimings (headers1: Headers, headers2: Headers) {
+export function combineServerTimings(headers1: Headers, headers2: Headers) {
   const newHeaders = new Headers(headers1)
   newHeaders.append('Server-Timing', headers2.get('Server-Timing') ?? '')
 
   return newHeaders.get('Server-Timing') ?? ''
 }
 
-export function cachifiedTimingReporter<Value> (
+export function cachifiedTimingReporter<Value>(
   timings?: Timings,
 ): undefined | CreateReporter<Value> {
   if (!timings) return

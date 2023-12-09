@@ -1,6 +1,10 @@
-import { useEffect } from "react";
-import type { ActionFunctionArgs, HeadersFunction, LoaderFunctionArgs } from '@remix-run/cloudflare'
-import { json } from "@remix-run/cloudflare";
+import { useEffect } from 'react'
+import type {
+  ActionFunctionArgs,
+  HeadersFunction,
+  LoaderFunctionArgs,
+} from '@remix-run/cloudflare'
+import { json } from '@remix-run/cloudflare'
 import { useActionData, useNavigation, useSubmit } from '@remix-run/react'
 import {
   Page,
@@ -13,25 +17,29 @@ import {
   List,
   Link,
   InlineStack,
-} from "@shopify/polaris";
-import { shops } from "~/utils/db/schema.server";
+} from '@shopify/polaris'
+import { shops } from '~/utils/db/schema.server'
 import { eq } from 'drizzle-orm'
 import { combineServerTimings, makeTimings, time } from '~/utils/timing.server'
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
-  const { session } = await context.shopify.authenticate.admin(request);
+  const { session } = await context.shopify.authenticate.admin(request)
 
   const timings = makeTimings('index')
 
   const [shop] = await time(
-    () => context.db.select().from(shops).where(eq(shops.shopDomain, session.shop)),
+    () =>
+      context.db.select().from(shops).where(eq(shops.shopDomain, session.shop)),
     { timings, type: 'find shop' },
   )
 
-  return json({ shop }, {
-    headers: { 'Server-Timing': timings.toString() }
-  });
-};
+  return json(
+    { shop },
+    {
+      headers: { 'Server-Timing': timings.toString() },
+    },
+  )
+}
 
 export const headers: HeadersFunction = ({ loaderHeaders, parentHeaders }) => {
   return {
@@ -40,12 +48,12 @@ export const headers: HeadersFunction = ({ loaderHeaders, parentHeaders }) => {
 }
 
 export const action = async ({ context, request }: ActionFunctionArgs) => {
-  const { admin } = await context.shopify.authenticate.admin(request);
-  const color = ["Red", "Orange", "Yellow", "Green"][
+  const { admin } = await context.shopify.authenticate.admin(request)
+  const color = ['Red', 'Orange', 'Yellow', 'Green'][
     Math.floor(Math.random() * 4)
-    ];
+  ]
   const response = await admin.graphql(
-      `#graphql
+    `#graphql
     mutation populateProduct($input: ProductInput!) {
       productCreate(input: $input) {
         product {
@@ -73,33 +81,33 @@ export const action = async ({ context, request }: ActionFunctionArgs) => {
           variants: [{ price: Math.random() * 100 }],
         },
       },
-    }
-  );
-  const responseJson = await response.json();
+    },
+  )
+  const responseJson = await response.json()
 
   return json({
     // @ts-ignore
     product: responseJson.data.productCreate.product,
-  });
-};
+  })
+}
 
 export default function Index() {
-  const nav = useNavigation();
-  const actionData = useActionData<typeof action>();
-  const submit = useSubmit();
+  const nav = useNavigation()
+  const actionData = useActionData<typeof action>()
+  const submit = useSubmit()
   const isLoading =
-    ["loading", "submitting"].includes(nav.state) && nav.formMethod === "POST";
+    ['loading', 'submitting'].includes(nav.state) && nav.formMethod === 'POST'
   const productId = actionData?.product?.id.replace(
-    "gid://shopify/Product/",
-    ""
-  );
+    'gid://shopify/Product/',
+    '',
+  )
 
   useEffect(() => {
     if (productId) {
-      shopify.toast.show("Product created");
+      shopify.toast.show('Product created')
     }
-  }, [productId]);
-  const generateProduct = () => submit({}, { replace: true, method: "POST" });
+  }, [productId])
+  const generateProduct = () => submit({}, { replace: true, method: 'POST' })
 
   return (
     <Page>
@@ -113,26 +121,26 @@ export default function Index() {
                     Congrats on creating a new Shopify app 🎉
                   </Text>
                   <Text variant="bodyMd" as="p">
-                    This embedded app template uses{" "}
+                    This embedded app template uses{' '}
                     <Link
                       url="https://shopify.dev/docs/apps/tools/app-bridge"
                       target="_blank"
                       removeUnderline
                     >
                       App Bridge
-                    </Link>{" "}
-                    interface examples like an{" "}
+                    </Link>{' '}
+                    interface examples like an{' '}
                     <Link url="/app/additional" removeUnderline>
                       additional page in the app nav
                     </Link>
-                    , as well as an{" "}
+                    , as well as an{' '}
                     <Link
                       url="https://shopify.dev/docs/api/admin-graphql"
                       target="_blank"
                       removeUnderline
                     >
                       Admin GraphQL
-                    </Link>{" "}
+                    </Link>{' '}
                     mutation demo, to provide a starting point for app
                     development.
                   </Text>
@@ -143,14 +151,14 @@ export default function Index() {
                   </Text>
                   <Text as="p" variant="bodyMd">
                     Generate a product with GraphQL and get the JSON output for
-                    that product. Learn more about the{" "}
+                    that product. Learn more about the{' '}
                     <Link
                       url="https://shopify.dev/docs/api/admin-graphql/latest/mutations/productCreate"
                       target="_blank"
                       removeUnderline
                     >
                       productCreate
-                    </Link>{" "}
+                    </Link>{' '}
                     mutation in our API references.
                   </Text>
                 </BlockStack>
@@ -229,7 +237,7 @@ export default function Index() {
                         >
                           Polaris
                         </Link>
-                        {", "}
+                        {', '}
                         <Link
                           url="https://shopify.dev/docs/apps/tools/app-bridge"
                           target="_blank"
@@ -261,19 +269,19 @@ export default function Index() {
                   </Text>
                   <List>
                     <List.Item>
-                      Build an{" "}
+                      Build an{' '}
                       <Link
                         url="https://shopify.dev/docs/apps/getting-started/build-app-example"
                         target="_blank"
                         removeUnderline
                       >
-                        {" "}
+                        {' '}
                         example app
-                      </Link>{" "}
+                      </Link>{' '}
                       to get started
                     </List.Item>
                     <List.Item>
-                      Explore Shopify’s API with{" "}
+                      Explore Shopify’s API with{' '}
                       <Link
                         url="https://shopify.dev/docs/apps/tools/graphiql-admin-api"
                         target="_blank"
@@ -290,5 +298,5 @@ export default function Index() {
         </Layout>
       </BlockStack>
     </Page>
-  );
+  )
 }

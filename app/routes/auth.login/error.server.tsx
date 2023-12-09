@@ -1,6 +1,6 @@
 import { LoginErrorType } from '@shopify/shopify-app-remix'
 
-export function loginErrorMessage (loginErrors: { shop?: LoginErrorType }) {
+export function loginErrorMessage(loginErrors: { shop?: LoginErrorType }) {
   if (loginErrors?.shop === LoginErrorType.MissingShop) {
     return { shop: 'Please enter your shop domain to log in' }
   } else if (loginErrors?.shop === LoginErrorType.InvalidShop) {

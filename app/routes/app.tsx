@@ -7,13 +7,13 @@ import { json } from '@remix-run/cloudflare'
 
 export const links = () => [{ rel: 'stylesheet', href: polarisStyles }]
 
-export async function loader ({ context, request }: LoaderFunctionArgs) {
+export async function loader({ context, request }: LoaderFunctionArgs) {
   await context.shopify.authenticate.admin(request)
 
   return json({ apiKey: context.env.SHOPIFY_API_KEY || '' })
 }
 
-export default function App () {
+export default function App() {
   const { apiKey } = useLoaderData<typeof loader>()
 
   return (
@@ -32,10 +32,10 @@ export default function App () {
 }
 
 // Shopify needs Remix to catch some thrown responses, so that their headers are included in the response.
-export function ErrorBoundary () {
+export function ErrorBoundary() {
   return boundary.error(useRouteError())
 }
 
-export const headers: HeadersFunction = (headersArgs) => {
+export const headers: HeadersFunction = headersArgs => {
   return boundary.headers(headersArgs)
 }

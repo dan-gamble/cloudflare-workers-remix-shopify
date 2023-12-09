@@ -1,10 +1,10 @@
 import { z } from 'zod'
 import type { Env } from '../../remix.env'
-import type { Cache, CachifiedOptions} from '@epic-web/cachified';
+import type { Cache, CachifiedOptions } from '@epic-web/cachified'
 import { cachified, mergeReporters, verboseReporter } from '@epic-web/cachified'
 
 import { cloudflareKvCacheAdapter } from 'cachified-adapter-cloudflare-kv'
-import type { Timings } from '~/utils/timing.server';
+import type { Timings } from '~/utils/timing.server'
 import { cachifiedTimingReporter } from '~/utils/timing.server'
 
 const cacheEntrySchema = z.object({
@@ -20,17 +20,17 @@ const cacheQueryResultSchema = z.object({
   value: z.string(),
 })
 
-export function setupCache (env: Env) {
+export function setupCache(env: Env) {
   const cache = cloudflareKvCacheAdapter({
     // @ts-ignore
     kv: env.KV,
     keyPrefix: 'cache',
-    name: 'CloudflareKV'
+    name: 'CloudflareKV',
   })
 
   const proxy: Cache = {
     name: 'KV Cache',
-    get (key) {
+    get(key) {
       const result = cache.get(key)
       const parseResult = cacheQueryResultSchema.safeParse(result)
       if (!parseResult.success) return null
@@ -46,18 +46,18 @@ export function setupCache (env: Env) {
 
       return {
         metadata,
-        value
+        value,
       }
     },
-    set (key, value) {
+    set(key, value) {
       return cache.set(key, value)
     },
-    delete (key) {
+    delete(key) {
       return cache.delete(key)
     },
   }
 
-  return async function<Value> ({
+  return async function <Value>({
     timings,
     reporter = verboseReporter({
       performance,

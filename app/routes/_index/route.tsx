@@ -5,7 +5,7 @@ import indexStyles from './style.css'
 
 export const links = () => [{ rel: 'stylesheet', href: indexStyles }]
 
-export async function loader ({ context, request }: LoaderFunctionArgs) {
+export async function loader({ context, request }: LoaderFunctionArgs) {
   const url = new URL(request.url)
 
   if (url.searchParams.get('shop')) {
@@ -15,7 +15,7 @@ export async function loader ({ context, request }: LoaderFunctionArgs) {
   return json({ showForm: Boolean(context.shopify.login) })
 }
 
-export default function App () {
+export default function App() {
   const { showForm } = useLoaderData<typeof loader>()
 
   return (

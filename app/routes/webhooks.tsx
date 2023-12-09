@@ -2,18 +2,17 @@
 // import { sessions } from '~/db/schema/session.server'
 // import { eq } from 'drizzle-orm'
 
-import type { ActionFunctionArgs } from "@remix-run/cloudflare"
-import { shops } from "~/utils/db/schema.server"
+import type { ActionFunctionArgs } from '@remix-run/cloudflare'
+import { shops } from '~/utils/db/schema.server'
 import { eq } from 'drizzle-orm'
 
-export async function action ({ context, request }: ActionFunctionArgs) {
-  const { shop, topic, payload } = await context.shopify.authenticate.webhook(request)
+export async function action({ context, request }: ActionFunctionArgs) {
+  const { shop, topic, payload } =
+    await context.shopify.authenticate.webhook(request)
 
   switch (topic) {
     case 'APP_UNINSTALLED':
-      await context.db
-        .delete(shops)
-        .where(eq(shops.shopDomain, shop))
+      await context.db.delete(shops).where(eq(shops.shopDomain, shop))
 
       break
     case 'CUSTOMERS_DATA_REQUEST':

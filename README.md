@@ -15,20 +15,26 @@ Both are started with one command:
 npm run dev
 ```
 
-Open up [http://127.0.0.1:8787](http://127.0.0.1:8787) and you should be ready to go!
+Open up [http://127.0.0.1:8787](http://127.0.0.1:8787) and you should be ready
+to go!
 
-If you want to check the production build, you can stop the dev server and run following commands:
+If you want to check the production build, you can stop the dev server and run
+following commands:
 
 ```sh
 npm run build
 npm start
 ```
 
-Then refresh the same URL in your browser (no live reload for production builds).
+Then refresh the same URL in your browser (no live reload for production
+builds).
 
 ## Deployment
 
-If you don't already have an account, then [create a cloudflare account here](https://dash.cloudflare.com/sign-up) and after verifying your email address with Cloudflare, go to your dashboard and set up your free custom Cloudflare Workers subdomain.
+If you don't already have an account, then
+[create a cloudflare account here](https://dash.cloudflare.com/sign-up) and
+after verifying your email address with Cloudflare, go to your dashboard and set
+up your free custom Cloudflare Workers subdomain.
 
 Once that's done, you should be able to deploy your app:
 

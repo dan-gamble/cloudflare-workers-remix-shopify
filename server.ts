@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 export default {
-  async fetch (
+  async fetch(
     request: Request,
     env: Env,
     ctx: ExecutionContext,
@@ -69,8 +69,8 @@ export default {
     }
   },
 
-  async queue (batch: MessageBatch, env: Env) {
+  async queue(batch: MessageBatch) {
     let messages = JSON.stringify(batch.messages)
     console.log(`consumed from our queue: ${messages}`)
-  }
+  },
 }

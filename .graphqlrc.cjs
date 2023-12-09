@@ -1,7 +1,7 @@
 const fs = require('node:fs')
 const apiVersion = require('@shopify/shopify-app-remix').LATEST_API_VERSION
 
-function getConfig () {
+function getConfig() {
   const config = {
     projects: {
       // Storefront API

@@ -17,7 +17,7 @@ import type { Env } from '../../../remix.env'
 //   keepAlive: true,
 // })
 
-export function createDb (env: Env) {
+export function createDb(env: Env) {
   return drizzle(env.DB)
 }
 
