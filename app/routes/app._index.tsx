@@ -78,6 +78,7 @@ export const action = async ({ context, request }: ActionFunctionArgs) => {
   const responseJson = await response.json();
 
   return json({
+    // @ts-ignore
     product: responseJson.data.productCreate.product,
   });
 };

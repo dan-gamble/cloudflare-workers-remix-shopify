@@ -15,7 +15,9 @@
     "paths": {
       "~/*": ["./app/*"]
     },
-
+    "types": [
+      "@shopify/app-bridge-types"
+    ],
     // Remix takes care of building everything in `remix build`.
     "noEmit": true
   }
