@@ -9,8 +9,10 @@ import {
 } from '@shopify/shopify-app-remix'
 import { KVSessionStorage } from '@shopify/shopify-app-session-storage-kv'
 import type { Env } from '../../remix.env'
-import { Database } from '~/utils/db/db.server'
+import type { Database } from '~/utils/db/db.server'
 import { shops } from './db/schema.server'
+import { makeGraphQLRequest } from './graphql.server'
+import { AppIdDocument } from '~/generated/graphql'
 
 // let shopify: ReturnType<typeof shopifyApp>
 
@@ -39,17 +41,9 @@ export function createShopifyApp (env: Env, db: Database) {
       afterAuth: async ({ admin, session }) => {
         shopify.registerWebhooks({ session })
 
-        const response = await admin.graphql(
-          `#query
-            query appId {
-              app {
-                id
-              }
-            }
-          `
-        )
-        // @ts-ignore
-        const { data: { app } } = await response.json()
+        const { app } = await makeGraphQLRequest(admin.graphql, {
+          document: AppIdDocument,
+        })
 
         await db
           .insert(shops)
