@@ -8,6 +8,7 @@ import type { AppLoadContext, EntryContext } from '@remix-run/cloudflare'
 import { RemixServer } from '@remix-run/react'
 import isbot from 'isbot'
 import { renderToReadableStream } from 'react-dom/server'
+import { makeTimings } from '~/utils/timing.server'
 
 export default async function handleRequest (
   request: Request,
@@ -17,6 +18,8 @@ export default async function handleRequest (
   loadContext: AppLoadContext,
 ) {
   loadContext.shopify.addDocumentResponseHeaders(request, responseHeaders)
+
+  const timings = makeTimings('render', 'renderToReadableStream')
 
   const body = await renderToReadableStream(
     <RemixServer context={remixContext} url={request.url} />,
@@ -35,6 +38,8 @@ export default async function handleRequest (
   }
 
   responseHeaders.set('Content-Type', 'text/html')
+  responseHeaders.append('Server-Timing', timings.toString())
+
   return new Response(body, {
     headers: responseHeaders,
     status: responseStatusCode,

@@ -8,7 +8,7 @@ import { json } from '@remix-run/cloudflare'
 export const links = () => [{ rel: 'stylesheet', href: polarisStyles }]
 
 export async function loader ({ context, request }: LoaderFunctionArgs) {
-  const a = await context.shopify.authenticate.admin(request)
+  await context.shopify.authenticate.admin(request)
 
   return json({ apiKey: context.env.SHOPIFY_API_KEY || '' })
 }
@@ -22,6 +22,7 @@ export default function App () {
         <Link to="/app" rel="home">
           Home
         </Link>
+
         <Link to="/app/additional">Additional page</Link>
       </ui-nav-menu>
 

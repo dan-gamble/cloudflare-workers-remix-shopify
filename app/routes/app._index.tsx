@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import type { ActionFunctionArgs, HeadersFunction, LoaderFunctionArgs } from '@remix-run/cloudflare'
 import { json } from "@remix-run/cloudflare";
-import { useActionData, useLoaderData, useNavigation, useSubmit } from '@remix-run/react'
+import { useActionData, useNavigation, useSubmit } from '@remix-run/react'
 import {
   Page,
   Layout,
@@ -102,11 +102,6 @@ export default function Index() {
 
   return (
     <Page>
-      <ui-title-bar title="Remix app template">
-        <button variant="primary" onClick={generateProduct}>
-          Generate a product
-        </button>
-      </ui-title-bar>
       <BlockStack gap="500">
         <Layout>
           <Layout.Section>

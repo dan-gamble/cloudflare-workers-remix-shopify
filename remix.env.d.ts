@@ -4,8 +4,18 @@
 
 import type { createShopifyApp } from '~/utils/shopify.server'
 import type { Database } from '~/utils/db/db.server'
-import type { Cache } from '@epic-web/cachified'
-import { setupCache } from '~/utils/cache.server'
+import type { setupCache } from '~/utils/cache.server'
+
+import type * as React from 'react'
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      ['ui-title-bar']: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+      ['ui-nav-menu']: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+    }
+  }
+}
 
 interface Env {
   __STATIC_CONTENT: Fetcher;
@@ -35,6 +45,6 @@ declare var process: {
   env: { NODE_ENV: 'development' | 'production' }
 }
 
-declare module "@remix-run/server-runtime" {
+declare module '@remix-run/server-runtime' {
   export interface AppLoadContext extends LoadContext {}
 }
