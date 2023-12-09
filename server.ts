@@ -2,10 +2,12 @@ import { getAssetFromKV } from '@cloudflare/kv-asset-handler'
 import type { AppLoadContext } from '@remix-run/cloudflare'
 import { createRequestHandler, logDevReady } from '@remix-run/cloudflare'
 import * as build from '@remix-run/dev/server-build'
+// @ts-ignore
 import __STATIC_CONTENT_MANIFEST from '__STATIC_CONTENT_MANIFEST'
 import { createShopifyApp } from '~/utils/shopify.server'
 import type { Env } from './remix.env'
 import { createDb } from '~/utils/db/db.server'
+import { setupCache } from '~/utils/cache.server'
 
 const MANIFEST = JSON.parse(__STATIC_CONTENT_MANIFEST)
 const handleRemixRequest = createRequestHandler(build, process.env.NODE_ENV)
@@ -43,6 +45,7 @@ export default {
 
     const db = createDb(env)
     const shopify = createShopifyApp(env, db)
+    const cache = setupCache(env)
 
     // This sends a log to our queue
     // let log = {
@@ -55,6 +58,7 @@ export default {
     try {
       const loadContext: AppLoadContext = {
         env,
+        cache,
         db,
         shopify,
       }

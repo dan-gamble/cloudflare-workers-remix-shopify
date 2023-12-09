@@ -22,7 +22,7 @@ export function createShopifyApp (env: Env, db: Database) {
     scopes: env.SCOPES?.split(','),
     appUrl: env.SHOPIFY_APP_URL || '',
     authPathPrefix: '/auth',
-    sessionStorage: new KVSessionStorage(env.APP_TEMPLATE_REMIX_DEV),
+    sessionStorage: new KVSessionStorage(env.KV),
     distribution: AppDistribution.AppStore,
     restResources,
     webhooks: {

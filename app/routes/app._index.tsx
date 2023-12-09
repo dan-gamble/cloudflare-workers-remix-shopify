@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/cloudflare";
+import type { ActionFunctionArgs, HeadersFunction, LoaderFunctionArgs } from '@remix-run/cloudflare'
 import { json } from "@remix-run/cloudflare";
 import { useActionData, useLoaderData, useNavigation, useSubmit } from '@remix-run/react'
 import {
@@ -16,14 +16,28 @@ import {
 } from "@shopify/polaris";
 import { shops } from "~/utils/db/schema.server";
 import { eq } from 'drizzle-orm'
+import { combineServerTimings, makeTimings, time } from '~/utils/timing.server'
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const { session } = await context.shopify.authenticate.admin(request);
 
-  return json(
-    await context.db.select().from(shops).where(eq(shops.shopDomain, session.shop))
-  );
+  const timings = makeTimings('index')
+
+  const [shop] = await time(
+    () => context.db.select().from(shops).where(eq(shops.shopDomain, session.shop)),
+    { timings, type: 'find shop' },
+  )
+
+  return json({ shop }, {
+    headers: { 'Server-Timing': timings.toString() }
+  });
 };
+
+export const headers: HeadersFunction = ({ loaderHeaders, parentHeaders }) => {
+  return {
+    'Server-Timing': combineServerTimings(parentHeaders, loaderHeaders),
+  }
+}
 
 export const action = async ({ context, request }: ActionFunctionArgs) => {
   const { admin } = await context.shopify.authenticate.admin(request);

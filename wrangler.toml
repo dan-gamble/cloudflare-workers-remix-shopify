@@ -6,7 +6,7 @@ main = "./build/index.js"
 compatibility_date = "2023-04-20"
 
 kv_namespaces = [
-  { binding = "APP_TEMPLATE_REMIX_DEV", id = "8968cadbc0ed4b7c9e08f5dc5c4ec811" }
+  { binding = "KV", id = "8968cadbc0ed4b7c9e08f5dc5c4ec811" }
 ]
 
 [[d1_databases]]

@@ -4,6 +4,8 @@
 
 import type { createShopifyApp } from '~/utils/shopify.server'
 import type { Database } from '~/utils/db/db.server'
+import type { Cache } from '@epic-web/cachified'
+import { setupCache } from '~/utils/cache.server'
 
 interface Env {
   __STATIC_CONTENT: Fetcher;
@@ -12,7 +14,7 @@ interface Env {
   SCOPES: string;
   SHOPIFY_APP_URL: string;
   SHOP_CUSTOM_DOMAIN?: string;
-  APP_TEMPLATE_REMIX_DEV: KVNamespace;
+  KV: KVNamespace;
   QUEUE: Queue
   DB: D1Database
 }
@@ -24,6 +26,7 @@ declare module '__STATIC_CONTENT_MANIFEST' {
 
 interface LoadContext {
   env: Env
+  cache: ReturnType<typeof setupCache>
   db: Database
   shopify: ReturnType<typeof createShopifyApp>
 }
