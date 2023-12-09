@@ -1,29 +1,31 @@
 import { Link, Outlet, useLoaderData, useRouteError } from '@remix-run/react'
 import polarisStyles from '@shopify/polaris/build/esm/styles.css'
+// @ts-ignore
 import { boundary } from '@shopify/shopify-app-remix/server'
+// @ts-ignore
 import { AppProvider } from '@shopify/shopify-app-remix/react'
 import type { HeadersFunction, LoaderFunctionArgs } from '@remix-run/cloudflare'
 import { json } from '@remix-run/cloudflare'
 
 export const links = () => [{ rel: 'stylesheet', href: polarisStyles }]
 
-export async function loader({ context, request }: LoaderFunctionArgs) {
+export async function loader ({ context, request }: LoaderFunctionArgs) {
   await context.shopify.authenticate.admin(request)
 
   return json({ apiKey: context.env.SHOPIFY_API_KEY || '' })
 }
 
-export default function App() {
+export default function App () {
   const { apiKey } = useLoaderData<typeof loader>()
 
   return (
     <AppProvider isEmbeddedApp apiKey={apiKey}>
       <ui-nav-menu>
-        <Link to="/app" rel="home">
+        <Link to='/app' rel='home'>
           Home
         </Link>
 
-        <Link to="/app/additional">Additional page</Link>
+        <Link to='/app/additional'>Additional page</Link>
       </ui-nav-menu>
 
       <Outlet />
@@ -32,7 +34,7 @@ export default function App() {
 }
 
 // Shopify needs Remix to catch some thrown responses, so that their headers are included in the response.
-export function ErrorBoundary() {
+export function ErrorBoundary () {
   return boundary.error(useRouteError())
 }
 

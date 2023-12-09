@@ -12,12 +12,12 @@ declare global {
   namespace JSX {
     interface IntrinsicElements {
       ['ui-title-bar']: React.DetailedHTMLProps<
-        React.HTMLAttributes<HTMLElement>,
-        HTMLElement
+      React.HTMLAttributes<HTMLElement>,
+      HTMLElement
       >
       ['ui-nav-menu']: React.DetailedHTMLProps<
-        React.HTMLAttributes<HTMLElement>,
-        HTMLElement
+      React.HTMLAttributes<HTMLElement>,
+      HTMLElement
       >
     }
   }
@@ -47,7 +47,7 @@ interface LoadContext {
   shopify: ReturnType<typeof createShopifyApp>
 }
 
-declare var process: {
+declare let process: {
   env: { NODE_ENV: 'development' | 'production' }
 }
 

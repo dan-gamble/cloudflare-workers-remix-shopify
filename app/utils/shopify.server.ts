@@ -5,7 +5,7 @@ import {
   AppDistribution,
   DeliveryMethod,
   LATEST_API_VERSION,
-  shopifyApp,
+  shopifyApp
 } from '@shopify/shopify-app-remix'
 import { KVSessionStorage } from '@shopify/shopify-app-session-storage-kv'
 import type { Env } from '../../remix.env'
@@ -16,7 +16,7 @@ import { AppIdDocument } from '~/generated/graphql'
 
 // let shopify: ReturnType<typeof shopifyApp>
 
-export function createShopifyApp(env: Env, db: Database) {
+export function createShopifyApp (env: Env, db: Database) {
   const shopify = shopifyApp({
     apiKey: env.SHOPIFY_API_KEY,
     apiSecretKey: env.SHOPIFY_API_SECRET || '',
@@ -30,37 +30,37 @@ export function createShopifyApp(env: Env, db: Database) {
     webhooks: {
       APP_UNINSTALLED: {
         deliveryMethod: DeliveryMethod.Http,
-        callbackUrl: '/webhooks',
+        callbackUrl: '/webhooks'
       },
       PRODUCTS_UPDATE: {
         deliveryMethod: DeliveryMethod.Http,
-        callbackUrl: '/webhooks',
-      },
+        callbackUrl: '/webhooks'
+      }
     },
     hooks: {
       afterAuth: async ({ admin, session }) => {
         shopify.registerWebhooks({ session })
 
         const { app } = await makeGraphQLRequest(admin.graphql, {
-          document: AppIdDocument,
+          document: AppIdDocument
         })
 
         await db
           .insert(shops)
           .values({
             appId: app!.id,
-            shopDomain: session.shop,
+            shopDomain: session.shop
           })
           .onConflictDoNothing()
-      },
+      }
     },
     future: {
       v3_webhookAdminContext: true,
-      v3_authenticatePublic: true,
+      v3_authenticatePublic: true
     },
     ...(env.SHOP_CUSTOM_DOMAIN
       ? { customShopDomains: [env.SHOP_CUSTOM_DOMAIN] }
-      : {}),
+      : {})
   })
 
   return shopify

@@ -1,33 +1,33 @@
 import type {
   RequestDocument,
   RequestOptions,
-  Variables,
+  Variables
 } from 'graphql-request'
 import type {
   GraphQLClientRequestHeaders,
-  JsonSerializer,
+  JsonSerializer
 } from 'graphql-request/src/types'
 import { resolveRequestDocument } from 'graphql-request'
 import type { GraphqlQueryFunction } from '@shopify/shopify-app-remix/build/ts/server/clients/admin/graphql'
 
-export async function makeGraphQLRequest<T, V extends Variables = Variables>(
+export async function makeGraphQLRequest<T, V extends Variables = Variables> (
   graphql: GraphqlQueryFunction,
-  options: RequestOptions<V, T>,
+  options: RequestOptions<V, T>
 ): Promise<T> {
   const { variables, requestHeaders } = options
   const requestOptions = parseRequestArgs(options, variables, requestHeaders)
   const { query } = resolveRequestDocument(requestOptions.document)
 
-  return makeRequest<T>(graphql, query, requestOptions.variables).then(
-    ({ data }) => data,
+  return await makeRequest<T>(graphql, query, requestOptions.variables).then(
+    ({ data }) => data
   )
 }
 
-async function makeRequest<T = unknown, V extends Variables = Variables>(
+async function makeRequest<T = unknown, V extends Variables = Variables> (
   graphql: GraphqlQueryFunction,
   query: string,
-  variables?: V,
-): Promise<{ status: number; data: T }> {
+  variables?: V
+): Promise<{ status: number, data: T }> {
   const response = await graphql(query, { variables })
   const result = await getResult(response)
 
@@ -41,39 +41,39 @@ async function makeRequest<T = unknown, V extends Variables = Variables>(
       data: result.data,
       // @ts-expect-error TODO
       headers: response.headers,
-      status: response.status,
+      status: response.status
     }
   }
 
   throw new Error(
-    `There was an error with your GraphQL request: ${JSON.stringify(result)}`,
+    `There was an error with your GraphQL request: ${JSON.stringify(result)}`
   )
 }
 
-function parseRequestArgs<V extends Variables = Variables>(
+function parseRequestArgs<V extends Variables = Variables> (
   documentOrOptions: RequestDocument | RequestOptions<V>,
   variables?: V,
-  requestHeaders?: GraphQLClientRequestHeaders,
+  requestHeaders?: GraphQLClientRequestHeaders
 ): RequestOptions<V> {
   return (documentOrOptions as RequestOptions<V>).document
     ? (documentOrOptions as RequestOptions<V>)
     : ({
         document: documentOrOptions as RequestDocument,
-        variables: variables,
-        requestHeaders: requestHeaders,
-        signal: undefined,
+        variables,
+        requestHeaders,
+        signal: undefined
       } as unknown as RequestOptions<V>)
 }
 
-async function getResult(
+async function getResult (
   response: Response,
-  jsonSerializer: JsonSerializer = JSON,
+  jsonSerializer: JsonSerializer = JSON
 ): Promise<
-  | { data: object; errors: undefined }[]
-  | { data: object; errors: undefined }
-  | { data: undefined; errors: object }
-  | { data: undefined; errors: object[] }
-> {
+  | Array<{ data: object, errors: undefined }>
+  | { data: object, errors: undefined }
+  | { data: undefined, errors: object }
+  | { data: undefined, errors: object[] }
+  > {
   let contentType: string | undefined
 
   response.headers.forEach((value, key) => {
@@ -84,9 +84,9 @@ async function getResult(
 
   if (
     contentType &&
-    (contentType.toLowerCase().startsWith(`application/json`) ||
-      contentType.toLowerCase().startsWith(`application/graphql+json`) ||
-      contentType.toLowerCase().startsWith(`application/graphql-response+json`))
+    (contentType.toLowerCase().startsWith('application/json') ||
+      contentType.toLowerCase().startsWith('application/graphql+json') ||
+      contentType.toLowerCase().startsWith('application/graphql-response+json'))
   ) {
     return jsonSerializer.parse(await response.text()) as any
   } else {

@@ -1,34 +1,34 @@
 import type { CreateReporter } from '@epic-web/cachified'
 
 export type Timings = Record<
-  string,
-  Array<
-    { desc?: string } & (
-      | { time: number; start?: never }
-      | { time?: never; start: number }
-    )
-  >
+string,
+Array<
+{ desc?: string } & (
+  | { time: number, start?: never }
+  | { time?: never, start: number }
+)
+>
 >
 
-export function makeTimings(type: string, desc?: string) {
+export function makeTimings (type: string, desc?: string) {
   const timings: Timings = {
-    [type]: [{ desc, start: performance.now() }],
+    [type]: [{ desc, start: performance.now() }]
   }
   Object.defineProperty(timings, 'toString', {
     value: function () {
       return getServerTimeHeader(timings)
     },
-    enumerable: false,
+    enumerable: false
   })
 
   return timings
 }
 
-function createTimer(type: string, desc?: string) {
+function createTimer (type: string, desc?: string) {
   const start = performance.now()
 
   return {
-    end(timings: Timings) {
+    end (timings: Timings) {
       let timingType = timings[type]
 
       if (!timingType) {
@@ -37,25 +37,25 @@ function createTimer(type: string, desc?: string) {
       }
 
       timingType.push({ desc, time: performance.now() - start })
-    },
+    }
   }
 }
 
-export async function time<ReturnType>(
+export async function time<ReturnType> (
   fn: Promise<ReturnType> | (() => ReturnType | Promise<ReturnType>),
   {
     type,
     desc,
-    timings,
+    timings
   }: {
     type: string
     desc?: string
     timings?: Timings
-  },
+  }
 ): Promise<ReturnType> {
   const timer = createTimer(type, desc)
   const promise = typeof fn === 'function' ? fn() : fn
-  if (!timings) return promise
+  if (timings == null) return await promise
 
   const result = await promise
 
@@ -63,8 +63,8 @@ export async function time<ReturnType>(
   return result
 }
 
-export function getServerTimeHeader(timings?: Timings) {
-  if (!timings) return ''
+export function getServerTimeHeader (timings?: Timings) {
+  if (timings == null) return ''
   return Object.entries(timings)
     .map(([key, timingInfos]) => {
       const dur = timingInfos
@@ -80,7 +80,7 @@ export function getServerTimeHeader(timings?: Timings) {
       return [
         key.replaceAll(/(:| |@|=|;|,|\/|\\)/g, '_'),
         desc ? `desc=${JSON.stringify(desc)}` : null,
-        `dur=${dur}`,
+        `dur=${dur}`
       ]
         .filter(Boolean)
         .join(';')
@@ -88,22 +88,22 @@ export function getServerTimeHeader(timings?: Timings) {
     .join(',')
 }
 
-export function combineServerTimings(headers1: Headers, headers2: Headers) {
+export function combineServerTimings (headers1: Headers, headers2: Headers) {
   const newHeaders = new Headers(headers1)
   newHeaders.append('Server-Timing', headers2.get('Server-Timing') ?? '')
 
   return newHeaders.get('Server-Timing') ?? ''
 }
 
-export function cachifiedTimingReporter<Value>(
-  timings?: Timings,
+export function cachifiedTimingReporter<Value> (
+  timings?: Timings
 ): undefined | CreateReporter<Value> {
-  if (!timings) return
+  if (timings == null) return
 
   return ({ key }) => {
     const cacheRetrievalTimer = createTimer(
       `cache:${key}`,
-      `${key} cache retrieval`,
+      `${key} cache retrieval`
     )
     let getFreshValueTimer: ReturnType<typeof createTimer> | undefined
 
@@ -112,7 +112,7 @@ export function cachifiedTimingReporter<Value>(
         case 'getFreshValueStart':
           getFreshValueTimer = createTimer(
             `getFreshValue:${key}`,
-            `request forced to wait for a fresh ${key} value`,
+            `request forced to wait for a fresh ${key} value`
           )
           break
         case 'getFreshValueSuccess':

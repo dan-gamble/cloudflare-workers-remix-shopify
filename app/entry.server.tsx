@@ -10,12 +10,12 @@ import isbot from 'isbot'
 import { renderToReadableStream } from 'react-dom/server'
 import { makeTimings } from '~/utils/timing.server'
 
-export default async function handleRequest(
+export default async function handleRequest (
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext,
-  loadContext: AppLoadContext,
+  loadContext: AppLoadContext
 ) {
   loadContext.shopify.addDocumentResponseHeaders(request, responseHeaders)
 
@@ -25,12 +25,12 @@ export default async function handleRequest(
     <RemixServer context={remixContext} url={request.url} />,
     {
       signal: request.signal,
-      onError(error: unknown) {
+      onError (error: unknown) {
         // Log streaming rendering errors from inside the shell
         console.error(error)
         responseStatusCode = 500
-      },
-    },
+      }
+    }
   )
 
   if (isbot(request.headers.get('user-agent'))) {
@@ -42,6 +42,6 @@ export default async function handleRequest(
 
   return new Response(body, {
     headers: responseHeaders,
-    status: responseStatusCode,
+    status: responseStatusCode
   })
 }

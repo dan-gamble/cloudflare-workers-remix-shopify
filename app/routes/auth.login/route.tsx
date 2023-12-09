@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type {
   ActionFunctionArgs,
   LinksFunction,
-  LoaderFunctionArgs,
+  LoaderFunctionArgs
 } from '@remix-run/cloudflare'
 import { json } from '@remix-run/cloudflare'
 import {
@@ -12,7 +12,7 @@ import {
   FormLayout,
   Page,
   Text,
-  TextField,
+  TextField
 } from '@shopify/polaris'
 
 import { Form, useActionData, useLoaderData } from '@remix-run/react'
@@ -21,27 +21,27 @@ import polarisStyles from '@shopify/polaris/build/esm/styles.css'
 import { loginErrorMessage } from './error.server'
 
 export const links: LinksFunction = () => [
-  { rel: 'stylesheet', href: polarisStyles },
+  { rel: 'stylesheet', href: polarisStyles }
 ]
 
-export async function loader({ context, request }: LoaderFunctionArgs) {
+export async function loader ({ context, request }: LoaderFunctionArgs) {
   const errors = loginErrorMessage(await context.shopify.login(request))
 
   return json({
     errors,
-    polarisTranslations: require(`@shopify/polaris/locales/en.json`),
+    polarisTranslations: require('@shopify/polaris/locales/en.json')
   })
 }
 
-export async function action({ context, request }: ActionFunctionArgs) {
+export async function action ({ context, request }: ActionFunctionArgs) {
   const errors = loginErrorMessage(await context.shopify.login(request))
 
   return json({
-    errors,
+    errors
   })
 }
 
-export default function Auth() {
+export default function Auth () {
   const { polarisTranslations } = useLoaderData<typeof loader>()
   const loaderData = useLoaderData<typeof loader>()
   const actionData = useActionData<typeof action>()
@@ -52,20 +52,20 @@ export default function Auth() {
     <PolarisAppProvider i18n={polarisTranslations}>
       <Page>
         <Card>
-          <Form method="post">
+          <Form method='post'>
             <FormLayout>
-              <Text variant="headingMd" as="h2">
+              <Text variant='headingMd' as='h2'>
                 Log in
               </Text>
 
               <TextField
-                type="text"
-                name="shop"
-                label="Shop domain"
-                helpText="example.myshopify.com"
+                type='text'
+                name='shop'
+                label='Shop domain'
+                helpText='example.myshopify.com'
                 value={shop}
                 onChange={setShop}
-                autoComplete="on"
+                autoComplete='on'
                 error={errors?.shop ?? ''}
               />
 
