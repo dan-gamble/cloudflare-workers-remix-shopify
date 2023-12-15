@@ -5,18 +5,17 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
-    "moduleResolution": "Node",
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "target": "ES2022",
     "strict": true,
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
-    "skipLibCheck": true,
     "paths": {
       "~/*": ["./app/*"]
     },
-    "types": ["@shopify/app-bridge-types"],
+
     // Remix takes care of building everything in `remix build`.
     "noEmit": true
   }

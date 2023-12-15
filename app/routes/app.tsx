@@ -1,11 +1,9 @@
 import { Link, Outlet, useLoaderData, useRouteError } from '@remix-run/react'
 import polarisStyles from '@shopify/polaris/build/esm/styles.css'
-// @ts-ignore
-import { boundary } from '@shopify/shopify-app-remix/server'
-// @ts-ignore
-import { AppProvider } from '@shopify/shopify-app-remix/react'
+import { boundary } from '@shopify/shopify-app-remix'
 import type { HeadersFunction, LoaderFunctionArgs } from '@remix-run/cloudflare'
 import { json } from '@remix-run/cloudflare'
+import { AppProvider } from '@shopify/shopify-app-remix/react'
 
 export const links = () => [{ rel: 'stylesheet', href: polarisStyles }]
 
@@ -21,11 +19,11 @@ export default function App () {
   return (
     <AppProvider isEmbeddedApp apiKey={apiKey}>
       <ui-nav-menu>
-        <Link to='/app' rel='home'>
+        <Link to="/app" rel="home">
           Home
         </Link>
 
-        <Link to='/app/additional'>Additional page</Link>
+        <Link to="/app/notification-styles">Notification styles</Link>
       </ui-nav-menu>
 
       <Outlet />

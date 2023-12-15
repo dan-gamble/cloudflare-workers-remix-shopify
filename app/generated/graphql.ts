@@ -47354,6 +47354,27 @@ export type DeliveryProfileUpdatePayload = {
   userErrors: Array<UserError>
 }
 
+export type MetafieldsSetMutationVariables = Exact<{
+  metafields: Array<MetafieldsSetInput> | MetafieldsSetInput
+}>
+
+export type MetafieldsSetMutation = {
+  __typename?: 'Mutation'
+  metafieldsSet?: {
+    __typename?: 'MetafieldsSetPayload'
+    metafields?: Array<{
+      __typename?: 'Metafield'
+      id: string
+      value: string
+    }> | null
+    userErrors: Array<{
+      __typename?: 'MetafieldsSetUserError'
+      field?: Array<string> | null
+      message: string
+    }>
+  } | null
+}
+
 export type AppIdQueryVariables = Exact<{ [key: string]: never }>
 
 export type AppIdQuery = {
@@ -47361,6 +47382,111 @@ export type AppIdQuery = {
   app?: { __typename?: 'App'; id: string } | null
 }
 
+export type ShopMetafieldQueryVariables = Exact<{
+  namespace: Scalars['String']['input']
+  key: Scalars['String']['input']
+}>
+
+export type ShopMetafieldQuery = {
+  __typename?: 'QueryRoot'
+  shop: {
+    __typename?: 'Shop'
+    id: string
+    metafield?: {
+      __typename?: 'Metafield'
+      id: string
+      namespace: string
+      key: string
+      value: string
+      type: string
+    } | null
+  }
+}
+
+export const MetafieldsSetDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'metafieldsSet' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'metafields' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'ListType',
+              type: {
+                kind: 'NonNullType',
+                type: {
+                  kind: 'NamedType',
+                  name: { kind: 'Name', value: 'MetafieldsSetInput' },
+                },
+              },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'metafieldsSet' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'metafields' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'metafields' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'metafields' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'value' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'userErrors' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'field' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'message' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  MetafieldsSetMutation,
+  MetafieldsSetMutationVariables
+>
 export const AppIdDocument = {
   kind: 'Document',
   definitions: [
@@ -47386,3 +47512,90 @@ export const AppIdDocument = {
     },
   ],
 } as unknown as DocumentNode<AppIdQuery, AppIdQueryVariables>
+export const ShopMetafieldDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'shopMetafield' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'namespace' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'key' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'shop' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'metafield' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'namespace' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'namespace' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'key' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'key' },
+                      },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'namespace' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'key' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'value' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ShopMetafieldQuery, ShopMetafieldQueryVariables>
