@@ -4,7 +4,7 @@ webhooks_path = "/webhooks"
 port = 8080
 
 [commands]
-dev = "npm run cf:dev"
+dev = "npm run local:dev"
 
 [hmr_server]
 http_paths = ["/ping"]

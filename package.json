@@ -7,10 +7,10 @@
     "build": "npm run build:remix",
     "build:remix": "remix build",
     "dev": "shopify app dev --no-update",
-    "dev:remix": "remix dev --manual -c \"npm start\"",
-    "dev:worker": "wrangler dev ./build/index.js --compatibility-flag nodejs_compat --live-reload",
+    "dev:remix": "remix watch",
+    "dev:worker": "wrangler dev --site public --compatibility-flag nodejs_compat --live-reload",
     "deploy": "wrangler deploy",
-    "cf:dev": "npm run build && concurrently \"npm:dev:*\"",
+    "local:dev": "npm run build && concurrently \"npm:dev:*\"",
     "cf:dev2": "remix dev --manual -c \"npm start\"",
     "start": "wrangler dev ./build/index.js",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -78,7 +78,7 @@
     "prettier": "^3.1.0",
     "prettier-plugin-sql": "^0.17.1",
     "typescript": "^5.1.6",
-    "wrangler": "3.8.0"
+    "wrangler": "3.21.0"
   },
   "engines": {
     "node": ">=18.0.0"
