@@ -13,7 +13,7 @@
 /** @type {import('@remix-run/dev').AppConfig} */
 export default {
   ignoredRouteFiles: ['**/.*'],
-  server: './server.ts',
+  server: './worker.ts',
   serverConditions: ['workerd', 'worker', 'browser'],
   serverDependenciesToBundle: [
     // bundle everything except the virtual module for the static content manifest provided by wrangler
