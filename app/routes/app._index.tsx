@@ -24,12 +24,22 @@ import { combineServerTimings, makeTimings, time } from '~/utils/timing.server'
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const { session } = await context.shopify.authenticate.admin(request)
+  const { cache } = context
 
   const timings = makeTimings('index')
 
-  const [shop] = await time(
+  // This doesn't need to be cached, but it's a good example of how to use the cache with timings
+  const shop = await time(
     () =>
-      context.db.select().from(shops).where(eq(shops.shopDomain, session.shop)),
+      cache({
+        ttl: 1000 * 10,
+        key: `index:shop:${session.shop}`,
+        async getFreshValue () {
+          const [shop]  = await context.db.select().from(shops).where(eq(shops.shopDomain, session.shop)).limit(1)
+
+          return shop
+        },
+      }),
     { timings, type: 'find shop' }
   )
 

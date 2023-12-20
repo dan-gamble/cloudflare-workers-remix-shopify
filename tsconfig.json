@@ -1,12 +1,19 @@
 {
-  "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "remix.env.d.ts",
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "extensions/**/*.ts",
+    "extensions/**/*.tsx"
+  ],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
-    "moduleResolution": "Bundler",
+    "moduleResolution": "Node",
     "resolveJsonModule": true,
+    "skipLibCheck": true,
     "target": "ES2022",
     "strict": true,
     "allowJs": true,
@@ -20,7 +27,8 @@
     "noEmit": true,
 
     "types": [
-      "node", "@shopify/app-bridge-types"
+      "node",
+      "@shopify/app-bridge-types"
     ]
   }
 }

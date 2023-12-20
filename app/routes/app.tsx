@@ -3,7 +3,7 @@ import polarisStyles from '@shopify/polaris/build/esm/styles.css'
 import { boundary } from '@shopify/shopify-app-remix'
 import type { HeadersFunction, LoaderFunctionArgs } from '@remix-run/cloudflare'
 import { json } from '@remix-run/cloudflare'
-import { AppProvider } from '@shopify/shopify-app-remix/react'
+import { AppProvider } from '@shopify/shopify-app-remix/build/ts/react'
 
 export const links = () => [{ rel: 'stylesheet', href: polarisStyles }]
 

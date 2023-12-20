@@ -6,21 +6,20 @@ import { cachified, mergeReporters, verboseReporter } from '@epic-web/cachified'
 import { cloudflareKvCacheAdapter } from 'cachified-adapter-cloudflare-kv'
 import type { Timings } from '~/utils/timing.server'
 import { cachifiedTimingReporter } from '~/utils/timing.server'
+import type { Logger } from 'pino'
+
+const cacheMetadataSchema = z.object({
+  createdTime: z.number(),
+  ttl: z.number().nullable().optional(),
+  swr: z.number().nullable().optional()
+})
 
 const cacheEntrySchema = z.object({
-  metadata: z.object({
-    createdTime: z.number(),
-    ttl: z.number().nullable().optional(),
-    swr: z.number().nullable().optional()
-  }),
+  metadata: cacheMetadataSchema,
   value: z.unknown()
 })
-const cacheQueryResultSchema = z.object({
-  metadata: z.string(),
-  value: z.string()
-})
 
-export function setupCache (env: Env) {
+export function setupCache (env: Env, logger: Logger) {
   const cache = cloudflareKvCacheAdapter({
     // @ts-expect-error
     kv: env.KV,
@@ -30,16 +29,15 @@ export function setupCache (env: Env) {
 
   const proxy: Cache = {
     name: 'KV Cache',
-    get (key) {
-      const result = cache.get(key)
-      const parseResult = cacheQueryResultSchema.safeParse(result)
-      if (!parseResult.success) return null
+    async get (key) {
+      const result = await cache.get(key)
+      const parsedEntry = cacheEntrySchema.safeParse(result)
 
-      const parsedEntry = cacheEntrySchema.safeParse({
-        metadata: JSON.parse(parseResult.data.metadata),
-        value: JSON.parse(parseResult.data.value)
-      })
-      if (!parsedEntry.success) return null
+      if (!parsedEntry.success) {
+        logger.error(parsedEntry.error.errors, 'cache.get: parseResult.error.errors')
+
+        return null
+      }
 
       const { metadata, value } = parsedEntry.data
       if (!value) return null

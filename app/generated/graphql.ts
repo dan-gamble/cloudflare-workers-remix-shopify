@@ -16501,7 +16501,15 @@ export enum FulfillmentOrderRequestStatus {
 /** Return type for `fulfillmentOrderReschedule` mutation. */
 export type FulfillmentOrderReschedulePayload = {
   __typename?: 'FulfillmentOrderReschedulePayload'
-  /** The fulfillment order that was rescheduled. */
+  /**
+   * A fulfillment order with the rescheduled line items.
+   *
+   * Fulfillment orders may be merged if they have the same `fulfillAt` datetime.
+   *
+   * If the fulfillment order is merged then the resulting fulfillment order will be returned.
+   * Otherwise the original fulfillment order will be returned with an updated `fulfillAt` datetime.
+   *
+   */
   fulfillmentOrder?: Maybe<FulfillmentOrder>
   /** The list of errors that occurred from executing the mutation. */
   userErrors: Array<FulfillmentOrderRescheduleUserError>
@@ -21207,7 +21215,7 @@ export type MarketingActivityCreateExternalInput = {
   scheduledStart?: InputMaybe<Scalars['DateTime']['input']>
   /** The date and time at which the activity started. If omitted or set to `null`, the current time will be used. */
   start?: InputMaybe<Scalars['DateTime']['input']>
-  /** The method of marketing used for this marketing activity. The marketing tactic determines which default fields are included in the marketing activity.. */
+  /** The method of marketing used for this marketing activity. The marketing tactic determines which default fields are included in the marketing activity. */
   tactic: MarketingTactic
   /** The title of the marketing activity. */
   title: Scalars['String']['input']
@@ -21370,7 +21378,7 @@ export type MarketingActivityUpdateExternalInput = {
   scheduledStart?: InputMaybe<Scalars['DateTime']['input']>
   /** The date and time at which the activity started. */
   start?: InputMaybe<Scalars['DateTime']['input']>
-  /** The method of marketing used for this marketing activity. The marketing tactic determines which default fields are included in the marketing activity.. */
+  /** The method of marketing used for this marketing activity. The marketing tactic determines which default fields are included in the marketing activity. */
   tactic?: InputMaybe<MarketingTactic>
   /** The title of the marketing activity. */
   title?: InputMaybe<Scalars['String']['input']>
@@ -24648,7 +24656,14 @@ export type Mutation = {
   fulfillmentOrderRejectFulfillmentRequest?: Maybe<FulfillmentOrderRejectFulfillmentRequestPayload>
   /** Releases the fulfillment hold on a fulfillment order. */
   fulfillmentOrderReleaseHold?: Maybe<FulfillmentOrderReleaseHoldPayload>
-  /** Reschedules a scheduled fulfillment order. */
+  /**
+   * Reschedules a scheduled fulfillment order.
+   *
+   * Updates the value of the `fulfillAt` field on a scheduled fulfillment order.
+   *
+   * The fulfillment order will be marked as ready for fulfillment at this date and time.
+   *
+   */
   fulfillmentOrderReschedule?: Maybe<FulfillmentOrderReschedulePayload>
   /** Splits a fulfillment order or orders based on line item inputs and quantities. */
   fulfillmentOrderSplit?: Maybe<FulfillmentOrderSplitPayload>
@@ -47099,7 +47114,14 @@ export enum WebhookSubscriptionTopic {
   FulfillmentOrdersOrderRoutingComplete = 'FULFILLMENT_ORDERS_ORDER_ROUTING_COMPLETE',
   /** The webhook topic for `fulfillment_orders/placed_on_hold` events. Occurs when a fulfillment order is placed on hold. Requires at least one of the following scopes: read_merchant_managed_fulfillment_orders, read_assigned_fulfillment_orders, read_third_party_fulfillment_orders. */
   FulfillmentOrdersPlacedOnHold = 'FULFILLMENT_ORDERS_PLACED_ON_HOLD',
-  /** The webhook topic for `fulfillment_orders/rescheduled` events. Triggers when a fulfillment order is rescheduled Requires at least one of the following scopes: read_merchant_managed_fulfillment_orders, read_assigned_fulfillment_orders, read_third_party_fulfillment_orders. */
+  /**
+   * The webhook topic for `fulfillment_orders/rescheduled` events. Triggers when a fulfillment order is rescheduled.
+   *
+   * Fulfillment orders may be merged if they have the same `fulfillAt` datetime.
+   * If the fulfillment order is merged then the resulting fulfillment order will be indicated in the webhook body.
+   * Otherwise it will be the original fulfillment order with an updated `fulfill_at` datetime.
+   *  Requires at least one of the following scopes: read_merchant_managed_fulfillment_orders, read_assigned_fulfillment_orders, read_third_party_fulfillment_orders.
+   */
   FulfillmentOrdersRescheduled = 'FULFILLMENT_ORDERS_RESCHEDULED',
   /** The webhook topic for `fulfillment_orders/scheduled_fulfillment_order_ready` events. Occurs whenever a fulfillment order which was scheduled becomes due. Requires at least one of the following scopes: read_merchant_managed_fulfillment_orders, read_assigned_fulfillment_orders, read_third_party_fulfillment_orders. */
   FulfillmentOrdersScheduledFulfillmentOrderReady = 'FULFILLMENT_ORDERS_SCHEDULED_FULFILLMENT_ORDER_READY',

@@ -7,6 +7,7 @@ import type { Database } from '~/utils/db/db.server'
 import type { setupCache } from '~/utils/cache.server'
 
 import type * as React from 'react'
+import type { Logger } from 'pino'
 
 declare global {
   namespace JSX {
@@ -21,6 +22,16 @@ declare global {
       >
     }
   }
+
+  enum LogLevel {
+    Trace = 'trace',
+    Debug = 'debug',
+    Info = 'info',
+    Warn = 'warn',
+    Error = 'error',
+    Fatal = 'fatal',
+    Silent = 'silent'
+  }
 }
 
 interface Env {
@@ -33,6 +44,9 @@ interface Env {
   KV: KVNamespace
   QUEUE: Queue
   DB: D1Database
+  LOG_LEVEL?: LogLevel,
+  LOG_FILENAME?: string,
+  WORKER_ENV: 'development' | 'production'
 }
 
 declare module '__STATIC_CONTENT_MANIFEST' {
@@ -44,7 +58,8 @@ interface LoadContext {
   env: Env
   cache: ReturnType<typeof setupCache>
   db: Database
-  shopify: ReturnType<typeof createShopifyApp>
+  shopify: ReturnType<typeof createShopifyApp>,
+  logger: Logger
 }
 
 declare let process: {

@@ -8,6 +8,7 @@ import { createShopifyApp } from '~/utils/shopify.server'
 import type { Env } from './remix.env'
 import { createDb } from '~/utils/db/db.server'
 import { setupCache } from '~/utils/cache.server'
+import { createLogger } from '~/utils/logger.server'
 
 const MANIFEST = JSON.parse(__STATIC_CONTENT_MANIFEST)
 const handleRemixRequest = createRequestHandler(build, process.env.NODE_ENV)
@@ -43,9 +44,10 @@ export default {
       )
     } catch (error) {}
 
+    const logger = createLogger(env)
     const db = createDb(env)
     const shopify = createShopifyApp(env, db)
-    const cache = setupCache(env)
+    const cache = setupCache(env, logger)
 
     // This sends a log to our queue
     // let log = {
@@ -60,7 +62,8 @@ export default {
         env,
         cache,
         db,
-        shopify
+        shopify,
+        logger,
       }
       return await handleRemixRequest(request, loadContext)
     } catch (error) {

@@ -72,7 +72,7 @@ export function getServerTimeHeader (timings?: Timings) {
           const time = timingInfo.time ?? performance.now() - timingInfo.start
           return acc + time
         }, 0)
-        .toFixed(1)
+        .toFixed(2)
       const desc = timingInfos
         .map(t => t.desc)
         .filter(Boolean)
