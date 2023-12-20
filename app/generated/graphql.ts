@@ -47404,6 +47404,13 @@ export type AppIdQuery = {
   app?: { __typename?: 'App'; id: string } | null
 }
 
+export type ShopLocalisationQueryVariables = Exact<{ [key: string]: never }>
+
+export type ShopLocalisationQuery = {
+  __typename?: 'QueryRoot'
+  shop: { __typename?: 'Shop'; currencyCode: CurrencyCode }
+}
+
 export type ShopMetafieldQueryVariables = Exact<{
   namespace: Scalars['String']['input']
   key: Scalars['String']['input']
@@ -47534,6 +47541,37 @@ export const AppIdDocument = {
     },
   ],
 } as unknown as DocumentNode<AppIdQuery, AppIdQueryVariables>
+export const ShopLocalisationDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'shopLocalisation' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'shop' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'currencyCode' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ShopLocalisationQuery,
+  ShopLocalisationQueryVariables
+>
 export const ShopMetafieldDocument = {
   kind: 'Document',
   definitions: [

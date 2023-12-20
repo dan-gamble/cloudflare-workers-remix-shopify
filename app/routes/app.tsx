@@ -3,21 +3,42 @@ import polarisStyles from '@shopify/polaris/build/esm/styles.css'
 import { boundary } from '@shopify/shopify-app-remix'
 import type { HeadersFunction, LoaderFunctionArgs } from '@remix-run/cloudflare'
 import { json } from '@remix-run/cloudflare'
-import { AppProvider } from '@shopify/shopify-app-remix/build/ts/react'
+// @ts-ignore
+import { AppProvider } from '@shopify/shopify-app-remix/react'
+import { ShopLocalisationDocument } from '~/generated/graphql'
+import { makeGraphQLRequest } from '~/utils/graphql.server'
+import { I18nContext, I18nManager } from '@shopify/react-i18n'
+import type { AppContext } from '~/types'
 
 export const links = () => [{ rel: 'stylesheet', href: polarisStyles }]
 
 export async function loader ({ context, request }: LoaderFunctionArgs) {
-  await context.shopify.authenticate.admin(request)
+  const { admin } = await context.shopify.authenticate.admin(request)
 
-  return json({ apiKey: context.env.SHOPIFY_API_KEY || '' })
+  const { shop } = await makeGraphQLRequest(admin.graphql, {
+    document: ShopLocalisationDocument,
+  })
+
+  return json({
+    polarisTranslations: require('@shopify/polaris/locales/en.json'),
+    apiKey: context.env.SHOPIFY_API_KEY || '',
+    shop,
+  })
 }
 
 export default function App () {
-  const { apiKey } = useLoaderData<typeof loader>()
+  const { apiKey, polarisTranslations, shop } = useLoaderData<typeof loader>()
+  const locale = 'en'
+  const i18nManager = new I18nManager({
+    locale,
+  })
 
   return (
-    <AppProvider isEmbeddedApp apiKey={apiKey}>
+    <AppProvider
+      isEmbeddedApp
+      apiKey={apiKey}
+      i18n={polarisTranslations}
+    >
       <ui-nav-menu>
         <Link to="/app" rel="home">
           Home
@@ -26,7 +47,9 @@ export default function App () {
         <Link to="/app/notification-styles">Notification styles</Link>
       </ui-nav-menu>
 
-      <Outlet />
+      <I18nContext.Provider value={i18nManager}>
+        <Outlet context={{ shop } satisfies AppContext} />
+      </I18nContext.Provider>
     </AppProvider>
   )
 }

@@ -40,6 +40,7 @@
     "@shopify/app": "^3.51.2",
     "@shopify/cli": "^3.51.2",
     "@shopify/polaris": "^12.1.1",
+    "@shopify/react-i18n": "^7.8.0",
     "@shopify/shopify-api": "^8.1.1",
     "@shopify/shopify-app-remix": "^2.1.0",
     "@shopify/shopify-app-session-storage-kv": "^2.0.1",
