@@ -21,6 +21,7 @@ import {
 import { shops } from '~/utils/db/schema.server'
 import { eq } from 'drizzle-orm'
 import { combineServerTimings, makeTimings, time } from '~/utils/timing.server'
+import { SayHelloJob } from '~/jobs/say-hello-job'
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const { session } = await context.shopify.authenticate.admin(request)
@@ -42,6 +43,8 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
       }),
     { timings, type: 'find shop' }
   )
+
+  SayHelloJob.dispatch('Hello, world :)')
 
   return json(
     { shop },

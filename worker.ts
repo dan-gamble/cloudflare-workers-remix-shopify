@@ -9,6 +9,8 @@ import type { Env } from './remix.env'
 import { createDb } from '~/utils/db/db.server'
 import { setupCache } from '~/utils/cache.server'
 import { createLogger } from '~/utils/logger.server'
+import { config } from './bao.config'
+import { handleQueue } from './app/utils/queue.server'
 
 const MANIFEST = JSON.parse(__STATIC_CONTENT_MANIFEST)
 const handleRemixRequest = createRequestHandler(build, process.env.NODE_ENV)
@@ -44,7 +46,9 @@ export default {
       )
     } catch (error) {}
 
-    const logger = createLogger(env)
+    config({ env, request, ctx })
+
+    const logger = createLogger()
     const db = createDb(env)
     const shopify = createShopifyApp(env, db)
     const cache = setupCache(env, logger)
@@ -72,8 +76,7 @@ export default {
     }
   },
 
-  async queue (batch: MessageBatch) {
-    const messages = JSON.stringify(batch.messages)
-    console.log(`consumed from our queue: ${messages}`)
+  async queue (batch: MessageBatch, env: Env, context: ExecutionContext) {
+    return handleQueue(batch, env, context, config)
   }
 }
