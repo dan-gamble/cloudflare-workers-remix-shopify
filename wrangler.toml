@@ -5,6 +5,9 @@ main = "./build/index.js"
 # https://developers.cloudflare.com/workers/platform/compatibility-dates
 compatibility_date = "2023-04-20"
 
+[triggers]
+crons = ['* * * * *']
+
 kv_namespaces = [
   { binding = "KV", id = "8968cadbc0ed4b7c9e08f5dc5c4ec811" }
 ]

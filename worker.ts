@@ -11,6 +11,7 @@ import { setupCache } from '~/utils/cache.server'
 import { createLogger } from '~/utils/logger.server'
 import { config } from './bao.config'
 import { handleQueue } from './app/utils/queue.server'
+import { handleScheduled } from './app/utils/scheduled.server'
 
 const MANIFEST = JSON.parse(__STATIC_CONTENT_MANIFEST)
 const handleRemixRequest = createRequestHandler(build, process.env.NODE_ENV)
@@ -23,7 +24,7 @@ export default {
   async fetch (
     request: Request,
     env: Env,
-    ctx: ExecutionContext
+    ctx: ExecutionContext,
   ): Promise<Response> {
     try {
       const url = new URL(request.url)
@@ -33,16 +34,16 @@ export default {
       return await getAssetFromKV(
         {
           request,
-          waitUntil: ctx.waitUntil.bind(ctx)
+          waitUntil: ctx.waitUntil.bind(ctx),
         } as FetchEvent,
         {
           ASSET_NAMESPACE: env.__STATIC_CONTENT,
           ASSET_MANIFEST: MANIFEST,
           cacheControl: {
             browserTTL: ttl,
-            edgeTTL: ttl
-          }
-        }
+            edgeTTL: ttl,
+          },
+        },
       )
     } catch (error) {}
 
@@ -78,5 +79,15 @@ export default {
 
   async queue (batch: MessageBatch, env: Env, context: ExecutionContext) {
     return handleQueue(batch, env, context, config)
-  }
+  },
+
+  async scheduled (event: ScheduledEvent, env: Env, ctx: ExecutionContext) {
+    return await handleScheduled(event, env, ctx, config, (schedule) => {
+      schedule
+        .run(async () => {
+          console.log('Running every minute')
+        })
+        .everyMinute()
+    })
+  },
 }

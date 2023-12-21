@@ -8,7 +8,7 @@
     "build:remix": "remix build",
     "dev": "shopify app dev --no-update",
     "dev:remix": "remix watch",
-    "dev:worker": "wrangler dev --site public --compatibility-flag nodejs_compat --live-reload",
+    "dev:worker": "wrangler dev --site public --compatibility-flag nodejs_compat --live-reload --test-scheduled",
     "deploy": "wrangler deploy",
     "local:dev": "npm run build && concurrently \"npm:dev:*\"",
     "cf:dev2": "remix dev --manual -c \"npm start\"",
