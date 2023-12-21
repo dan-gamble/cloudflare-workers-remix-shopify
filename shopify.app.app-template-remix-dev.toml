@@ -7,7 +7,7 @@ embedded = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products"
+scopes = "write_products,write_checkout_branding_settings,write_files,write_pixels,read_customer_events,write_publications,write_cart_transforms"
 use_legacy_install_flow = true
 
 [auth]
@@ -25,5 +25,4 @@ api_version = "2023-10"
 embedded = false
 
 [build]
-automatically_update_urls_on_dev = false
 dev_store_url = "bao-checkout-2.myshopify.com"

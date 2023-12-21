@@ -1,6 +1,6 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-name = "App Template Remix - CF"
+name = "Cloudflare"
 client_id = "42e3f4a3b29eacdfcfa6660f81a19ce8"
 application_url = "https://remix-cloudflare-workers.dan-gamble.workers.dev"
 embedded = true
