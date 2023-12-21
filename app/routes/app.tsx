@@ -44,6 +44,8 @@ export default function App () {
           Home
         </Link>
 
+        <Link to="/app/additional">Additional</Link>
+
         <Link to="/app/notification-styles">Notification styles</Link>
       </ui-nav-menu>
 

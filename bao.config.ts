@@ -8,6 +8,12 @@ export const config = defineConfig<Env>(context => {
     },
     queues: {
       default: context.env.QUEUE,
+    },
+    storage: {
+      default: {
+        binding: context.env.BUCKET,
+        publicPath: '/storage/media'
+      },
     }
   }
 })

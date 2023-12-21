@@ -44,8 +44,9 @@ interface Env {
   KV: KVNamespace
   QUEUE: Queue
   DB: D1Database
+  BUCKET: R2Bucket
   LOG_LEVEL?: LogLevel,
-  LOG_FILENAME?: string,
+  LOG_FILENAME?: string
   WORKER_ENV: 'development' | 'production'
 }
 

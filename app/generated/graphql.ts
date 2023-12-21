@@ -46119,7 +46119,7 @@ export enum TranslatableResourceType {
   PackingSlipTemplate = 'PACKING_SLIP_TEMPLATE',
   /** A payment gateway. Translatable fields: `name`. */
   PaymentGateway = 'PAYMENT_GATEWAY',
-  /** An online store product. Translatable fields: `title`, `body_html`, `handle`, `meta_title`, `meta_description`. */
+  /** An online store product. Translatable fields: `title`, `body_html`, `handle`, `product_type`, `meta_title`, `meta_description`. */
   Product = 'PRODUCT',
   /**
    * An online store custom product property name. For example, "Size", "Color", or "Material".

@@ -1,3 +1,5 @@
+import { ActionFunctionArgs, json, unstable_parseMultipartFormData } from '@remix-run/cloudflare'
+import { Form } from '@remix-run/react'
 import {
   Box,
   Card,
@@ -6,8 +8,47 @@ import {
   List,
   Page,
   Text,
-  BlockStack
+  BlockStack,
 } from '@shopify/polaris'
+import { parseMultipartFormData } from '~/utils/form-data.server'
+import { storage } from '~/utils/storage.server'
+
+export async function action ({ context, request }: ActionFunctionArgs) {
+  const formData = await request.formData()
+  const file = formData.get('file')
+  if (!(file instanceof File)) throw new Error('Not a file')
+  const key = file.name
+
+  const r2Object = await storage().put(key, file)
+
+  // const formData = await parseMultipartFormData(
+  //   request,
+  //   async ({ name, filename, stream, data, ...rest }) => {
+  //     console.log({ rest })
+  //
+  //     if (name === 'file') {
+  //       console.log('a', { stream })
+  //       const r2Object = await storage().put(filename, stream, {
+  //         httpMetadata: request.headers,
+  //       })
+  //       console.log({ r2Object })
+  //       console.log('b')
+  //
+  //       return r2Object.key
+  //     }
+  //
+  //     console.log({ name, filename, data })
+  //
+  //     return data
+  //   }
+  // )
+
+  const url = storage().url(key)
+
+  console.log({ url })
+
+  return json({})
+}
 
 export default function AdditionalPage () {
   return (
@@ -37,7 +78,13 @@ export default function AdditionalPage () {
                 link to it in the <Code>&lt;ui-nav-menu&gt;</Code> component
                 found in <Code>app/routes/app.jsx</Code>.
               </Text>
-            </BlockStack>
+
+              <Form method="post" encType="multipart/form-data">
+                <label htmlFor="avatar-input">Avatar</label>
+                <input id="avatar-input" type="file" name="file" />
+                <button>Upload</button>
+              </Form>
+              </BlockStack>
           </Card>
         </Layout.Section>
         <Layout.Section variant='oneThird'>
