@@ -1,15 +1,11 @@
 import { getAssetFromKV } from '@cloudflare/kv-asset-handler'
-import type { AppLoadContext } from '@remix-run/cloudflare'
 import { createRequestHandler, logDevReady } from '@remix-run/cloudflare'
 import * as build from '@remix-run/dev/server-build'
 import __STATIC_CONTENT_MANIFEST from '__STATIC_CONTENT_MANIFEST'
-import { createShopifyApp } from '~/utils/shopify.server'
-import { createDb } from '~/utils/db/db.server'
-import { setupCache } from '~/utils/cache.server'
-import { createLogger } from '~/utils/logger.server'
 import { config } from './bao.config'
-import { handleQueue } from './app/utils/queue.server'
-import { handleScheduled } from './app/utils/scheduled.server'
+import { handleQueue } from '~/utils/queue.server'
+import { handleScheduled } from '~/utils/scheduled.server'
+import { setupLoadContext } from '~/utils/cloudflare.server'
 
 export { Channel } from '~/utils/channel.server'
 
@@ -49,11 +45,6 @@ export default {
 
     config({ env, request, ctx })
 
-    const logger = createLogger()
-    const db = createDb(env)
-    const shopify = createShopifyApp(env, db)
-    const cache = setupCache(env)
-
     // This sends a log to our queue
     // let log = {
     //   url: request.url,
@@ -63,14 +54,7 @@ export default {
     // await env.QUEUE.send(log)
 
     try {
-      const loadContext: AppLoadContext = {
-        env,
-        cache,
-        db,
-        shopify,
-        logger,
-      }
-      return await handleRemixRequest(request, loadContext)
+      return await handleRemixRequest(request, setupLoadContext(env))
     } catch (error) {
       console.log(error)
       return new Response('An unexpected error occurred', { status: 500 })

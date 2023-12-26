@@ -4,6 +4,8 @@ import { dispatchEvent, Event } from "~/utils/events.server"
 import { hydrateArguments } from '~/utils/serialize.server'
 import type { defineConfig} from '~/utils/config.server'
 import { getEvent, getJob } from '~/utils/config.server'
+import { setupLoadContext } from '~/utils/cloudflare.server'
+import type { AppLoadContext } from '@remix-run/cloudflare'
 
 export interface MessagePayload {
   job?: string;
@@ -11,7 +13,7 @@ export interface MessagePayload {
   payload: any;
 }
 
-export async function handleQueue<Env> (
+export async function handleQueue (
   batch: MessageBatch,
   env: Env,
   ctx: ExecutionContext,
@@ -23,18 +25,21 @@ export async function handleQueue<Env> (
    */
   config({ env, ctx })
 
+  const loadContext = setupLoadContext(env)
+
   return await Promise.all(
-    batch.messages.map((message) => handleQueueMessage(message)),
+    batch.messages.map((message) => handleQueueMessage(message, ctx, loadContext)),
   )
 }
 
-async function handleQueueMessage (message: Message) {
+async function handleQueueMessage (message: Message, context: ExecutionContext, loadContext: AppLoadContext) {
   const instance = await hydrateInstanceFromQueuePayload(
     message.body as MessagePayload,
   )
 
   if (instance instanceof Job) {
-    await instance.handle()
+    await instance.handle(context, loadContext)
+
     return
   }
 
