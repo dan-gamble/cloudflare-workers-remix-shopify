@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import type {
   ActionFunctionArgs,
   HeadersFunction,
@@ -29,6 +29,8 @@ import { SayHelloJob } from '~/jobs/say-hello-job'
 import { useChannel } from '~/hooks/use-channel'
 import { SayHelloEvent } from '~/events/say-hello-event'
 import { sleep } from '~/utils/index.server'
+import { AuthenticatedExampleEvent } from '~/events/authenticated-example-event'
+import { normaliseShopName } from '~/utils/shopify'
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const { session } = await context.shopify.authenticate.admin(request)
@@ -52,6 +54,8 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   )
 
   SayHelloJob.dispatch('Hello, world :)')
+
+  AuthenticatedExampleEvent.dispatch('This is an example of an event that is only dispatched when the user is authenticated', session.shop)
 
   return json(
     { shop },
@@ -128,15 +132,23 @@ export default function Index () {
     ''
   )
 
+  const [broadcastMessage, setBroadcastMessage] = useState('')
+
   useChannel('default', message => {
     const data = JSON.parse(message.data)
 
-    console.log({ data })
+    setBroadcastMessage(data.data.message)
+  })
+
+  useChannel(`shops.${normaliseShopName('bao-checkout-2')}`, message => {
+    console.log({ message })
   })
 
   useEffect(() => {
     if (productId) {
       shopify.toast.show('Product created')
+
+      setBroadcastMessage('')
     }
   }, [productId])
   const generateProduct = () => submit({}, { replace: true, method: 'POST' })
@@ -194,7 +206,7 @@ export default function Index () {
                     mutation in our API references.
                   </Text>
                 </BlockStack>
-                <InlineStack gap='300'>
+                <InlineStack gap='300' blockAlign="center">
                   <Button loading={isLoading} onClick={generateProduct}>
                     Generate a product
                   </Button>
@@ -206,6 +218,11 @@ export default function Index () {
                     >
                       View product
                     </Button>
+                  )}
+                  {broadcastMessage && (
+                    <Text as="p" variant="bodyMd">
+                      {broadcastMessage}
+                    </Text>
                   )}
                 </InlineStack>
                 {actionData?.product && (

@@ -71,7 +71,7 @@ export class Channel implements DurableObject {
 
     webSocket.addEventListener('message', async (message: MessageEvent) => {
       try {
-        let data = JSON.parse(message.data)
+        let data = JSON.parse(message.data as string)
 
         if (!receivedInitialMessage) {
           // Broadcast to all other connections that this user has joined.

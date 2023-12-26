@@ -1,5 +1,8 @@
 import { defineConfig } from '~/utils/config.server'
 import { SayHelloListener } from '~/listeners/say-hello-listener'
+import type { Session } from '@shopify/shopify-api'
+import { AuthenticatedExampleListener } from '~/listeners/authenticated-example-listener'
+import { normaliseShopName } from '~/utils/shopify'
 
 export const config = defineConfig<Env>(context => {
   return {
@@ -19,9 +22,16 @@ export const config = defineConfig<Env>(context => {
       default: {
         binding: context.env.CHANNELS,
       },
+      'shops.*': {
+        binding: context.env.CHANNELS,
+        async authorize (session: Session, shopName: string) {
+          return normaliseShopName(session.shop) === normaliseShopName(shopName)
+        },
+      },
     },
     listeners: {
-      SayHelloEvent: [SayHelloListener]
-    }
+      AuthenticatedExampleEvent: [AuthenticatedExampleListener],
+      SayHelloEvent: [SayHelloListener],
+    },
   }
 })

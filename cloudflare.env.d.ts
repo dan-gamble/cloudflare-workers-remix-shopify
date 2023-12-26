@@ -29,7 +29,7 @@ interface Env {
   QUEUE: Queue
   DB: D1Database
   BUCKET: R2Bucket
-  CHANNELS: DurableObjectNamespace,
+  CHANNELS: DurableObjectNamespace
   LOG_LEVEL?: LogLevel,
   LOG_FILENAME?: string
   WORKER_ENV: 'development' | 'production'

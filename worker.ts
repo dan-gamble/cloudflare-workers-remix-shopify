@@ -52,7 +52,7 @@ export default {
     const logger = createLogger()
     const db = createDb(env)
     const shopify = createShopifyApp(env, db)
-    const cache = setupCache(env, logger)
+    const cache = setupCache(env)
 
     // This sends a log to our queue
     // let log = {

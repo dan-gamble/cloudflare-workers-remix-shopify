@@ -1,6 +1,7 @@
 import type { Job } from '~/utils/jobs.server'
 import { sanitizeModuleName } from '~/utils/string.server'
 import type { Session } from '@shopify/shopify-api'
+import { WithRequired } from '~/types'
 
 export interface StorageDiskConfig {
   binding: R2Bucket
@@ -20,7 +21,7 @@ type ChannelAuthorizeFunction = (
   ...args: any
 ) => boolean | Promise<boolean>
 
-type ChannelPresenceFunction = (user: any, ...args: any) => any | Promise<any>
+type ChannelPresenceFunction = (session: Session, ...args: any) => any | Promise<any>
 
 export type ChannelConfig = {
   binding?: DurableObjectNamespace
@@ -29,9 +30,7 @@ export type ChannelConfig = {
 }
 
 interface ChannelsConfig {
-  default: {
-    binding: DurableObjectNamespace
-  }
+  default: WithRequired<ChannelConfig, 'binding'>
 
   [name: string]: ChannelConfig
 }
