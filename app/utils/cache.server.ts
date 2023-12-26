@@ -1,12 +1,10 @@
 import { z } from 'zod'
-import type { Env } from '../../remix.env'
 import type { Cache, CachifiedOptions } from '@epic-web/cachified'
 import { cachified, mergeReporters, verboseReporter } from '@epic-web/cachified'
 
 import { cloudflareKvCacheAdapter } from 'cachified-adapter-cloudflare-kv'
 import type { Timings } from '~/utils/timing.server'
 import { cachifiedTimingReporter } from '~/utils/timing.server'
-import type { Logger } from 'pino'
 
 const cacheMetadataSchema = z.object({
   createdTime: z.number(),
@@ -19,9 +17,9 @@ const cacheEntrySchema = z.object({
   value: z.unknown()
 })
 
-export function setupCache (env: Env, logger: Logger) {
+export function setupCache (env: Env) {
   const cache = cloudflareKvCacheAdapter({
-    // @ts-expect-error
+    // @ts-ignore
     kv: env.KV,
     keyPrefix: 'cache',
     name: 'CloudflareKV'
@@ -34,8 +32,6 @@ export function setupCache (env: Env, logger: Logger) {
       const parsedEntry = cacheEntrySchema.safeParse(result)
 
       if (!parsedEntry.success) {
-        logger.error(parsedEntry.error.errors, 'cache.get: parseResult.error.errors')
-
         return null
       }
 

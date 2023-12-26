@@ -1,10 +1,10 @@
-import { defineConfig } from './app/utils/config.server'
-import type { Env } from './remix.env'
+import { defineConfig } from '~/utils/config.server'
+import { SayHelloListener } from '~/listeners/say-hello-listener'
 
 export const config = defineConfig<Env>(context => {
   return {
     database: {
-      default: context.env.DB
+      default: context.env.DB,
     },
     queues: {
       default: context.env.QUEUE,
@@ -12,8 +12,16 @@ export const config = defineConfig<Env>(context => {
     storage: {
       default: {
         binding: context.env.BUCKET,
-        publicPath: '/storage/media'
+        publicPath: '/storage/media',
       },
+    },
+    channels: {
+      default: {
+        binding: context.env.CHANNELS,
+      },
+    },
+    listeners: {
+      SayHelloEvent: [SayHelloListener]
     }
   }
 })

@@ -2,16 +2,16 @@ import { getAssetFromKV } from '@cloudflare/kv-asset-handler'
 import type { AppLoadContext } from '@remix-run/cloudflare'
 import { createRequestHandler, logDevReady } from '@remix-run/cloudflare'
 import * as build from '@remix-run/dev/server-build'
-// @ts-expect-error
 import __STATIC_CONTENT_MANIFEST from '__STATIC_CONTENT_MANIFEST'
 import { createShopifyApp } from '~/utils/shopify.server'
-import type { Env } from './remix.env'
 import { createDb } from '~/utils/db/db.server'
 import { setupCache } from '~/utils/cache.server'
 import { createLogger } from '~/utils/logger.server'
 import { config } from './bao.config'
 import { handleQueue } from './app/utils/queue.server'
 import { handleScheduled } from './app/utils/scheduled.server'
+
+export { Channel } from '~/utils/channel.server'
 
 const MANIFEST = JSON.parse(__STATIC_CONTENT_MANIFEST)
 const handleRemixRequest = createRequestHandler(build, process.env.NODE_ENV)

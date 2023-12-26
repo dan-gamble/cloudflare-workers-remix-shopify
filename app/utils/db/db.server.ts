@@ -1,5 +1,4 @@
 import { drizzle } from 'drizzle-orm/d1'
-import type { Env } from '../../../remix.env'
 
 // const client = new Client({
 //   connectionString: process.env.DATABASE_URL,

@@ -1,8 +1,9 @@
-import type { Job } from '~/jobs/job'
+import type { Job } from '~/utils/jobs.server'
 import { sanitizeModuleName } from '~/utils/string.server'
+import type { Session } from '@shopify/shopify-api'
 
 export interface StorageDiskConfig {
-  binding: R2Bucket;
+  binding: R2Bucket
   /**
    * Optional. The public URL to the disk. If you have made your R2 bucket public, you can
    * set this to the URL of the bucket. If your R2 bucket is private but you want to allow
@@ -11,13 +12,38 @@ export interface StorageDiskConfig {
    *
    * If you do not set this, `storage()->url(key)` for objects in this disk will return `null`.
    */
-  publicPath?: string;
+  publicPath?: string
+}
+
+type ChannelAuthorizeFunction = (
+  session: Session,
+  ...args: any
+) => boolean | Promise<boolean>
+
+type ChannelPresenceFunction = (user: any, ...args: any) => any | Promise<any>
+
+export type ChannelConfig = {
+  binding?: DurableObjectNamespace
+  authorize?: ChannelAuthorizeFunction
+  presence?: ChannelPresenceFunction
+}
+
+interface ChannelsConfig {
+  default: {
+    binding: DurableObjectNamespace
+  }
+
+  [name: string]: ChannelConfig
 }
 
 export interface BaoConfig {
   database?: { default: D1Database } & Record<string, D1Database>
   queues?: { default: Queue } & Record<string, Queue>
   storage?: { default: StorageDiskConfig } & Record<string, StorageDiskConfig>
+  channels?: ChannelsConfig
+  listeners?: {
+    [name: string]: any[]
+  }
 }
 
 export function setConfig (userConfig: BaoConfig) {
@@ -37,6 +63,14 @@ export function setConfig (userConfig: BaoConfig) {
     }
   }
 
+  if (userConfig.channels) {
+    Config.channels = userConfig.channels
+  }
+
+  if (userConfig.listeners) {
+    Config.listeners = new Map(Object.entries(userConfig.listeners))
+  }
+
   return userConfig
 }
 
@@ -50,7 +84,7 @@ export class Config {
   }
 
   static storage?: {
-    disks: BaoConfig["storage"];
+    disks: BaoConfig['storage']
   }
 
   static queues?: BaoConfig['queues']
@@ -58,6 +92,31 @@ export class Config {
   static jobs?: {
     [name: string]: Constructor<Job>
   }
+
+  static events?: {
+    [name: string]: any
+  }
+
+  static listeners: Map<string, any[]> = new Map()
+
+  static channels: BaoConfig['channels']
+}
+
+export function registerEvent (event: any) {
+  const eventName = sanitizeModuleName(event.name)
+
+  Config.events = Config.events || {}
+  Config.events[eventName] = event
+}
+
+export function getEvent (name: string) {
+  return Config.events?.[name]
+}
+
+export function getListenersForEventClass (eventClass: any) {
+  const eventName = sanitizeModuleName(eventClass.name)
+
+  return Config.listeners.get(eventName) || []
 }
 
 export function setEnv (env: any) {
@@ -66,6 +125,14 @@ export function setEnv (env: any) {
 
 export function getEnv () {
   return Config.env
+}
+
+export function getChannelNames () {
+  return Object.keys(Config.channels || {})
+}
+
+export function getChannel (name: string) {
+  return Config.channels?.[name as keyof typeof Config.channels]
 }
 
 export function getJob (name: string): Constructor<Job> | undefined {
@@ -90,9 +157,9 @@ type DefineConfigContext<Env = Record<string, any>> = {
   /**
    * Request will not always be present, e.g. if the context is a queue worker.
    */
-  request?: Request;
-  env: Env;
-  ctx: ExecutionContext;
+  request?: Request
+  env: Env
+  ctx: ExecutionContext
 }
 
 export type DefineConfigResult = BaoConfig

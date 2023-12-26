@@ -1,7 +1,9 @@
-import { Job } from '~/jobs/job'
+import { Job } from '~/utils/jobs.server'
+import { dispatchEvent, Event } from "~/utils/events.server"
+
 import { hydrateArguments } from '~/utils/serialize.server'
-import type { defineConfig} from '~/utils/config.server';
-import { getJob } from '~/utils/config.server'
+import type { defineConfig} from '~/utils/config.server'
+import { getEvent, getJob } from '~/utils/config.server'
 
 export interface MessagePayload {
   job?: string;
@@ -36,11 +38,11 @@ async function handleQueueMessage (message: Message) {
     return
   }
 
-  // if (instance instanceof Event) {
-  //   dispatchEvent(instance)
-  //
-  //   return
-  // }
+   if (instance instanceof Event) {
+     dispatchEvent(instance)
+
+     return
+   }
 
   throw new Error(`Could not hydrate instance from queue payload.`)
 }
@@ -49,13 +51,12 @@ async function handleQueueMessage (message: Message) {
  * Create an instance of a Job or Event class from a Queue message payload.
  */
 async function hydrateInstanceFromQueuePayload (payload: MessagePayload) {
-  // if (payload.event) {
-  //   const eventClass = getEvent(payload.event) as Constructor<Event>
-  //   const constructorArgs = await hydrateArguments(payload.payload)
-  //   const event = new eventClass(...constructorArgs)
-  //
-  //   return event
-  // }
+   if (payload.event) {
+     const eventClass = getEvent(payload.event) as Constructor<Event>
+     const constructorArgs = await hydrateArguments(payload.payload)
+
+     return new eventClass(...constructorArgs)
+   }
 
   if (payload.job) {
     const jobClass = getJob(payload.job)
@@ -67,3 +68,5 @@ async function hydrateInstanceFromQueuePayload (payload: MessagePayload) {
 
   throw new Error(`Job payload does not contain a job or event.`)
 }
+
+type Constructor<T> = new (...args: any[]) => T

@@ -5,7 +5,11 @@ import type {
   LoaderFunctionArgs
 } from '@remix-run/cloudflare'
 import { json } from '@remix-run/cloudflare'
-import { useActionData, useNavigation, useSubmit } from '@remix-run/react'
+import {
+  useActionData,
+  useNavigation,
+  useSubmit,
+} from '@remix-run/react'
 import {
   Page,
   Layout,
@@ -22,6 +26,9 @@ import { shops } from '~/utils/db/schema.server'
 import { eq } from 'drizzle-orm'
 import { combineServerTimings, makeTimings, time } from '~/utils/timing.server'
 import { SayHelloJob } from '~/jobs/say-hello-job'
+import { useChannel } from '~/hooks/use-channel'
+import { SayHelloEvent } from '~/events/say-hello-event'
+import { sleep } from '~/utils/index.server'
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const { session } = await context.shopify.authenticate.admin(request)
@@ -98,6 +105,12 @@ export const action = async ({ context, request }: ActionFunctionArgs) => {
   )
   const responseJson = await response.json()
 
+  for (const arrayElement of [20, 40, 60, 80, 100]) {
+    SayHelloEvent.dispatch(`We're ${arrayElement}% complete!`)
+
+    await sleep(arrayElement * 10)
+  }
+
   return json({
     // @ts-expect-error
     product: responseJson.data.productCreate.product
@@ -114,6 +127,12 @@ export default function Index () {
     'gid://shopify/Product/',
     ''
   )
+
+  useChannel('default', message => {
+    const data = JSON.parse(message.data)
+
+    console.log({ data })
+  })
 
   useEffect(() => {
     if (productId) {

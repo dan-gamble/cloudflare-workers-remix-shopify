@@ -1,12 +1,12 @@
-import { Job } from '~/jobs/job'
+import { Job } from '~/utils/jobs.server'
 
 export class SayHelloJob extends Job {
-  constructor (public name: string) {
+  constructor (public message: string) {
     super()
   }
 
   async handle () {
-    console.log(`Hello, ${this.name}!`)
+    console.log(`${this.message} from SayHelloJob!`)
   }
 }
 
