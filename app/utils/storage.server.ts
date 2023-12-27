@@ -1,4 +1,5 @@
-import { Config, StorageDiskConfig } from './config.server'
+import type { StorageDiskConfig } from './config.server';
+import { Config } from './config.server'
 
 export type R2Input = Parameters<R2Bucket['put']>[1]
 

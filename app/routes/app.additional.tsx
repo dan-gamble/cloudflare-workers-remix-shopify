@@ -13,41 +13,17 @@ import {
 } from '@shopify/polaris'
 import { storage } from '~/utils/storage.server'
 
-export async function action ({ context, request }: ActionFunctionArgs) {
+export async function action ({ request }: ActionFunctionArgs) {
   const formData = await request.formData()
   const file = formData.get('file')
   if (!(file instanceof File)) throw new Error('Not a file')
   const key = file.name
 
-  const r2Object = await storage().put(key, file)
-
-  // const formData = await parseMultipartFormData(
-  //   request,
-  //   async ({ name, filename, stream, data, ...rest }) => {
-  //     console.log({ rest })
-  //
-  //     if (name === 'file') {
-  //       console.log('a', { stream })
-  //       const r2Object = await storage().put(filename, stream, {
-  //         httpMetadata: request.headers,
-  //       })
-  //       console.log({ r2Object })
-  //       console.log('b')
-  //
-  //       return r2Object.key
-  //     }
-  //
-  //     console.log({ name, filename, data })
-  //
-  //     return data
-  //   }
-  // )
+  await storage().put(key, file)
 
   const url = storage().url(key)
 
-  console.log({ url })
-
-  return json({})
+  return json({ url })
 }
 
 export default function AdditionalPage () {

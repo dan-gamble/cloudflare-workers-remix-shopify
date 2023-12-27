@@ -62,7 +62,7 @@ export async function parseMultipartFormData (
 
     let value = await uploadHandler({
       ...part,
-
+      stream,
     })
     if (typeof value !== 'undefined' && value !== null) {
       formData.append(part.name, value as any)

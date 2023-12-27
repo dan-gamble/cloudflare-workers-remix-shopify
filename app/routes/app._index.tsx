@@ -26,11 +26,9 @@ import { shops } from '~/utils/db/schema.server'
 import { eq } from 'drizzle-orm'
 import { combineServerTimings, makeTimings, time } from '~/utils/timing.server'
 import { SayHelloJob } from '~/jobs/say-hello-job'
-import { useChannel } from '~/hooks/use-channel'
 import { SayHelloEvent } from '~/events/say-hello-event'
 import { sleep } from '~/utils/index.server'
 import { AuthenticatedExampleEvent } from '~/events/authenticated-example-event'
-import { normaliseShopName } from '~/utils/shopify'
 import { getContext } from '~/utils/context.server'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

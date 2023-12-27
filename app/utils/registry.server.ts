@@ -1,10 +1,8 @@
 import type { AsyncLocalStorage } from 'node:async_hooks'
 import { sanitizeModuleName } from '~/utils/string.server'
-import { Config } from '~/utils/config.server'
-import type { Job } from '~/utils/jobs.server'
 
 /**
- * A registry of models, jobs, and events. This is not bound to a request, as
+ * A registry of models, jobs, and events. This is not bound to a request, as
  * classes will register themselves as soon as they're imported into the module graph.
  *
  * Do not store anything on this object that is request-specific because it will
