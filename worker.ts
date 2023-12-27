@@ -54,7 +54,7 @@ export default {
     // await env.QUEUE.send(log)
 
     try {
-      return await handleRemixRequest(request, setupLoadContext(env))
+      return await handleRemixRequest(request, setupLoadContext(env, ctx))
     } catch (error) {
       console.log(error)
       return new Response('An unexpected error occurred', { status: 500 })
