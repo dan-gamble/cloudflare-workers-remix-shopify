@@ -4,7 +4,7 @@ webhooks_path = "/webhooks"
 port = 8080
 
 [commands]
-dev = "npm run local:dev"
+dev = "npm run shopify:dev"
 
 [hmr_server]
 http_paths = ["/ping"]
