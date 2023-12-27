@@ -66,7 +66,7 @@ export default {
     try {
       return await runWithContext(
         context,
-        async () => handleRemixRequest(request, setupLoadContext(env)),
+        async () => handleRemixRequest(request, setupLoadContext(env, ctx)),
       )
     } catch (error) {
       console.log(error)

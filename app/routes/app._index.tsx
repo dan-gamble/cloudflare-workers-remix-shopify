@@ -136,15 +136,15 @@ export default function Index () {
 
   const [broadcastMessage, setBroadcastMessage] = useState('')
 
-  useChannel('default', message => {
-    const data = JSON.parse(message.data)
-
-    setBroadcastMessage(data.data.message)
-  })
-
-  useChannel(`shops.${normaliseShopName('bao-checkout-2')}`, message => {
-    console.log({ message })
-  })
+  // useChannel('default', message => {
+  //   const data = JSON.parse(message.data)
+  //
+  //   setBroadcastMessage(data.data.message)
+  // })
+  //
+  // useChannel(`shops.${normaliseShopName('bao-checkout-2')}`, message => {
+  //   console.log({ message })
+  // })
 
   useEffect(() => {
     if (productId) {

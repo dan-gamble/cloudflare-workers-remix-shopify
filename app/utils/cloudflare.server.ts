@@ -4,7 +4,7 @@ import { createShopifyApp } from '~/utils/shopify.server'
 import { setupCache } from '~/utils/cache.server'
 import type { AppLoadContext } from '@remix-run/cloudflare'
 
-export function setupLoadContext (env: Env) {
+export function setupLoadContext (env: Env, ctx: ExecutionContext) {
   const logger = createLogger()
   const db = createDb(env)
   const shopify = createShopifyApp(env, db)
@@ -16,6 +16,7 @@ export function setupLoadContext (env: Env) {
     db,
     shopify,
     logger,
+    ctx,
   }
 
   return loadContext
