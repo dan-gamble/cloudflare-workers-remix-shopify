@@ -8,6 +8,7 @@
     "build:remix": "remix build",
     "dev": "shopify app dev --no-update",
     "dev:remix": "remix watch",
+    "dev:tunnel": "cloudflared tunnel --config .cloudflared/config.yml --url localhost:8787 run app-template-remix",
     "dev:worker": "wrangler dev --site public --compatibility-flag nodejs_compat --live-reload --test-scheduled",
     "deploy": "wrangler deploy",
     "local:dev": "remix build --sourcemap && concurrently \"npm:dev:*\"",
