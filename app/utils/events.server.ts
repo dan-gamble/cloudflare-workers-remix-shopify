@@ -1,7 +1,8 @@
 import { sanitizeModuleName } from './string.server'
 import { serializeArguments } from '~/utils/serialize.server'
 import { getBindingForChannelName } from '~/utils/channel.server'
-import { getListenersForEventClass, getQueue, registerEvent } from '~/utils/config.server'
+import { registerEvent } from '~/utils/registry.server'
+import { getListenersForEventClass, getQueue } from '~/utils/context.server'
 
 export class Event {
   public static shouldQueue = false

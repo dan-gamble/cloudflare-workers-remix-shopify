@@ -1,7 +1,6 @@
 import type { Job } from '~/utils/jobs.server'
-import { sanitizeModuleName } from '~/utils/string.server'
 import type { Session } from '@shopify/shopify-api'
-import { WithRequired } from '~/types'
+import type { WithRequired } from '~/types'
 
 export interface StorageDiskConfig {
   binding: R2Bucket
@@ -101,51 +100,12 @@ export class Config {
   static channels: BaoConfig['channels']
 }
 
-export function registerEvent (event: any) {
-  const eventName = sanitizeModuleName(event.name)
-
-  Config.events = Config.events || {}
-  Config.events[eventName] = event
-}
-
-export function getEvent (name: string) {
-  return Config.events?.[name]
-}
-
-export function getListenersForEventClass (eventClass: any) {
-  const eventName = sanitizeModuleName(eventClass.name)
-
-  return Config.listeners.get(eventName) || []
-}
-
 export function setEnv (env: any) {
   Config.env = env
 }
 
 export function getEnv () {
   return Config.env
-}
-
-export function getChannelNames () {
-  return Object.keys(Config.channels || {})
-}
-
-export function getChannel (name: string) {
-  return Config.channels?.[name as keyof typeof Config.channels]
-}
-
-export function getJob (name: string): Constructor<Job> | undefined {
-  return Config.jobs?.[name]
-}
-
-export function getQueue (name: string) {
-  return Config.queues?.[name]
-}
-
-export function registerJob (job: any) {
-  const jobName = sanitizeModuleName(job.name)
-  Config.jobs = Config.jobs || {}
-  Config.jobs[jobName] = job
 }
 
 /**

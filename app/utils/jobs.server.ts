@@ -1,7 +1,7 @@
 import { serializeArguments } from '~/utils/serialize.server'
 import type { MessagePayload } from '~/utils/queue.server'
-import { getQueue, registerJob } from '~/utils/config.server'
-import type { AppLoadContext } from '@remix-run/cloudflare'
+import { registerJob } from '~/utils/registry.server'
+import { getQueue } from '~/utils/context.server'
 
 export abstract class Job {
   /**
@@ -11,7 +11,7 @@ export abstract class Job {
 
   constructor () {}
 
-  abstract handle (context: ExecutionContext, loadContext: AppLoadContext): Promise<void>;
+  abstract handle (context: ExecutionContext): Promise<void>;
 
   /**
    * The private instance method we use to dispatch a job onto the queue.

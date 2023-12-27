@@ -9,15 +9,17 @@ import { RemixServer } from '@remix-run/react'
 import isbot from 'isbot'
 import { renderToReadableStream } from 'react-dom/server'
 import { makeTimings } from '~/utils/timing.server'
+import { getContext } from '~/utils/context.server'
 
 export default async function handleRequest (
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext,
-  loadContext: AppLoadContext
 ) {
-  loadContext.shopify.addDocumentResponseHeaders(request, responseHeaders)
+  const { shopify } = getContext()
+
+  shopify.addDocumentResponseHeaders(request, responseHeaders)
 
   const timings = makeTimings('render', 'renderToReadableStream')
 

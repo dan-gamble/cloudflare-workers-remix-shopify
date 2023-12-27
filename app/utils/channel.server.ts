@@ -1,5 +1,5 @@
 import type { ChannelConfig} from '~/utils/config.server';
-import { getChannel, getChannelNames } from '~/utils/config.server'
+import { getChannel, getChannelNames } from '~/utils/context.server'
 
 interface Session {
   webSocket: WebSocket

@@ -9,11 +9,13 @@ import { ShopLocalisationDocument } from '~/generated/graphql'
 import { makeGraphQLRequest } from '~/utils/graphql.server'
 import { I18nContext, I18nManager } from '@shopify/react-i18n'
 import type { AppContext } from '~/types'
+import { getContext } from '~/utils/context.server'
 
 export const links = () => [{ rel: 'stylesheet', href: polarisStyles }]
 
-export async function loader ({ context, request }: LoaderFunctionArgs) {
-  const { admin } = await context.shopify.authenticate.admin(request)
+export async function loader ({ request }: LoaderFunctionArgs) {
+  const { env, shopify } = getContext()
+  const { admin } = await shopify.authenticate.admin(request)
 
   const { shop } = await makeGraphQLRequest(admin.graphql, {
     document: ShopLocalisationDocument,
@@ -21,7 +23,7 @@ export async function loader ({ context, request }: LoaderFunctionArgs) {
 
   return json({
     polarisTranslations: require('@shopify/polaris/locales/en.json'),
-    apiKey: context.env.SHOPIFY_API_KEY || '',
+    apiKey: env?.SHOPIFY_API_KEY ?? '',
     shop,
   })
 }

@@ -1,4 +1,4 @@
-import { getAssetFromKV } from '@cloudflare/kv-asset-handler'
+import { getAssetFromKV, MethodNotAllowedError, NotFoundError } from '@cloudflare/kv-asset-handler'
 import { createRequestHandler, logDevReady } from '@remix-run/cloudflare'
 import * as build from '@remix-run/dev/server-build'
 import __STATIC_CONTENT_MANIFEST from '__STATIC_CONTENT_MANIFEST'
@@ -6,6 +6,7 @@ import { config } from './bao.config'
 import { handleQueue } from '~/utils/queue.server'
 import { handleScheduled } from '~/utils/scheduled.server'
 import { setupLoadContext } from '~/utils/cloudflare.server'
+import { getContextFromUserConfig, runWithContext } from '~/utils/context.server'
 
 export { Channel } from '~/utils/channel.server'
 
@@ -41,7 +42,13 @@ export default {
           },
         },
       )
-    } catch (error) {}
+    } catch (error) {
+      if (error instanceof NotFoundError || error instanceof MethodNotAllowedError) {
+        // fall through to the remix handler
+      } else {
+        return new Response('An unexpected error occurred', { status: 500 })
+      }
+    }
 
     config({ env, request, ctx })
 
@@ -53,8 +60,14 @@ export default {
     // }
     // await env.QUEUE.send(log)
 
+    const context = getContextFromUserConfig(config({ request, env, ctx }), env)
+    context.env = env
+
     try {
-      return await handleRemixRequest(request, setupLoadContext(env))
+      return await runWithContext(
+        context,
+        async () => handleRemixRequest(request, setupLoadContext(env)),
+      )
     } catch (error) {
       console.log(error)
       return new Response('An unexpected error occurred', { status: 500 })

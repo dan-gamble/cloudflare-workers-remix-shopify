@@ -31,10 +31,12 @@ import { SayHelloEvent } from '~/events/say-hello-event'
 import { sleep } from '~/utils/index.server'
 import { AuthenticatedExampleEvent } from '~/events/authenticated-example-event'
 import { normaliseShopName } from '~/utils/shopify'
+import { getContext } from '~/utils/context.server'
 
-export const loader = async ({ context, request }: LoaderFunctionArgs) => {
-  const { session } = await context.shopify.authenticate.admin(request)
-  const { cache } = context
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const { cache, db, shopify } = getContext()
+
+  const { session } = await shopify.authenticate.admin(request)
 
   const timings = makeTimings('index')
 
@@ -45,7 +47,7 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
         ttl: 1000 * 10,
         key: `index:shop:${session.shop}`,
         async getFreshValue () {
-          const [shop]  = await context.db.select().from(shops).where(eq(shops.shopDomain, session.shop)).limit(1)
+          const [shop]  = await db.select().from(shops).where(eq(shops.shopDomain, session.shop)).limit(1)
 
           return shop
         },
