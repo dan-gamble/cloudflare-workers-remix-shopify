@@ -3,7 +3,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/cloudfla
 import { json } from '@remix-run/cloudflare'
 import { z } from 'zod'
 import { makeGraphQLRequest } from '~/utils/graphql.server'
-import { MetafieldsSetDocument, ShopMetafieldDocument } from '~/generated/graphql'
+import { ShopMetafieldDocument } from '~/generated/graphql'
 import { parse } from '@conform-to/zod'
 import { useActionData, useLoaderData, useNavigation, useSubmit } from '@remix-run/react'
 import type { PropsWithChildren} from 'react';
@@ -45,7 +45,9 @@ export default function NotificationStyles () {
 
   const [codeString, setCodeString] = useState(loaderData.shop.metafield?.value ?? '')
 
-  const metafieldId = actionData?.notificationStyles?.metafieldsSet?.metafields?.[0]?.id
+  const metafieldId = actionData?.metafield?.id
+
+  console.log({ metafieldId })
 
   useEffect(() => {
     if (metafieldId) {
@@ -113,32 +115,25 @@ function Code ({ children }: PropsWithChildren) {
 }
 
 export const action = async ({ context, request }: ActionFunctionArgs) => {
-  const { admin } = await context.shopify.authenticate.admin(request)
+  const { admin, session } = await context.shopify.authenticate.admin(request)
   const formData = await request.formData()
   const submission = parse(formData, { schema: notificationStylesSchema })
 
   if (submission.intent !== 'submit') {
-    return json({ status: 'idle', submission, notificationStyles: null } as const)
+    return json({ status: 'idle', submission, metafield: null } as const)
   }
 
   if (!submission.value) {
-    return json({ status: 'error', submission, notificationStyles: null } as const, { status: 400 })
+    return json({ status: 'error', submission, metafield: null } as const, { status: 400 })
   }
 
-  const notificationStyles = await makeGraphQLRequest(admin.graphql, {
-    document: MetafieldsSetDocument,
-    variables: {
-      metafields: [
-        {
-          namespace: METAFIELD_NAMESPACE,
-          key: METAFIELD_KEY,
-          ownerId: submission.value.ownerId,
-          type: 'multi_line_text_field',
-          value: submission.value.value,
-        },
-      ],
-    },
-  })
+  const metafield = new admin.rest.resources.Metafield({ session: session })
+  metafield.namespace = METAFIELD_NAMESPACE
+  metafield.key = METAFIELD_KEY
+  metafield.type = 'multi_line_text_field'
+  metafield.value = submission.value.value
 
-  return json({ status: 'success', submission, notificationStyles } as const)
+  await metafield.save({ update: true })
+
+  return json({ status: 'success', submission, metafield } as const)
 }
