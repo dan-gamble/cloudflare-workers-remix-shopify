@@ -1,8 +1,8 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-name = "App Template Remix - CF"
-client_id = "42e3f4a3b29eacdfcfa6660f81a19ce8"
-application_url = "https://remix-cloudflare-workers.dan-gamble.workers.dev"
+name = "App Template - Remix (Dev)"
+client_id = "b14ef573974868defef46ffddd7343d3"
+application_url = "https://broader-tomatoes-denial-retrieval.trycloudflare.com"
 embedded = true
 
 [access_scopes]
@@ -12,14 +12,17 @@ use_legacy_install_flow = true
 
 [auth]
 redirect_urls = [
-  "https://remix-cloudflare-workers.dan-gamble.workers.dev/auth/callback",
-  "https://remix-cloudflare-workers.dan-gamble.workers.dev/auth/shopify/callback",
-  "https://remix-cloudflare-workers.dan-gamble.workers.dev/api/auth/callback",
-  "https://remix-cloudflare-workers.dan-gamble.workers.dev/.shopify/graphiql/auth/callback"
+  "https://broader-tomatoes-denial-retrieval.trycloudflare.com/auth/callback",
+  "https://broader-tomatoes-denial-retrieval.trycloudflare.com/auth/shopify/callback",
+  "https://broader-tomatoes-denial-retrieval.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
-api_version = "2023-10"
+api_version = "2024-01"
 
 [pos]
 embedded = false
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "bao-checkout-2.myshopify.com"
