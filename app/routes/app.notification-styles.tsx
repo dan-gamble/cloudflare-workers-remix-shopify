@@ -2,8 +2,6 @@ import CodeMirror from '@uiw/react-codemirror'
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/cloudflare'
 import { json } from '@remix-run/cloudflare'
 import { z } from 'zod'
-import { makeGraphQLRequest } from '~/utils/graphql.server'
-import { ShopMetafieldDocument } from '~/generated/graphql'
 import { parse } from '@conform-to/zod'
 import { useActionData, useLoaderData, useNavigation, useSubmit } from '@remix-run/react'
 import type { PropsWithChildren} from 'react';
@@ -11,6 +9,8 @@ import { useEffect, useState } from 'react'
 import { BlockStack, Box, Card, Layout, Page, Text } from '@shopify/polaris'
 import { gruvboxDark } from '@uiw/codemirror-theme-gruvbox-dark'
 import { css } from '@codemirror/lang-css'
+import { makeRequest } from '~/utils/graphql.server'
+import { shopMetafieldQuery } from '~/graphql/queries/shop-metafield-query'
 
 const METAFIELD_NAMESPACE = 'emails'
 const METAFIELD_KEY = 'notification_style'
@@ -21,16 +21,16 @@ const notificationStylesSchema = z.object({
 })
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
-  const { admin } = await context.shopify.authenticate.admin(request)
-  const notificationStyles = await makeGraphQLRequest(admin.graphql, {
-    document: ShopMetafieldDocument,
+  const { admin, session } = await context.shopify.authenticate.admin(request)
+
+  const notificationStyles = await makeRequest(admin.graphql, session, shopMetafieldQuery, {
     variables: {
       namespace: METAFIELD_NAMESPACE,
       key: METAFIELD_KEY,
     },
   })
 
-  return json(notificationStyles)
+  return json(notificationStyles.data)
 }
 
 export default function NotificationStyles () {
@@ -46,8 +46,6 @@ export default function NotificationStyles () {
   const [codeString, setCodeString] = useState(loaderData.shop.metafield?.value ?? '')
 
   const metafieldId = actionData?.metafield?.id
-
-  console.log({ metafieldId })
 
   useEffect(() => {
     if (metafieldId) {

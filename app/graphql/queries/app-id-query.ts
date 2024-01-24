@@ -1,6 +1,4 @@
-import gql from 'graphql-tag'
-
-export const appIdQuery = gql`
+export const appIdQuery = `#graphql
   query appId {
     app {
       id

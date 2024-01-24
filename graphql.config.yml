@@ -1,0 +1,5 @@
+projects:
+  admin:
+    schema: "https://shopify.dev/admin-graphql-direct-proxy/2024-01"
+    documents:
+      - "app/**/*.{ts,tsx}"

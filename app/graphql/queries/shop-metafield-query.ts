@@ -1,6 +1,4 @@
-import gql from 'graphql-tag'
-
-export const shopMetafieldQuery = gql`
+export const shopMetafieldQuery = `#graphql
   query shopMetafield ($namespace: String!, $key: String!) {
     shop {
       id

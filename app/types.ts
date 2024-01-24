@@ -1,4 +1,4 @@
-import type { ShopLocalisationQuery } from '~/generated/graphql'
+import type { ShopLocalisationQuery } from '~/types/admin.generated'
 
 export type AppContext = {
   shop: ShopLocalisationQuery['shop']
