@@ -1,6 +1,4 @@
-import gql from 'graphql-tag'
-
-export const shopLocalisationQuery = gql`
+export const shopLocalisationQuery = `#graphql
   query shopLocalisation {
     shop {
       currencyCode

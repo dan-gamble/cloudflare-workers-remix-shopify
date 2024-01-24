@@ -1,95 +1,47 @@
-import type {
-  RequestDocument,
-  RequestOptions,
-  Variables
-} from 'graphql-request'
-import type {
-  GraphQLClientRequestHeaders,
-  JsonSerializer
-} from 'graphql-request/src/types'
-import { resolveRequestDocument } from 'graphql-request'
-import type { GraphqlQueryFunction } from '@shopify/shopify-app-remix/build/ts/server/clients/admin/graphql'
+import type { AdminOperations } from '@shopify/admin-api-client'
+import type { GraphQLClient, GraphQLQueryOptions } from '@shopify/shopify-app-remix/build/ts/server/clients/types'
+import { GraphqlQueryError } from '@shopify/shopify-api'
+import type { ClientResponse } from '@shopify/graphql-client'
+import { invariant } from '@epic-web/invariant'
 
-export async function makeGraphQLRequest<T, V extends Variables = Variables> (
-  graphql: GraphqlQueryFunction,
-  options: RequestOptions<V, T>
-): Promise<T> {
-  const { variables, requestHeaders } = options
-  const requestOptions = parseRequestArgs(options, variables, requestHeaders)
-  const { query } = resolveRequestDocument(requestOptions.document)
+export type ShopifyGraphQLClient<Operations extends AdminOperations = AdminOperations> = GraphQLClient<Operations>
 
-  return await makeRequest<T>(graphql, query, requestOptions.variables).then(
-    ({ data }) => data
-  )
-}
+type ErrorBodyResponse = Required<Omit<ClientResponse, 'data'>>
 
-async function makeRequest<T = unknown, V extends Variables = Variables> (
-  graphql: GraphqlQueryFunction,
-  query: string,
-  variables?: V
-): Promise<{ status: number, data: T }> {
-  const response = await graphql(query, { variables })
-  const result = await getResult(response)
-
-  const successfullyReceivedData = Array.isArray(result)
-    ? !result.some(({ data }) => !data)
-    : Boolean(result.data)
-
-  if (response.ok && successfullyReceivedData) {
-    return {
-      // @ts-expect-error TODO
-      data: result.data,
-      // @ts-expect-error TODO
-      headers: response.headers,
-      status: response.status
-    }
+export async function makeRequest<
+  Operations extends AdminOperations,
+  Operation extends keyof Operations,
+  Client extends GraphQLClient<Operations> = GraphQLClient<Operations>,
+> (
+  client: Client,
+  query: Operation,
+  options?: GraphQLQueryOptions<Operation, Operations>
+) {
+  const defaultOptions: GraphQLQueryOptions<Operation, Operations> = {
+    headers: {
+      ...options?.headers,
+      'X-GraphQL-Cost-Include-Fields': true,
+    },
   }
 
-  throw new Error(
-    `There was an error with your GraphQL request: ${JSON.stringify(result)}`
-  )
-}
+  // TODO: Add rate limiting stuff like the metadata worker project
+  try {
+    const response = await client(query, Object.assign({}, defaultOptions, options))
 
-function parseRequestArgs<V extends Variables = Variables> (
-  documentOrOptions: RequestDocument | RequestOptions<V>,
-  variables?: V,
-  requestHeaders?: GraphQLClientRequestHeaders
-): RequestOptions<V> {
-  return (documentOrOptions as RequestOptions<V>).document
-    ? (documentOrOptions as RequestOptions<V>)
-    : ({
-        document: documentOrOptions as RequestDocument,
-        variables,
-        requestHeaders,
-        signal: undefined
-      } as unknown as RequestOptions<V>)
-}
+    return await response.json()
+  } catch (e: any) {
+    if (e instanceof GraphqlQueryError) {
+      const body = e.body as ErrorBodyResponse
 
-async function getResult (
-  response: Response,
-  jsonSerializer: JsonSerializer = JSON
-): Promise<
-  | Array<{ data: object, errors: undefined }>
-  | { data: object, errors: undefined }
-  | { data: undefined, errors: object }
-  | { data: undefined, errors: object[] }
-  > {
-  let contentType: string | undefined
+      if (body.errors.message?.includes(`Review 'graphQLErrors' for details.`)) {
+        invariant(body?.errors?.graphQLErrors, 'Expected graphQLErrors to be present')
 
-  response.headers.forEach((value, key) => {
-    if (key.toLowerCase() === 'content-type') {
-      contentType = value.toLowerCase()
+        for (const graphQLError of body.errors.graphQLErrors) {
+          throw new Error(graphQLError.message)
+        }
+      }
     }
-  })
 
-  if (
-    contentType &&
-    (contentType.toLowerCase().startsWith('application/json') ||
-      contentType.toLowerCase().startsWith('application/graphql+json') ||
-      contentType.toLowerCase().startsWith('application/graphql-response+json'))
-  ) {
-    return jsonSerializer.parse(await response.text()) as any
-  } else {
-    return (await response.text()) as any
+    throw new Error(e.message)
   }
 }

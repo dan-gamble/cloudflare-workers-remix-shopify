@@ -1,6 +1,6 @@
 import '@shopify/shopify-api/adapters/cf-worker'
 
-import { restResources } from '@shopify/shopify-api/rest/admin/2023-10'
+import { restResources } from '@shopify/shopify-api/rest/admin/2024-01'
 import {
   AppDistribution,
   DeliveryMethod,
@@ -10,10 +10,10 @@ import {
 import { KVSessionStorage } from '@shopify/shopify-app-session-storage-kv'
 import type { Database } from '~/utils/db/db.server'
 import { shops } from './db/schema.server'
-import { makeGraphQLRequest } from './graphql.server'
-import { AppIdDocument } from '~/generated/graphql'
-import type { GraphqlQueryFunction } from '@shopify/shopify-app-remix/build/ts/server/clients/admin/graphql'
 import type { Session } from '@shopify/shopify-api'
+import type { ShopifyGraphQLClient } from '~/utils/graphql.server';
+import { makeRequest } from '~/utils/graphql.server'
+import { invariant } from '@epic-web/invariant'
 
 // let shopify: ReturnType<typeof shopifyApp>
 
@@ -57,15 +57,20 @@ export function createShopifyApp (env: Env, db: Database) {
   return shopify
 }
 
-async function setShopAppId (graphql: GraphqlQueryFunction, db: Database, session: Session) {
-  const { app } = await makeGraphQLRequest(graphql, {
-    document: AppIdDocument
-  })
+async function setShopAppId (client: ShopifyGraphQLClient, db: Database, session: Session) {
+  const response = await makeRequest(client, `#graphql
+    query appId {
+      app {
+        id
+      }
+    }
+  `)
+  invariant(response?.data?.app?.id, 'App ID not found in response')
 
   await db
     .insert(shops)
     .values({
-      appId: app!.id,
+      appId: response.data.app.id,
       shopDomain: session.shop
     })
     .onConflictDoNothing()

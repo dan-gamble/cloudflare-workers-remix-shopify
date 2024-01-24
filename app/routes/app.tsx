@@ -5,11 +5,11 @@ import type { HeadersFunction, LoaderFunctionArgs } from '@remix-run/cloudflare'
 import { json } from '@remix-run/cloudflare'
 // @ts-ignore
 import { AppProvider } from '@shopify/shopify-app-remix/react'
-import { ShopLocalisationDocument } from '~/generated/graphql'
-import { makeGraphQLRequest } from '~/utils/graphql.server'
 import { I18nContext, I18nManager } from '@shopify/react-i18n'
 import type { AppContext } from '~/types'
 import { getContext } from '~/utils/context.server'
+import { makeRequest } from '~/utils/graphql.server'
+import { invariant } from '@epic-web/invariant'
 
 export const links = () => [{ rel: 'stylesheet', href: polarisStyles }]
 
@@ -17,14 +17,20 @@ export async function loader ({ request }: LoaderFunctionArgs) {
   const { env, shopify } = getContext()
   const { admin } = await shopify.authenticate.admin(request)
 
-  const { shop } = await makeGraphQLRequest(admin.graphql, {
-    document: ShopLocalisationDocument,
-  })
+  const response = await makeRequest(admin.graphql, `#graphql
+    query shopLocalisation {
+      shop {
+        currencyCode
+      }
+    }
+  `)
+
+  invariant(response?.data?.shop, 'Shop not found')
 
   return json({
     polarisTranslations: require('@shopify/polaris/locales/en.json'),
     apiKey: env?.SHOPIFY_API_KEY ?? '',
-    shop,
+    shop: response.data.shop,
   })
 }
 

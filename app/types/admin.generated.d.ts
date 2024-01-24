@@ -42,9 +42,11 @@ export type PopulateProductMutation = { productCreate?: AdminTypes.Maybe<{ produ
     )> }> };
 
 interface GeneratedQueryTypes {
-  "\n  query appId {\n    app {\n      id\n    }\n  }\n": {return: AppIdQuery, variables: AppIdQueryVariables},
-  "\n  query shopLocalisation {\n    shop {\n      currencyCode\n    }\n  }\n": {return: ShopLocalisationQuery, variables: ShopLocalisationQueryVariables},
-  "\n  query shopMetafield ($namespace: String!, $key: String!) {\n    shop {\n      id\n      metafield(namespace: $namespace, key: $key) {\n        id\n        namespace\n        key\n        value\n        type\n      }\n    }\n  }\n": {return: ShopMetafieldQuery, variables: ShopMetafieldQueryVariables},
+  "#graphql\n  query appId {\n    app {\n      id\n    }\n  }\n": {return: AppIdQuery, variables: AppIdQueryVariables},
+  "#graphql\n  query shopLocalisation {\n    shop {\n      currencyCode\n    }\n  }\n": {return: ShopLocalisationQuery, variables: ShopLocalisationQueryVariables},
+  "#graphql\n  query shopMetafield ($namespace: String!, $key: String!) {\n    shop {\n      id\n      metafield(namespace: $namespace, key: $key) {\n        id\n        namespace\n        key\n        value\n        type\n      }\n    }\n  }\n": {return: ShopMetafieldQuery, variables: ShopMetafieldQueryVariables},
+  "#graphql\n    query shopLocalisation {\n      shop {\n        currencyCode\n      }\n    }\n  ": {return: ShopLocalisationQuery, variables: ShopLocalisationQueryVariables},
+  "#graphql\n    query appId {\n      app {\n        id\n      }\n    }\n  ": {return: AppIdQuery, variables: AppIdQueryVariables},
 }
 
 interface GeneratedMutationTypes {

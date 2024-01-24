@@ -2,7 +2,7 @@
 
 name = "App Template - Remix (Dev)"
 client_id = "b14ef573974868defef46ffddd7343d3"
-application_url = "https://winners-program-critics-newer.trycloudflare.com"
+application_url = "https://broader-tomatoes-denial-retrieval.trycloudflare.com"
 embedded = true
 
 [access_scopes]
@@ -12,9 +12,9 @@ use_legacy_install_flow = true
 
 [auth]
 redirect_urls = [
-  "https://winners-program-critics-newer.trycloudflare.com/auth/callback",
-  "https://winners-program-critics-newer.trycloudflare.com/auth/shopify/callback",
-  "https://winners-program-critics-newer.trycloudflare.com/api/auth/callback"
+  "https://broader-tomatoes-denial-retrieval.trycloudflare.com/auth/callback",
+  "https://broader-tomatoes-denial-retrieval.trycloudflare.com/auth/shopify/callback",
+  "https://broader-tomatoes-denial-retrieval.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
