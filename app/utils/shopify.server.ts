@@ -58,7 +58,7 @@ export function createShopifyApp (env: Env, db: Database) {
 }
 
 async function setShopAppId (client: ShopifyGraphQLClient, db: Database, session: Session) {
-  const response = await makeRequest(client, `#graphql
+  const response = await makeRequest(client, session, `#graphql
     query appId {
       app {
         id
