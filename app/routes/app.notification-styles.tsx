@@ -21,9 +21,9 @@ const notificationStylesSchema = z.object({
 })
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
-  const { admin, session } = await context.shopify.authenticate.admin(request)
+  const { admin } = await context.shopify.authenticate.admin(request)
 
-  const notificationStyles = await makeRequest(admin.graphql, session, shopMetafieldQuery, {
+  const notificationStyles = await makeRequest(admin.graphql, shopMetafieldQuery, {
     variables: {
       namespace: METAFIELD_NAMESPACE,
       key: METAFIELD_KEY,

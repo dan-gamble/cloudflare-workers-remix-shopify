@@ -15,8 +15,6 @@ import type { ShopifyGraphQLClient } from '~/utils/graphql.server';
 import { makeRequest } from '~/utils/graphql.server'
 import { invariant } from '@epic-web/invariant'
 
-// let shopify: ReturnType<typeof shopifyApp>
-
 export function createShopifyApp (env: Env, db: Database) {
   const shopify = shopifyApp({
     apiKey: env.SHOPIFY_API_KEY,
@@ -58,7 +56,7 @@ export function createShopifyApp (env: Env, db: Database) {
 }
 
 async function setShopAppId (client: ShopifyGraphQLClient, db: Database, session: Session) {
-  const response = await makeRequest(client, session, `#graphql
+  const response = await makeRequest(client, `#graphql
     query appId {
       app {
         id

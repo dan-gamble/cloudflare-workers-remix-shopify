@@ -15,9 +15,9 @@ export const links = () => [{ rel: 'stylesheet', href: polarisStyles }]
 
 export async function loader ({ request }: LoaderFunctionArgs) {
   const { env, shopify } = getContext()
-  const { admin, session } = await shopify.authenticate.admin(request)
+  const { admin } = await shopify.authenticate.admin(request)
 
-  const response = await makeRequest(admin.graphql, session, `#graphql
+  const response = await makeRequest(admin.graphql, `#graphql
     query shopLocalisation {
       shop {
         currencyCode
