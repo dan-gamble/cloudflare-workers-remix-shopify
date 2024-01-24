@@ -2,7 +2,7 @@
 
 name = "App Template - Remix (Dev)"
 client_id = "b14ef573974868defef46ffddd7343d3"
-application_url = "https://app-template-remix.beeayo.com"
+application_url = "https://winners-program-critics-newer.trycloudflare.com"
 embedded = true
 
 [access_scopes]
@@ -12,10 +12,9 @@ use_legacy_install_flow = true
 
 [auth]
 redirect_urls = [
-  "https://app-template-remix.beeayo.com/auth/callback",
-  "https://app-template-remix.beeayo.com/auth/shopify/callback",
-  "https://app-template-remix.beeayo.com/api/auth/callback",
-  "https://app-template-remix.beeayo.com/.shopify/graphiql/auth/callback"
+  "https://winners-program-critics-newer.trycloudflare.com/auth/callback",
+  "https://winners-program-critics-newer.trycloudflare.com/auth/shopify/callback",
+  "https://winners-program-critics-newer.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
@@ -25,4 +24,5 @@ api_version = "2024-01"
 embedded = false
 
 [build]
+automatically_update_urls_on_dev = true
 dev_store_url = "bao-checkout-2.myshopify.com"

@@ -13,12 +13,12 @@ if (
 }
 
 // From: https://codefrontend.com/deploy-shopify-apps-on-cloudflare/
-// if (process.env.NODE_ENV === "development") {
-//   fs.writeFileSync(
-//     ".dev.vars",
-//     `SHOPIFY_APP_URL=${process.env.SHOPIFY_APP_URL}\nSHOPIFY_API_KEY=${process.env.SHOPIFY_API_KEY}\nSHOPIFY_API_SECRET=${process.env.SHOPIFY_API_SECRET}\nSCOPES=${process.env.SCOPES}\n`,
-//   );
-// }
+if (process.env.NODE_ENV === "development") {
+  fs.writeFileSync(
+    ".dev.vars",
+    `SHOPIFY_APP_URL=${process.env.SHOPIFY_APP_URL}\nSHOPIFY_API_KEY=${process.env.SHOPIFY_API_KEY}\nSHOPIFY_API_SECRET=${process.env.SHOPIFY_API_SECRET}\nSCOPES=${process.env.SCOPES}\n`,
+  );
+}
 
 /** @type {import('@remix-run/dev').AppConfig} */
 export default {

@@ -6,9 +6,8 @@
   "scripts": {
     "build": "npm run build:remix",
     "build:remix": "remix build",
-    "dev": "shopify app dev --no-update",
+    "dev": "shopify app dev",
     "dev:remix": "remix watch",
-    "dev:tunnel": "cloudflared tunnel --config .cloudflared/config.yml --url localhost:8787 run app-template-remix",
     "dev:worker": "wrangler dev --site public --compatibility-flag nodejs_compat --live-reload --test-scheduled",
     "deploy": "wrangler deploy",
     "start": "wrangler dev ./build/index.js",
@@ -25,7 +24,8 @@
     "db:generate": "drizzle-kit generate:sqlite",
     "db:up": "drizzle-kit up:sqlite --schema=app/utils/db/schema.server.ts",
     "codegen": "graphql-codegen --config codegen.ts",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "tunnel": "cloudflared tunnel --config .cloudflared/config.yml --url localhost:8787 run app-template-remix"
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "^0.3.0",
