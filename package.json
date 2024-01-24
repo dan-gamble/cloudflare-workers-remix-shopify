@@ -38,8 +38,8 @@
     "@remix-run/cloudflare": "^2.3.1",
     "@remix-run/css-bundle": "^2.3.1",
     "@remix-run/react": "^2.3.1",
-    "@shopify/app": "^3.52.0",
-    "@shopify/cli": "^3.52.0",
+    "@shopify/app": "^3.53.1",
+    "@shopify/cli": "^3.53.1",
     "@shopify/polaris": "^12.1.1",
     "@shopify/react-i18n": "^7.8.0",
     "@shopify/shopify-api": "^8.1.1",
@@ -70,7 +70,7 @@
     "@parcel/watcher": "^2.2.0",
     "@remix-run/dev": "^2.3.1",
     "@remix-run/eslint-config": "^2.3.1",
-    "@shopify/app-bridge-types": "^0.0.3",
+    "@shopify/app-bridge-types": "^0.0.5",
     "@total-typescript/ts-reset": "^0.5.1",
     "@types/node": "^20.10.5",
     "@types/react": "^18.2.20",
@@ -84,7 +84,7 @@
     "prettier": "^3.1.0",
     "prettier-plugin-sql": "^0.17.1",
     "typescript": "^5.1.6",
-    "wrangler": "3.22.1"
+    "wrangler": "3.24.0"
   },
   "engines": {
     "node": ">=18.0.0"

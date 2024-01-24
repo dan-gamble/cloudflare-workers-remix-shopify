@@ -19,7 +19,7 @@ redirect_urls = [
 ]
 
 [webhooks]
-api_version = "2023-10"
+api_version = "2024-01"
 
 [pos]
 embedded = false
