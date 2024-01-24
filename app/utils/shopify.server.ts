@@ -12,6 +12,8 @@ import type { Database } from '~/utils/db/db.server'
 import { shops } from './db/schema.server'
 import { makeGraphQLRequest } from './graphql.server'
 import { AppIdDocument } from '~/generated/graphql'
+import type { GraphqlQueryFunction } from '@shopify/shopify-app-remix/build/ts/server/clients/admin/graphql'
+import type { Session } from '@shopify/shopify-api'
 
 // let shopify: ReturnType<typeof shopifyApp>
 
@@ -40,17 +42,7 @@ export function createShopifyApp (env: Env, db: Database) {
       afterAuth: async ({ admin, session }) => {
         shopify.registerWebhooks({ session })
 
-        const { app } = await makeGraphQLRequest(admin.graphql, {
-          document: AppIdDocument
-        })
-
-        await db
-          .insert(shops)
-          .values({
-            appId: app!.id,
-            shopDomain: session.shop
-          })
-          .onConflictDoNothing()
+        await setShopAppId(admin.graphql, db, session)
       }
     },
     future: {
@@ -63,13 +55,18 @@ export function createShopifyApp (env: Env, db: Database) {
   })
 
   return shopify
+}
 
-  // export default shopify
-  // export const apiVersion = LATEST_API_VERSION
-  // export const addDocumentResponseHeaders = shopify.addDocumentResponseHeaders
-  // export const authenticate = shopify.authenticate
-  // export const unauthenticated = shopify.unauthenticated
-  // export const login = shopify.login
-  // export const registerWebhooks = shopify.registerWebhooks
-  // export const sessionStorage = shopify.sessionStorage
+async function setShopAppId (graphql: GraphqlQueryFunction, db: Database, session: Session) {
+  const { app } = await makeGraphQLRequest(graphql, {
+    document: AppIdDocument
+  })
+
+  await db
+    .insert(shops)
+    .values({
+      appId: app!.id,
+      shopDomain: session.shop
+    })
+    .onConflictDoNothing()
 }
