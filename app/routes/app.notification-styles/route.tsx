@@ -1,24 +1,21 @@
 import CodeMirror from '@uiw/react-codemirror'
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/cloudflare'
 import { json } from '@remix-run/cloudflare'
-import { z } from 'zod'
 import { parse } from '@conform-to/zod'
 import { useActionData, useLoaderData, useNavigation, useSubmit } from '@remix-run/react'
-import type { PropsWithChildren} from 'react';
+import type { PropsWithChildren } from 'react'
 import { useEffect, useState } from 'react'
 import { BlockStack, Box, Card, Layout, Page, Text } from '@shopify/polaris'
 import { gruvboxDark } from '@uiw/codemirror-theme-gruvbox-dark'
 import { css } from '@codemirror/lang-css'
 import { makeRequest } from '~/utils/graphql.server'
 import { shopMetafieldQuery } from '~/graphql/queries/shop-metafield-query'
-
-const METAFIELD_NAMESPACE = 'emails'
-const METAFIELD_KEY = 'notification_style'
-
-const notificationStylesSchema = z.object({
-  ownerId: z.string({ required_error: 'Owner ID is required' }),
-  value: z.string({ required_error: 'Value is required' }),
-})
+import { UpdateNotificationStylesJob } from '~/jobs/update-notification-styles-job'
+import {
+  METAFIELD_KEY,
+  METAFIELD_NAMESPACE,
+  notificationStylesSchema,
+} from '~/routes/app.notification-styles/constants'
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const { admin } = await context.shopify.authenticate.admin(request)
@@ -45,13 +42,13 @@ export default function NotificationStyles () {
 
   const [codeString, setCodeString] = useState(loaderData.shop.metafield?.value ?? '')
 
-  const metafieldId = actionData?.metafield?.id
+  const ok = actionData?.ok
 
   useEffect(() => {
-    if (metafieldId) {
+    if (ok) {
       shopify.toast.show('Notification styles saved')
     }
-  }, [metafieldId])
+  }, [ok])
 
   return (
     <Page
@@ -113,25 +110,19 @@ function Code ({ children }: PropsWithChildren) {
 }
 
 export const action = async ({ context, request }: ActionFunctionArgs) => {
-  const { admin, session } = await context.shopify.authenticate.admin(request)
+  const { session } = await context.shopify.authenticate.admin(request)
   const formData = await request.formData()
   const submission = parse(formData, { schema: notificationStylesSchema })
 
   if (submission.intent !== 'submit') {
-    return json({ status: 'idle', submission, metafield: null } as const)
+    return json({ status: 'idle', submission, ok: false } as const)
   }
 
   if (!submission.value) {
-    return json({ status: 'error', submission, metafield: null } as const, { status: 400 })
+    return json({ status: 'error', submission, ok: false } as const, { status: 400 })
   }
 
-  const metafield = new admin.rest.resources.Metafield({ session: session })
-  metafield.namespace = METAFIELD_NAMESPACE
-  metafield.key = METAFIELD_KEY
-  metafield.type = 'multi_line_text_field'
-  metafield.value = submission.value.value
+  await UpdateNotificationStylesJob.dispatch(session.shop, submission.value.value)
 
-  await metafield.save({ update: true })
-
-  return json({ status: 'success', submission, metafield } as const)
+  return json({ status: 'success', submission, ok: true } as const)
 }
