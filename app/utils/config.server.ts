@@ -1,6 +1,4 @@
 import type { Job } from '~/utils/jobs.server'
-import type { Session } from '@shopify/shopify-api'
-import type { WithRequired } from '~/types'
 
 export interface StorageDiskConfig {
   binding: R2Bucket
@@ -15,30 +13,10 @@ export interface StorageDiskConfig {
   publicPath?: string
 }
 
-type ChannelAuthorizeFunction = (
-  session: Session,
-  ...args: any
-) => boolean | Promise<boolean>
-
-type ChannelPresenceFunction = (session: Session, ...args: any) => any | Promise<any>
-
-export type ChannelConfig = {
-  binding?: DurableObjectNamespace
-  authorize?: ChannelAuthorizeFunction
-  presence?: ChannelPresenceFunction
-}
-
-interface ChannelsConfig {
-  default: WithRequired<ChannelConfig, 'binding'>
-
-  [name: string]: ChannelConfig
-}
-
 export interface BaoConfig {
   database?: { default: D1Database } & Record<string, D1Database>
   queues?: { default: Queue } & Record<string, Queue>
   storage?: { default: StorageDiskConfig } & Record<string, StorageDiskConfig>
-  channels?: ChannelsConfig
   listeners?: {
     [name: string]: any[]
   }
@@ -59,10 +37,6 @@ export function setConfig (userConfig: BaoConfig) {
     Config.storage = {
       disks: userConfig.storage,
     }
-  }
-
-  if (userConfig.channels) {
-    Config.channels = userConfig.channels
   }
 
   if (userConfig.listeners) {
@@ -96,8 +70,6 @@ export class Config {
   }
 
   static listeners: Map<string, any[]> = new Map()
-
-  static channels: BaoConfig['channels']
 }
 
 export function setEnv (env: any) {

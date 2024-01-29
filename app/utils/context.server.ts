@@ -19,7 +19,6 @@ export interface AppContext {
   storage?: {
     disks: BaoConfig['storage']
   }
-  channels?: BaoConfig['channels']
   listeners?: Map<string, any[]>
   cache: ReturnType<typeof setupCache>
   db: Database
@@ -85,10 +84,6 @@ export function getContextFromUserConfig (
     context.queues = userConfig.queues
   }
 
-  if (userConfig.channels) {
-    context.channels = userConfig.channels
-  }
-
   if (userConfig.listeners) {
     context.listeners = new Map(Object.entries(userConfig.listeners))
   }
@@ -103,14 +98,6 @@ export function getQueue (name: string) {
 export function getListenersForEventClass (eventClass: any) {
   const eventName = sanitizeModuleName(eventClass.name)
   return getContext().listeners?.get(eventName) || []
-}
-
-export function getChannelNames () {
-  return Object.keys(getContext().channels || {})
-}
-
-export function getChannel (name: string) {
-  return getContext().channels?.[name]
 }
 
 export function getStorage () {

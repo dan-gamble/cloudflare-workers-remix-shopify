@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import type {
   ActionFunctionArgs,
   HeadersFunction,
@@ -27,7 +26,6 @@ import { eq } from 'drizzle-orm'
 import { combineServerTimings, makeTimings, time } from '~/utils/timing.server'
 import { SayHelloEvent } from '~/events/say-hello-event'
 import { sleep } from '~/utils/index.server'
-import { AuthenticatedExampleEvent } from '~/events/authenticated-example-event'
 import { getContext } from '~/utils/context.server'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -51,8 +49,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       }),
     { timings, type: 'find shop' }
   )
-
-  AuthenticatedExampleEvent.dispatch('This is an example of an event that is only dispatched when the user is authenticated', session.shop)
 
   return json(
     { shop },
@@ -129,25 +125,6 @@ export default function Index () {
     ''
   )
 
-  const [broadcastMessage, setBroadcastMessage] = useState('')
-
-  // useChannel('default', message => {
-  //   const data = JSON.parse(message.data)
-  //
-  //   setBroadcastMessage(data.data.message)
-  // })
-  //
-  // useChannel(`shops.${normaliseShopName('bao-checkout-2')}`, message => {
-  //   console.log({ message })
-  // })
-
-  useEffect(() => {
-    if (productId) {
-      shopify.toast.show('Product created')
-
-      setBroadcastMessage('')
-    }
-  }, [productId])
   const generateProduct = () => submit({}, { replace: true, method: 'POST' })
 
   return (
@@ -216,12 +193,8 @@ export default function Index () {
                       View product
                     </Button>
                   )}
-                  {broadcastMessage && (
-                    <Text as="p" variant="bodyMd">
-                      {broadcastMessage}
-                    </Text>
-                  )}
                 </InlineStack>
+
                 {actionData?.product && (
                   <Box
                     padding='400'
@@ -239,6 +212,7 @@ export default function Index () {
               </BlockStack>
             </Card>
           </Layout.Section>
+
           <Layout.Section variant='oneThird'>
             <BlockStack gap='500'>
               <Card>

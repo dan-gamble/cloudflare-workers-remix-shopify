@@ -8,8 +8,6 @@ import { handleScheduled } from '~/utils/scheduled.server'
 import { setupLoadContext } from '~/utils/cloudflare.server'
 import { getContextFromUserConfig, runWithContext } from '~/utils/context.server'
 
-export { Channel } from '~/utils/channel.server'
-
 const MANIFEST = JSON.parse(__STATIC_CONTENT_MANIFEST)
 const handleRemixRequest = createRequestHandler(build, process.env.NODE_ENV)
 

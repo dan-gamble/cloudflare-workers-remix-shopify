@@ -44,20 +44,6 @@
       "bucket_name": "app-template-remix"
     }
   ],
-  "durable_objects": {
-    "bindings": [
-      {
-        "name": "CHANNELS",
-        "class_name": "Channel"
-      }
-    ]
-  },
-  "migrations": [
-    {
-      "tag": "v1",
-      "new_classes": ["Channel"]
-    }
-  ],
   "triggers": {
     "crons": [
       "* * * * *"

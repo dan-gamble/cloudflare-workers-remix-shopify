@@ -2,7 +2,7 @@
 
 name = "App Template - Remix (Dev)"
 client_id = "b14ef573974868defef46ffddd7343d3"
-application_url = "https://sub-finland-soup-bw.trycloudflare.com"
+application_url = "https://think-actress-tricks-safe.trycloudflare.com"
 embedded = true
 
 [access_scopes]
@@ -12,9 +12,9 @@ use_legacy_install_flow = true
 
 [auth]
 redirect_urls = [
-  "https://sub-finland-soup-bw.trycloudflare.com/auth/callback",
-  "https://sub-finland-soup-bw.trycloudflare.com/auth/shopify/callback",
-  "https://sub-finland-soup-bw.trycloudflare.com/api/auth/callback"
+  "https://think-actress-tricks-safe.trycloudflare.com/auth/callback",
+  "https://think-actress-tricks-safe.trycloudflare.com/auth/shopify/callback",
+  "https://think-actress-tricks-safe.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

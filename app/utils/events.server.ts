@@ -1,8 +1,7 @@
 import { sanitizeModuleName } from './string.server'
 import { serializeArguments } from '~/utils/serialize.server'
-import { getBindingForChannelName } from '~/utils/channel.server'
 import { registerEvent } from '~/utils/registry.server'
-import { getListenersForEventClass, getQueue } from '~/utils/context.server'
+import { getContext, getListenersForEventClass, getQueue } from '~/utils/context.server'
 
 export class Event {
   public static shouldQueue = false
@@ -25,17 +24,23 @@ export class Event {
         throw new Error(`Queue ${queueName} not found.`)
       }
 
-      // TODO: Wrap this in ctx.waitUntil
-      queue.send({
-        event: sanitizeModuleName(this.name),
-        payload: serializeArguments(args),
-      })
+      const context = getContext()
+
+      if (typeof context.ctx !== 'undefined') {
+        context.ctx.waitUntil(queue.send({
+          event: sanitizeModuleName(this.name),
+          payload: serializeArguments(args),
+        }))
+      } else {
+        queue.send({
+          event: sanitizeModuleName(this.name),
+          payload: serializeArguments(args),
+        })
+      }
     } else {
       dispatchEvent(event)
     }
   }
-
-  broadcastTo? (): string;
 
   public static register (event: any): void {
     registerEvent(event)
@@ -48,38 +53,5 @@ export function dispatchEvent (event: any): void {
   getListenersForEventClass(event.constructor).forEach((listener) => {
     const instance = new listener()
     instance.handle(event)
-  })
-
-  if (event.broadcastTo) {
-    const channelName = event.broadcastTo()
-
-    if (channelName) {
-      broadcastEvent(event, channelName)
-    }
-  }
-}
-
-async function broadcastEvent (event: Event, channelName: string) {
-  // console.log(`broadcasting`, sanitizeModuleName(event.constructor.name));
-
-  const binding = getBindingForChannelName(channelName)
-
-  if (!binding) {
-    throw new Error(
-      `No channel binding found for ${channelName}. Please update your bao.config.`,
-    )
-  }
-
-  const id = binding.idFromName(channelName)
-  const channel = binding.get(id)
-
-  const data = {
-    event: sanitizeModuleName(event.constructor.name),
-    data: event,
-  }
-
-  await channel.fetch('https://bao.agency', {
-    method: 'POST',
-    body: JSON.stringify(data),
   })
 }
