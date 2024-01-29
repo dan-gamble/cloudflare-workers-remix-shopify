@@ -25,7 +25,6 @@ import {
 import { shops } from '~/utils/db/schema.server'
 import { eq } from 'drizzle-orm'
 import { combineServerTimings, makeTimings, time } from '~/utils/timing.server'
-import { SayHelloJob } from '~/jobs/say-hello-job'
 import { SayHelloEvent } from '~/events/say-hello-event'
 import { sleep } from '~/utils/index.server'
 import { AuthenticatedExampleEvent } from '~/events/authenticated-example-event'
@@ -52,8 +51,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       }),
     { timings, type: 'find shop' }
   )
-
-  SayHelloJob.dispatch('Hello, world :)')
 
   AuthenticatedExampleEvent.dispatch('This is an example of an event that is only dispatched when the user is authenticated', session.shop)
 

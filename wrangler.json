@@ -1,0 +1,66 @@
+{
+  "name": "bao-app-template-remix",
+  "workers_dev": true,
+  "main": "./build/index.js",
+  "compatibility_date": "2023-04-20",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "site": {
+    "bucket": "./public"
+  },
+  "build": {
+    "command": "npm run build"
+  },
+  "kv_namespaces": [
+    {
+      "binding": "KV",
+      "id": "8968cadbc0ed4b7c9e08f5dc5c4ec811"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_id": "3334a842-d77a-4d9b-bf94-2d075db444b9",
+      "database_name": "app-template-remix"
+    }
+  ],
+  "queues": {
+    "producers": [
+      {
+        "binding": "QUEUE",
+        "queue": "app-template-remix-queue"
+      }
+    ],
+    "consumers": [
+      {
+        "queue": "app-template-remix-queue"
+      }
+    ]
+  },
+  "r2_buckets": [
+    {
+      "binding": "BUCKET",
+      "bucket_name": "app-template-remix"
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "CHANNELS",
+        "class_name": "Channel"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_classes": ["Channel"]
+    }
+  ],
+  "triggers": {
+    "crons": [
+      "* * * * *"
+    ]
+  }
+}
