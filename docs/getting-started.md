@@ -1,9 +1,8 @@
 ## ./bin/setup.mjs
 
 1. `npm i`
-2. `./bin/setup.mjs`
-3. `npm run migrate -- --local`
-4. `npm run dev`
+2. `npm run setup`
+3. `npm run dev`
 
 ## Deployment
 

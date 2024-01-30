@@ -4,8 +4,7 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "build": "npm run build:remix",
-    "build:remix": "remix build",
+    "build": "remix build",
     "dev": "shopify app dev",
     "dev:remix": "remix watch",
     "dev:worker": "wrangler dev --experimental-json-config --site public --compatibility-flag nodejs_compat --live-reload --test-scheduled",
@@ -23,11 +22,11 @@
     "shopify:dev": "remix build --sourcemap && concurrently \"npm:dev:*\"",
     "shopify:env": "shopify app env",
     "db:generate": "drizzle-kit generate:sqlite",
-    "db:up": "drizzle-kit up:sqlite --schema=app/utils/db/schema.server.ts",
     "codegen": "graphql-codegen --config .graphqlrc.ts",
     "prepare": "husky install",
     "tunnel": "cloudflared tunnel --config .cloudflared/config.yml --url localhost:8787 run app-template-remix",
-    "setup": "./bin/setup.mjs"
+    "migrate": "wrangler d1 execute DB --file=./app/utils/db/migrations/0000_certain_outlaw_kid.sql --experimental-json-config",
+    "setup": "./bin/setup.mjs && npm run migrate -- --local"
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "^0.3.1",
