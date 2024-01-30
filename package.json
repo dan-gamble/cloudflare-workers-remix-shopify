@@ -22,11 +22,11 @@
     "shopify:dev": "remix build --sourcemap && concurrently \"npm:dev:*\"",
     "shopify:env": "shopify app env",
     "db:generate": "drizzle-kit generate:sqlite",
+    "db:migrate": "wrangler d1 execute DB --file=./app/utils/db/migrations/0000_certain_outlaw_kid.sql --experimental-json-config",
     "codegen": "graphql-codegen --config .graphqlrc.ts",
     "prepare": "husky install",
     "tunnel": "cloudflared tunnel --config .cloudflared/config.yml --url localhost:8787 run app-template-remix",
-    "migrate": "wrangler d1 execute DB --file=./app/utils/db/migrations/0000_certain_outlaw_kid.sql --experimental-json-config",
-    "setup": "./bin/setup.mjs && npm run migrate -- --local"
+    "setup": "./bin/setup.mjs && npm run db:migrate -- --local"
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "^0.3.1",

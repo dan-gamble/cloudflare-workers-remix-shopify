@@ -11,7 +11,7 @@
 
 1. `npm run shopify:config:link` to link to the product app
 2. `npm run deploy`
-3. `npm run migrate`
+3. `npm run db:migrate`
 4. `npm run shopify:env show`
    1. Note down the `SHOPIFY_API_KEY`, `SHOPIFY_API_SECRET` and `SCOPES` values
    2. You may need to update your `scopes` in the `.toml` file, push them, then do this step again to ensure your scopes
