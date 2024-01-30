@@ -26,7 +26,8 @@
     "db:up": "drizzle-kit up:sqlite --schema=app/utils/db/schema.server.ts",
     "codegen": "graphql-codegen --config .graphqlrc.ts",
     "prepare": "husky install",
-    "tunnel": "cloudflared tunnel --config .cloudflared/config.yml --url localhost:8787 run app-template-remix"
+    "tunnel": "cloudflared tunnel --config .cloudflared/config.yml --url localhost:8787 run app-template-remix",
+    "setup": "./bin/setup.mjs"
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "^0.3.1",

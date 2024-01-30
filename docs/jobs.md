@@ -29,3 +29,7 @@ export async function loader ({ request }: LoaderFunctionArgs) {
 ```
 
 ### Registering a job
+
+```typescript jsx
+Job.register(SayHelloJob)
+```
