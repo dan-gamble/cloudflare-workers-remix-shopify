@@ -31,10 +31,6 @@ export function createShopifyApp (env: Env, db: Database) {
         deliveryMethod: DeliveryMethod.Http,
         callbackUrl: '/webhooks'
       },
-      PRODUCTS_UPDATE: {
-        deliveryMethod: DeliveryMethod.Http,
-        callbackUrl: '/webhooks'
-      }
     },
     hooks: {
       afterAuth: async ({ admin, session }) => {
