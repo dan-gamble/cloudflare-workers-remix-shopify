@@ -43,10 +43,5 @@
       "binding": "BUCKET",
       "bucket_name": "app-template-remix"
     }
-  ],
-  "triggers": {
-    "crons": [
-      "* * * * *"
-    ]
-  }
+  ]
 }

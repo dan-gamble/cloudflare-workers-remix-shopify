@@ -4,7 +4,6 @@ import * as build from '@remix-run/dev/server-build'
 import __STATIC_CONTENT_MANIFEST from '__STATIC_CONTENT_MANIFEST'
 import { config } from './bao.config'
 import { handleQueue } from '~/utils/queue.server'
-import { handleScheduled } from '~/utils/scheduled.server'
 import { setupLoadContext } from '~/utils/cloudflare.server'
 import { getContextFromUserConfig, runWithContext } from '~/utils/context.server'
 import type { AssetManifestType } from '@cloudflare/kv-asset-handler/src/types'
@@ -67,15 +66,5 @@ export default {
 
   async queue (batch: MessageBatch, env: Env, context: ExecutionContext) {
     return handleQueue(batch, env, context, config)
-  },
-
-  async scheduled (event: ScheduledEvent, env: Env, ctx: ExecutionContext) {
-    return await handleScheduled(event, env, ctx, config, (schedule) => {
-      schedule
-        .run(async () => {
-          console.log('Running every minute')
-        })
-        .everyMinute()
-    })
   },
 }
