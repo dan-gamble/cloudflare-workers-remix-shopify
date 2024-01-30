@@ -7,8 +7,9 @@ import { handleQueue } from '~/utils/queue.server'
 import { handleScheduled } from '~/utils/scheduled.server'
 import { setupLoadContext } from '~/utils/cloudflare.server'
 import { getContextFromUserConfig, runWithContext } from '~/utils/context.server'
+import type { AssetManifestType } from '@cloudflare/kv-asset-handler/src/types'
 
-const MANIFEST = JSON.parse(__STATIC_CONTENT_MANIFEST)
+const MANIFEST = JSON.parse(__STATIC_CONTENT_MANIFEST) as AssetManifestType
 const handleRemixRequest = createRequestHandler(build, process.env.NODE_ENV)
 
 if (process.env.NODE_ENV === 'development') {
@@ -49,14 +50,6 @@ export default {
     }
 
     config({ env, request, ctx })
-
-    // This sends a log to our queue
-    // let log = {
-    //   url: request.url,
-    //   method: request.method,
-    //   headers: Object.fromEntries(request.headers),
-    // }
-    // await env.QUEUE.send(log)
 
     const context = getContextFromUserConfig(config({ request, env, ctx }), env)
     context.env = env
