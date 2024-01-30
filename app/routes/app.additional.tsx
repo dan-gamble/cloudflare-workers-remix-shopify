@@ -1,5 +1,3 @@
-import type { ActionFunctionArgs} from '@remix-run/cloudflare';
-import { json } from '@remix-run/cloudflare'
 import { Form } from '@remix-run/react'
 import {
   Box,
@@ -11,20 +9,6 @@ import {
   Text,
   BlockStack,
 } from '@shopify/polaris'
-import { storage } from '~/utils/storage.server'
-
-export async function action ({ request }: ActionFunctionArgs) {
-  const formData = await request.formData()
-  const file = formData.get('file')
-  if (!(file instanceof File)) throw new Error('Not a file')
-  const key = file.name
-
-  await storage().put(key, file)
-
-  const url = storage().url(key)
-
-  return json({ url })
-}
 
 export default function AdditionalPage () {
   return (
