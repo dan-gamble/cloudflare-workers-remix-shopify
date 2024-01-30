@@ -24,8 +24,6 @@ import {
 import { shops } from '~/utils/db/schema.server'
 import { eq } from 'drizzle-orm'
 import { combineServerTimings, makeTimings, time } from '~/utils/timing.server'
-import { SayHelloEvent } from '~/events/say-hello-event'
-import { sleep } from '~/utils/index.server'
 import { getContext } from '~/utils/context.server'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -101,12 +99,6 @@ export const action = async ({ context, request }: ActionFunctionArgs) => {
     }
   )
   const responseJson = await response.json()
-
-  for (const arrayElement of [20, 40, 60, 80, 100]) {
-    SayHelloEvent.dispatch(`We're ${arrayElement}% complete!`)
-
-    await sleep(arrayElement * 10)
-  }
 
   return json({
     // @ts-expect-error

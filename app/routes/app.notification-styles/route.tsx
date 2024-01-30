@@ -10,7 +10,6 @@ import { gruvboxDark } from '@uiw/codemirror-theme-gruvbox-dark'
 import { css } from '@codemirror/lang-css'
 import { makeRequest } from '~/utils/graphql.server'
 import { shopMetafieldQuery } from '~/graphql/queries/shop-metafield-query'
-import { UpdateNotificationStylesJob } from '~/jobs/update-notification-styles-job'
 import {
   METAFIELD_KEY,
   METAFIELD_NAMESPACE,
@@ -110,7 +109,7 @@ function Code ({ children }: PropsWithChildren) {
 }
 
 export const action = async ({ context, request }: ActionFunctionArgs) => {
-  const { session } = await context.shopify.authenticate.admin(request)
+  const { admin, session } = await context.shopify.authenticate.admin(request)
   const formData = await request.formData()
   const submission = parse(formData, { schema: notificationStylesSchema })
 
@@ -122,7 +121,13 @@ export const action = async ({ context, request }: ActionFunctionArgs) => {
     return json({ status: 'error', submission, ok: false } as const, { status: 400 })
   }
 
-  await UpdateNotificationStylesJob.dispatch(session.shop, submission.value.value)
+  const metafield = new admin.rest.resources.Metafield({ session: session })
+  metafield.namespace = METAFIELD_NAMESPACE
+  metafield.key = METAFIELD_KEY
+  metafield.type = 'multi_line_text_field'
+  metafield.value = submission.value.value
+
+  await metafield.save({ update: true })
 
   return json({ status: 'success', submission, ok: true } as const)
 }
