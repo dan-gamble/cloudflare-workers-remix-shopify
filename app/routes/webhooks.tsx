@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs } from '@remix-run/cloudflare'
-import { getContext } from '~/utils/context.server'
 import { AppUninstalledJob } from '~/jobs/app-uninstalled-job'
+import { getContext } from '~/utils/context.server'
 
 export async function action ({ request }: ActionFunctionArgs) {
   const context = getContext()
