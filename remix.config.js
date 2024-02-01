@@ -34,7 +34,11 @@ export default {
   serverModuleFormat: 'esm',
   serverPlatform: 'neutral',
 
-  dev: { port: process.env.HMR_SERVER_PORT || 8082 },
+  dev: {
+    command: `npm start -- --port=${process.env.PORT}`,
+    manual: true,
+    port: process.env.HMR_SERVER_PORT || 8002,
+  },
   future: {}
   // appDirectory: "app",
   // assetsBuildDirectory: "public/build",

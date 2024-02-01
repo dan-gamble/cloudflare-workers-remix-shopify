@@ -1,8 +1,8 @@
-import fs from "fs";
+import fs from 'fs'
 
-import { LATEST_API_VERSION } from "@shopify/shopify-api";
-import { shopifyApiProject, ApiType } from "@shopify/api-codegen-preset";
-import type { IGraphQLConfig } from "graphql-config";
+import { LATEST_API_VERSION } from '@shopify/shopify-api'
+import { shopifyApiProject, ApiType } from '@shopify/api-codegen-preset'
+import type { IGraphQLConfig } from 'graphql-config'
 
 const outputDir = './app/types'
 const defaultConfig = shopifyApiProject({
@@ -16,38 +16,38 @@ defaultConfig.extensions.codegen.generates[`${outputDir}/admin.types.ts`] =
   defaultConfig.extensions.codegen.generates[`${outputDir}/admin.types.d.ts`]
 delete defaultConfig.extensions.codegen.generates[
   `${outputDir}/admin.types.d.ts`
-  ]
+]
 
 function getConfig() {
   const config: IGraphQLConfig = {
     projects: {
       default: defaultConfig,
     },
-  };
+  }
 
-  let extensions: string[] = [];
+  let extensions: string[] = []
   try {
-    extensions = fs.readdirSync("./extensions");
+    extensions = fs.readdirSync('./extensions')
   } catch {
     // ignore if no extensions
   }
 
   for (const entry of extensions) {
-    const extensionPath = `./extensions/${entry}`;
-    const schema = `${extensionPath}/schema.graphql`;
+    const extensionPath = `./extensions/${entry}`
+    const schema = `${extensionPath}/schema.graphql`
     if (!fs.existsSync(schema)) {
-      continue;
+      continue
     }
     config.projects[entry] = {
       schema,
       documents: [`${extensionPath}/**/*.graphql`],
-    };
+    }
   }
 
   // @ts-ignore
   config.ignoreNoDocuments = true
 
-  return config;
+  return config
 }
 
-module.exports = getConfig();
+module.exports = getConfig()

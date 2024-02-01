@@ -34,6 +34,8 @@ export function createShopifyApp (env: Env, db: Database) {
     },
     hooks: {
       afterAuth: async ({ admin, session }) => {
+        console.log({ admin, session })
+
         shopify.registerWebhooks({ session })
 
         await setShopAppId(admin.graphql, db, session)
@@ -41,7 +43,8 @@ export function createShopifyApp (env: Env, db: Database) {
     },
     future: {
       v3_webhookAdminContext: true,
-      v3_authenticatePublic: true
+      v3_authenticatePublic: true,
+      unstable_newEmbeddedAuthStrategy: true,
     },
     ...(env.SHOP_CUSTOM_DOMAIN
       ? { customShopDomains: [env.SHOP_CUSTOM_DOMAIN] }

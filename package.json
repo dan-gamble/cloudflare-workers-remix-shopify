@@ -7,10 +7,9 @@
     "build": "remix build",
     "dev": "shopify app dev",
     "dev:remix": "remix watch",
-    "dev:worker": "wrangler dev --experimental-json-config --site public --compatibility-flag nodejs_compat --live-reload --test-scheduled",
+    "start": "wrangler dev --site public --live-reload --test-scheduled",
     "dev:codegen": "npm run codegen -- --watch",
     "deploy": "wrangler deploy --experimental-json-config",
-    "start": "wrangler dev ./build/index.js --experimental-json-config",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "shopify": "shopify",
     "lint": "eslint . --fix",
@@ -38,8 +37,8 @@
     "@remix-run/css-bundle": "^2.5.1",
     "@remix-run/react": "^2.5.1",
     "@shopify/admin-api-client": "^0.2.2",
-    "@shopify/app": "^3.54.0",
-    "@shopify/cli": "^3.54.0",
+    "@shopify/app": "^3.55.2",
+    "@shopify/cli": "^3.55.2",
     "@shopify/polaris": "^12.11.1",
     "@shopify/react-i18n": "^7.8.0",
     "@shopify/shopify-api": "^9.0.2",
@@ -78,7 +77,7 @@
     "prettier": "^3.2.4",
     "prettier-plugin-sql": "^0.18.0",
     "typescript": "^5.3.3",
-    "wrangler": "3.25.0"
+    "wrangler": "3.26.0"
   },
   "engines": {
     "node": ">=18.0.0"
