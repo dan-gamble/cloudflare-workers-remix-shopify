@@ -53,6 +53,8 @@ export default function App () {
         </Link>
 
         <Link to="/app/additional">Additional</Link>
+
+        <Link to="/app/branding">Branding</Link>
       </ui-nav-menu>
 
       <I18nContext.Provider value={i18nManager}>

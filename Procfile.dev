@@ -1,0 +1,2 @@
+shopify: npm run dev
+codegen: npm run dev:codegen

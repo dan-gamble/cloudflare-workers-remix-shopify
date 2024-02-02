@@ -40,6 +40,7 @@ export default async function handleRequest (
   }
 
   responseHeaders.set('Content-Type', 'text/html')
+  // responseHeaders.set('Transfer-Encoding', 'chunked')
   responseHeaders.append('Server-Timing', timings.toString())
 
   return new Response(body, {

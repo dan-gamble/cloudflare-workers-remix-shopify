@@ -6,7 +6,6 @@
   "scripts": {
     "build": "remix build",
     "dev": "shopify app dev",
-    "dev:remix": "remix watch",
     "start": "wrangler dev --site public --live-reload --test-scheduled",
     "dev:codegen": "npm run codegen -- --watch",
     "deploy": "wrangler deploy --experimental-json-config",
@@ -21,7 +20,7 @@
     "shopify:dev": "remix build --sourcemap && concurrently \"npm:dev:*\"",
     "shopify:env": "shopify app env",
     "db:generate": "drizzle-kit generate:sqlite",
-    "db:migrate": "wrangler d1 execute DB --file=./app/utils/db/migrations/0000_certain_outlaw_kid.sql --experimental-json-config",
+    "db:migrate": "wrangler d1 execute DB --file=./app/utils/db/migrations/0001_melodic_storm.sql --experimental-json-config",
     "codegen": "graphql-codegen --config .graphqlrc.ts",
     "prepare": "husky install",
     "tunnel": "cloudflared tunnel --config .cloudflared/config.yml --url localhost:8787 run app-template-remix",
@@ -33,6 +32,7 @@
     "@conform-to/zod": "^0.9.1",
     "@epic-web/cachified": "^4.0.0",
     "@epic-web/invariant": "^1.0.0",
+    "@hookform/resolvers": "^3.3.4",
     "@remix-run/cloudflare": "^2.5.1",
     "@remix-run/css-bundle": "^2.5.1",
     "@remix-run/react": "^2.5.1",
@@ -54,6 +54,7 @@
     "pino-pretty": "^10.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.50.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
