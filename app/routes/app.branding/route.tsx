@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs } from '@remix-run/cloudflare';
+import type { HeadersFunction, LoaderFunctionArgs } from '@remix-run/cloudflare'
 import { json } from '@remix-run/cloudflare'
 import { getContext } from '~/utils/context.server'
 import { shopifyFontFamilies } from '~/utils/db/schema.server'
@@ -9,6 +9,7 @@ import { checkoutProfilesQuery } from '~/routes/app.branding/graphql/queries/che
 import { brandingQuery } from '~/routes/app.branding/graphql/queries/branding-query'
 import type { CheckoutBrandingQuery, CheckoutProfilesQuery } from '~/types/admin.generated'
 import { useBrandingForms } from '~/routes/app.branding._index/hooks/use-branding-forms'
+import { combineServerTimings, makeTimings, time } from '~/utils/timing.server'
 
 type FontDataContext = {
   shopifyFonts: Array<{ name: string }>;
@@ -58,6 +59,8 @@ type CheckoutBrandingContext = {
 }
 
 export async function loader ({ request }: LoaderFunctionArgs) {
+  const timings = makeTimings('branding')
+
   const url = new URL(request.url)
 
   const { db, shopify } = getContext()
@@ -68,31 +71,58 @@ export async function loader ({ request }: LoaderFunctionArgs) {
     shopifyFontFamilyNames,
     checkoutProfileData,
   ] = await Promise.all([
-    db
-      .select({
-        name: shopifyFontFamilies.name,
-      })
-      .from(shopifyFontFamilies),
-    makeRequest(admin.graphql, checkoutProfilesQuery)
+    time(
+      async () => {
+        return db
+          .select({
+            name: shopifyFontFamilies.name,
+          })
+          .from(shopifyFontFamilies)
+      },
+      { timings, type: 'find shopify font families' },
+    ),
+    time(
+      async () => {
+        return makeRequest(admin.graphql, checkoutProfilesQuery)
+      },
+      { timings, type: 'checkout profiles' },
+    ),
   ])
 
   invariant(checkoutProfileData?.data, 'No checkout profile data found')
 
-  const checkoutProfileId = url.searchParams.get('profileId') ?? checkoutProfileData.data?.checkoutProfiles?.nodes?.[0]?.id
+  const checkoutProfileId = url.searchParams.get('profileId') ??
+    checkoutProfileData.data?.checkoutProfiles?.nodes?.[0]?.id
 
-  const currentBranding = await makeRequest(admin.graphql, brandingQuery, {
-    variables: {
-      checkoutProfileId
-    }
-  })
+  const currentBranding = await time(
+    async () => {
+      return makeRequest(admin.graphql, brandingQuery, {
+        variables: {
+          checkoutProfileId,
+        },
+      })
+    },
+    { timings, type: 'current branding' },
+  )
   invariant(currentBranding?.data, 'No branding data found')
 
-  return json({
-    shopifyFontFamilyNames,
-    checkoutProfileData: checkoutProfileData.data,
-    checkoutProfileId,
-    currentBranding,
-  })
+  return json(
+    {
+      shopifyFontFamilyNames,
+      checkoutProfileData: checkoutProfileData.data,
+      checkoutProfileId,
+      currentBranding,
+    },
+    {
+      headers: { 'Server-Timing': timings.toString() },
+    },
+  )
+}
+
+export const headers: HeadersFunction = ({ loaderHeaders, parentHeaders }) => {
+  return {
+    'Server-Timing': combineServerTimings(parentHeaders, loaderHeaders)
+  }
 }
 
 export default function Branding () {
