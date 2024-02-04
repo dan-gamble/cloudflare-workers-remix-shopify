@@ -63,9 +63,9 @@ export async function loader ({ request }: LoaderFunctionArgs) {
 
   const url = new URL(request.url)
 
-  const { db, shopify } = getContext()
+  const { cache, db, shopify } = getContext()
 
-  const { admin } = await shopify.authenticate.admin(request)
+  const { admin, session } = await shopify.authenticate.admin(request)
 
   const [
     shopifyFontFamilyNames,
@@ -83,7 +83,13 @@ export async function loader ({ request }: LoaderFunctionArgs) {
     ),
     time(
       async () => {
-        return makeRequest(admin.graphql, checkoutProfilesQuery)
+        return cache.cachified({
+          ttl: 1000 * 60 * 5,
+          key: `${session.shop}:checkoutProfiles`,
+          async getFreshValue () {
+            return makeRequest(admin.graphql, checkoutProfilesQuery)
+          },
+        })
       },
       { timings, type: 'checkout profiles' },
     ),
@@ -96,9 +102,15 @@ export async function loader ({ request }: LoaderFunctionArgs) {
 
   const currentBranding = await time(
     async () => {
-      return makeRequest(admin.graphql, brandingQuery, {
-        variables: {
-          checkoutProfileId,
+      return cache.cachified({
+        ttl: 1000 * 60 * 5,
+        key: `${session.shop}:checkoutBranding-${checkoutProfileId}`,
+        async getFreshValue () {
+          return makeRequest(admin.graphql, brandingQuery, {
+            variables: {
+              checkoutProfileId,
+            },
+          })
         },
       })
     },

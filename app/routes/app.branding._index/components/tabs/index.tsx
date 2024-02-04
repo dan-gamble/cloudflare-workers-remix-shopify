@@ -4,6 +4,7 @@ import type { ReactNode} from 'react';
 import { useState } from 'react'
 import { useSearchParams } from '@remix-run/react'
 import { ButtonsTab } from '~/routes/app.branding._index/components/tabs/buttons-tab'
+import { FormTab } from '~/routes/app.branding._index/components/tabs/form-tab'
 
 const tabs: Array<TabProps & { component: () => ReactNode }> = [
   {
@@ -12,7 +13,14 @@ const tabs: Array<TabProps & { component: () => ReactNode }> = [
     accessibilityLabel: 'Buttons',
     panelID: 'buttons',
     component: ButtonsTab,
-  }
+  },
+  {
+    id: 'form',
+    content: 'Form',
+    accessibilityLabel: 'Form',
+    panelID: 'form',
+    component: FormTab,
+  },
 ]
 
 export function CheckoutBrandingTabs () {

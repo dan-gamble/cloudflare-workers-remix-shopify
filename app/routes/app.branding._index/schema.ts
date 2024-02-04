@@ -200,6 +200,16 @@ export const checkoutBrandingTextFieldSchema = z.object({
   typography: checkoutBrandingTypographyStyleSchema.optional().nullable(),
 })
 
+export const checkoutBrandingFormSchema = z.object({
+  checkbox: checkoutBrandingCheckboxSchema.optional().nullable(),
+  choiceList: checkoutBrandingChoiceListSchema.optional().nullable(),
+  control: checkoutBrandingControlSchema.optional().nullable(),
+  select: checkoutBrandingSelectSchema.optional().nullable(),
+  textField: checkoutBrandingTextFieldSchema.optional().nullable(),
+})
+
+export type CheckoutBrandingFormFields = z.infer<typeof checkoutBrandingFormSchema>
+
 export const checkoutBrandingButtonsSchema = z.object({
   primaryButton: checkoutBrandingButtonSchema.optional().nullable(),
   secondaryButton: checkoutBrandingButtonSchema.optional().nullable(),
@@ -208,9 +218,6 @@ export const checkoutBrandingButtonsSchema = z.object({
 export type CheckoutBrandingButtonsFields = z.infer<typeof checkoutBrandingButtonsSchema>
 
 export const checkoutBrandingCustomizationSchema = z.object({
-  checkbox: checkoutBrandingCheckboxSchema.optional().nullable(),
-  choiceList: checkoutBrandingChoiceListSchema.optional().nullable(),
-  control: checkoutBrandingControlSchema.optional().nullable(),
   favicon: checkoutBrandingImageSchema.optional().nullable(),
   global: checkoutBrandingGlobalSchema.optional().nullable(),
   header: checkoutBrandingHeaderSchema.optional().nullable(),
@@ -220,9 +227,9 @@ export const checkoutBrandingCustomizationSchema = z.object({
   main: checkoutBrandingMainSchema.optional().nullable(),
   merchandiseThumbnail: checkoutBrandingMerchandiseThumbnailSchema.optional().nullable(),
   orderSummary: checkoutBrandingOrderSummarySchema.optional().nullable(),
-  select: checkoutBrandingSelectSchema.optional().nullable(),
-  textField: checkoutBrandingTextFieldSchema.optional().nullable(),
-}).and(checkoutBrandingButtonsSchema.optional().nullable())
+})
+  .and(checkoutBrandingFormSchema.optional().nullable())
+  .and(checkoutBrandingButtonsSchema.optional().nullable())
 
 export const checkoutBrandingCornerRadiusSchema = z.object({
   base: z.number().positive().optional().nullable(),

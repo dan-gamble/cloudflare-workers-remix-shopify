@@ -3,7 +3,7 @@ If you're using `cache` to cache a value that is specific to a store ensure that
 ```typescript jsx
 const { session } = await shopify.authenticate.admin(request)
 
-const notificationStyles = await cache({
+const notificationStyles = await cache.cachified({
   ttl: 1000 * 10,
   key: `${session.shop}:notificationStyles`,
   async getFreshValue () {

@@ -1,5 +1,5 @@
 import { useFetcher, useNavigation } from '@remix-run/react'
-import { BlockStack, Card, FormLayout, Layout, Page, Text } from '@shopify/polaris'
+import { BlockStack, Card, FormLayout, Layout, Page, PageActions, Text } from '@shopify/polaris'
 import { TextFontIcon } from '@shopify/polaris-icons'
 import { TextField } from '~/components/text-field'
 import { useCheckoutBranding } from '~/routes/app.branding/route'
@@ -11,15 +11,17 @@ export default function CheckoutBranding () {
 
   const checkoutBranding = useCheckoutBranding()
 
+  const primaryAction = {
+    content: 'Save',
+    disabled: !checkoutBranding.isDirty,
+    loading: navigation.state === 'submitting',
+    onAction: checkoutBranding.handleSubmit,
+  }
+
   return (
     <Page
       title="Checkout Branding"
-      primaryAction={{
-        content: 'Save',
-        disabled: !checkoutBranding.isDirty,
-        loading: navigation.state === 'submitting',
-        onAction: checkoutBranding.handleSubmit,
-      }}
+      primaryAction={primaryAction}
       secondaryActions={[
         {
           content: 'Update Shopify Font Families',
@@ -102,6 +104,10 @@ export default function CheckoutBranding () {
               </BlockStack>
             </BlockStack>
           </Card>
+        </Layout.Section>
+
+        <Layout.Section variant="fullWidth">
+          <PageActions primaryAction={primaryAction} />
         </Layout.Section>
       </Layout>
     </Page>

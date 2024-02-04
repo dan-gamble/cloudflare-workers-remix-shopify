@@ -51,19 +51,22 @@ export function setupCache (env: Env) {
     }
   }
 
-  return async function <Value>({
-    timings,
-    reporter = verboseReporter({
-      performance
-    }),
-    ...options
-  }: Omit<CachifiedOptions<Value>, 'cache'> & {
-    timings?: Timings
-  }): Promise<Value> {
-    return await cachified({
-      ...options,
-      cache: proxy,
-      reporter: mergeReporters(cachifiedTimingReporter(timings), reporter)
-    })
+  return {
+    delete: proxy.delete,
+    cachified: async function <Value>({
+      timings,
+      reporter = verboseReporter({
+        performance
+      }),
+      ...options
+    }: Omit<CachifiedOptions<Value>, 'cache'> & {
+      timings?: Timings
+    }): Promise<Value> {
+      return await cachified({
+        ...options,
+        cache: proxy,
+        reporter: mergeReporters(cachifiedTimingReporter(timings), reporter)
+      })
+    },
   }
 }
