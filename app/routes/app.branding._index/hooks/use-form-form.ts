@@ -2,8 +2,9 @@ import type { CheckoutBrandingFormFields} from '~/routes/app.branding._index/sch
 import { checkoutBrandingFormSchema } from '~/routes/app.branding._index/schema'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import type { BrandingFormHook } from '~/routes/app.branding._index/hooks/types'
 
-export function useFormForm () {
+export function useFormForm (): BrandingFormHook<CheckoutBrandingFormFields> {
   const { control, getValues, formState, reset } = useForm<CheckoutBrandingFormFields>({
     resolver: zodResolver(checkoutBrandingFormSchema),
     defaultValues: {

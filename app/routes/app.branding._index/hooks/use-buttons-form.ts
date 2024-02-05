@@ -6,8 +6,9 @@ import {
   checkoutBrandingCornerRadiusSchema,
 } from '~/routes/app.branding._index/schema'
 import { zodResolver } from '@hookform/resolvers/zod'
+import type { BrandingFormHook } from '~/routes/app.branding._index/hooks/types'
 
-export function useButtonsForm () {
+export function useButtonsForm (): BrandingFormHook<CheckoutBrandingButtonsFields> {
   const { control, getValues, formState, reset } = useForm<CheckoutBrandingButtonsFields>({
     resolver: zodResolver(checkoutBrandingCornerRadiusSchema),
     defaultValues: {

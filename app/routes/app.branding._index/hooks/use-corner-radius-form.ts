@@ -1,12 +1,14 @@
 import { useForm } from 'react-hook-form'
 import type {
-  CheckoutBrandingCornerRadiusFields} from '~/routes/app.branding._index/schema';
+  CheckoutBrandingCornerRadiusFields,
+} from '~/routes/app.branding._index/schema'
 import {
   checkoutBrandingCornerRadiusSchema,
 } from '~/routes/app.branding._index/schema'
 import { zodResolver } from '@hookform/resolvers/zod'
+import type { BrandingFormHook } from '~/routes/app.branding._index/hooks/types'
 
-export function useCornerRadiusForm () {
+export function useCornerRadiusForm (): BrandingFormHook<CheckoutBrandingCornerRadiusFields> {
   const { control, getValues, formState, reset } = useForm<CheckoutBrandingCornerRadiusFields>({
     resolver: zodResolver(checkoutBrandingCornerRadiusSchema),
     defaultValues: {
@@ -24,9 +26,9 @@ export function useCornerRadiusForm () {
       return {
         designSystem: {
           cornerRadius: {
-            ...getValues()
-          }
-        }
+            ...getValues(),
+          },
+        },
       }
     },
   }

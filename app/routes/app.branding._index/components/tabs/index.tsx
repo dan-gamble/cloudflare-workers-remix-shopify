@@ -5,8 +5,16 @@ import { useState } from 'react'
 import { useSearchParams } from '@remix-run/react'
 import { ButtonsTab } from '~/routes/app.branding._index/components/tabs/buttons-tab'
 import { FormTab } from '~/routes/app.branding._index/components/tabs/form-tab'
+import { HeadingsTab } from './headings-tab';
 
 const tabs: Array<TabProps & { component: () => ReactNode }> = [
+  // {
+  //   id: 'colours',
+  //   content: 'Colours',
+  //   accessibilityLabel: 'Colours',
+  //   panelID: 'colours',
+  //   component: ColoursTab,
+  // },
   {
     id: 'buttons',
     content: 'Buttons',
@@ -21,6 +29,27 @@ const tabs: Array<TabProps & { component: () => ReactNode }> = [
     panelID: 'form',
     component: FormTab,
   },
+  {
+    id: 'headings',
+    content: 'Headings',
+    accessibilityLabel: 'Headings',
+    panelID: 'headings',
+    component: HeadingsTab,
+  },
+  // {
+  //   id: 'layout',
+  //   content: 'Layout',
+  //   accessibilityLabel: 'Layout',
+  //   panelID: 'layout',
+  //   component: LayoutTab,
+  // },
+  // {
+  //   id: 'typography',
+  //   content: 'Typography',
+  //   accessibilityLabel: 'Typography',
+  //   panelID: 'typography',
+  //   component: TypographyTab,
+  // },
 ]
 
 export function CheckoutBrandingTabs () {

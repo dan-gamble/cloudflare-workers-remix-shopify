@@ -217,19 +217,25 @@ export const checkoutBrandingButtonsSchema = z.object({
 
 export type CheckoutBrandingButtonsFields = z.infer<typeof checkoutBrandingButtonsSchema>
 
+export const checkoutBrandingHeadingsSchema = z.object({
+  headingLevel1: checkoutBrandingHeadingLevelSchema.optional().nullable(),
+  headingLevel2: checkoutBrandingHeadingLevelSchema.optional().nullable(),
+  headingLevel3: checkoutBrandingHeadingLevelSchema.optional().nullable(),
+})
+
+export type CheckoutBrandingHeadingFields = z.infer<typeof checkoutBrandingHeadingsSchema>
+
 export const checkoutBrandingCustomizationSchema = z.object({
   favicon: checkoutBrandingImageSchema.optional().nullable(),
   global: checkoutBrandingGlobalSchema.optional().nullable(),
   header: checkoutBrandingHeaderSchema.optional().nullable(),
-  headingLevel1: checkoutBrandingHeadingLevelSchema.optional().nullable(),
-  headingLevel2: checkoutBrandingHeadingLevelSchema.optional().nullable(),
-  headingLevel3: checkoutBrandingHeadingLevelSchema.optional().nullable(),
   main: checkoutBrandingMainSchema.optional().nullable(),
   merchandiseThumbnail: checkoutBrandingMerchandiseThumbnailSchema.optional().nullable(),
   orderSummary: checkoutBrandingOrderSummarySchema.optional().nullable(),
 })
-  .and(checkoutBrandingFormSchema.optional().nullable())
   .and(checkoutBrandingButtonsSchema.optional().nullable())
+  .and(checkoutBrandingFormSchema.optional().nullable())
+  .and(checkoutBrandingHeadingsSchema.optional().nullable())
 
 export const checkoutBrandingCornerRadiusSchema = z.object({
   base: z.number().positive().optional().nullable(),
