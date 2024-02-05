@@ -6,15 +6,17 @@ import { useSearchParams } from '@remix-run/react'
 import { ButtonsTab } from '~/routes/app.branding._index/components/tabs/buttons-tab'
 import { FormTab } from '~/routes/app.branding._index/components/tabs/form-tab'
 import { HeadingsTab } from './headings-tab';
+import { ColoursTab } from '~/routes/app.branding._index/components/tabs/colours-tab'
 
+// @ts-ignore
 const tabs: Array<TabProps & { component: () => ReactNode }> = [
-  // {
-  //   id: 'colours',
-  //   content: 'Colours',
-  //   accessibilityLabel: 'Colours',
-  //   panelID: 'colours',
-  //   component: ColoursTab,
-  // },
+  {
+    id: 'colours',
+    content: 'Colours',
+    accessibilityLabel: 'Colours',
+    panelID: 'colours',
+    component: ColoursTab,
+  },
   {
     id: 'buttons',
     content: 'Buttons',

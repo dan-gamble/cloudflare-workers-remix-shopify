@@ -243,14 +243,17 @@ export const checkoutBrandingCornerRadiusSchema = z.object({
   small: z.number().positive().optional().nullable(),
 })
 
-export const checkoutBrandingDesignSystemSchema = z.object({
-  colors: z.object({
-    global: checkoutBrandingColorGlobalSchema.optional().nullable(),
-    schemes: z.object({
-      scheme1: checkoutBrandingColorSchemeSchema.optional().nullable(),
-      scheme2: checkoutBrandingColorSchemeSchema.optional().nullable(),
-    }).optional().nullable(),
+export const checkoutBrandingColorsSchema = z.object({
+  global: checkoutBrandingColorGlobalSchema.optional().nullable(),
+  schemes: z.object({
+    scheme1: checkoutBrandingColorSchemeSchema.optional().nullable(),
+    scheme2: checkoutBrandingColorSchemeSchema.optional().nullable(),
   }).optional().nullable(),
+})
+
+export type CheckoutBrandingColorsFields = z.infer<typeof checkoutBrandingColorsSchema>
+
+export const checkoutBrandingDesignSystemSchema = z.object({
   cornerRadius: checkoutBrandingCornerRadiusSchema.optional().nullable(),
   typography: z.object({
     primary: checkoutBrandingFontGroupSchema.optional().nullable(),
@@ -258,6 +261,7 @@ export const checkoutBrandingDesignSystemSchema = z.object({
     size: checkoutBrandingFontSizeSchema.optional().nullable(),
   }).optional().nullable(),
 })
+  .and(checkoutBrandingColorsSchema.optional().nullable())
 
 export const checkoutBrandingSchema = z.object({
   customizations: checkoutBrandingCustomizationSchema.nullable().optional(),

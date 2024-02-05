@@ -1,9 +1,16 @@
+import type { LinksFunction } from '@remix-run/cloudflare'
 import { useFetcher, useNavigation } from '@remix-run/react'
 import { BlockStack, Card, FormLayout, Layout, Page, PageActions, Text } from '@shopify/polaris'
 import { TextFontIcon } from '@shopify/polaris-icons'
 import { TextField } from '~/components/text-field'
 import { useCheckoutBranding } from '~/routes/app.branding/route'
 import { CheckoutBrandingTabs } from '~/routes/app.branding._index/components/tabs'
+
+import styles from './styles.css'
+
+export const links: LinksFunction = () => [
+  { rel: 'stylesheet', href: styles },
+]
 
 export default function CheckoutBranding () {
   const fetcher = useFetcher()
