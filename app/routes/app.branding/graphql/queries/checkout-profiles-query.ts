@@ -1,4 +1,15 @@
 export const checkoutProfilesQuery = `#graphql
+  fragment CustomFont on GenericFile {
+    __typename
+    id
+    mimeType
+    alt
+    createdAt
+    fileStatus
+    originalFileSize
+    url
+  }
+
   query checkoutProfiles {
     checkoutProfiles(first: 100) {
       nodes {
@@ -8,22 +19,17 @@ export const checkoutProfilesQuery = `#graphql
       }
     }
 
-    #        TODO:
-    #        genericFiles: files(first: 250, query: "media_type:GENERIC_FILE status:ready") {
-    #          edges {
-    #            node {
-    #              ... on GenericFile {
-    #                id
-    #                mimeType
-    #                alt
-    #                createdAt
-    #                fileStatus
-    #                originalFileSize
-    #                url
-    #              }
-    #            }
-    #          }
-    #        }
+    customFonts: files(
+      first: 250,
+      query: "media_type:GENERIC_FILE status:ready filename:*.woff",
+      sortKey: FILENAME
+    ) {
+      nodes {
+        __typename
+
+        ...CustomFont
+      }
+    }
 
     backgroundStyles: __type(name: "CheckoutBrandingBackgroundStyle") {
       name

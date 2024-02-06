@@ -53,6 +53,8 @@ export function setupCache (env: Env) {
 
   return {
     delete: proxy.delete,
+    get: proxy.get,
+    set: proxy.set,
     cachified: async function <Value>({
       timings,
       reporter = verboseReporter({

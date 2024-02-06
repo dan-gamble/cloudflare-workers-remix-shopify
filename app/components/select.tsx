@@ -20,7 +20,7 @@ export function Select<
   return (
     <ShopifySelect
       {...props}
-      value={field.value}
+      value={field.value ?? ''}
       onChange={value => {
         if (typeof props.onChange === 'function') {
           return props.onChange(value, field)

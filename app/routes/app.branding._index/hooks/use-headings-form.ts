@@ -6,9 +6,10 @@ import {
 } from '~/routes/app.branding._index/schema'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { removeCleanFields } from '~/routes/app.branding._index/hooks/utils'
 
 export function useHeadingsForm (): BrandingFormHook<CheckoutBrandingHeadingFields> {
-  const { control, getValues, formState, reset } = useForm<CheckoutBrandingHeadingFields>({
+  const { control, getValues, formState: { isDirty, dirtyFields }, reset } = useForm<CheckoutBrandingHeadingFields>({
     resolver: zodResolver(checkoutBrandingHeadingsSchema),
     defaultValues: {
       headingLevel1: {
@@ -43,12 +44,12 @@ export function useHeadingsForm (): BrandingFormHook<CheckoutBrandingHeadingFiel
 
   return {
     control,
-    formState,
+    isDirty,
     reset,
     toValues () {
       return {
         customizations: {
-          ...getValues(),
+          ...removeCleanFields(getValues(), dirtyFields),
         },
       }
     },

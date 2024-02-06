@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { zfd } from 'zod-form-data'
 import {
   CheckoutBrandingBackgroundStyle,
   CheckoutBrandingBorder,
@@ -41,7 +42,7 @@ export const checkoutBrandingHeaderPositionEnum = z.nativeEnum(CheckoutBrandingH
 
 export const checkoutBrandingCustomFontSchema = z.object({
   genericFileId : z.string(),
-  weight: z.number().min(100).max(900),
+  weight: z.coerce.number().min(100).max(900),
 })
 
 export const checkoutBrandingCustomFontGroupSchema = z.object({
@@ -51,8 +52,8 @@ export const checkoutBrandingCustomFontGroupSchema = z.object({
 })
 
 export const checkoutBrandingShopifyFontGroupSchema = z.object({
-  baseWeight: z.number().optional().nullable(),
-  boldWeight: z.number().optional().nullable(),
+  baseWeight: z.coerce.number().optional().nullable(),
+  boldWeight: z.coerce.number().optional().nullable(),
   loadingStrategy: checkoutBrandingFontLoadingStrategyEnum.optional().nullable(),
   name: z.string(),
 })
@@ -63,8 +64,14 @@ export const checkoutBrandingFontGroupSchema = z.object({
 })
 
 export const checkoutBrandingFontSizeSchema = z.object({
-  base: z.number().min(12.0).max(18.0).optional().nullable(),
-  ratio: z.number().min(1.0).max(1.4).optional().nullable(),
+  base: z
+    .coerce
+    .number()
+    .min(12.0, { message: 'Base font size must be at least 12' })
+    .max(18.0)
+    .optional()
+    .nullable(),
+  ratio: z.coerce.number().min(1.0).max(1.4).optional().nullable(),
 })
 
 export const checkoutBrandingColorGlobalSchema = z.object({
@@ -157,7 +164,7 @@ export const checkoutBrandingHeaderSchema = z.object({
   banner: checkoutBrandingImageSchema.optional().nullable(),
   logo: z.object({
     image: checkoutBrandingImageSchema.optional().nullable(),
-    maxWidth: z.number().positive().optional().nullable(),
+    maxWidth: z.coerce.number().positive().optional().nullable(),
   }),
   position: checkoutBrandingHeaderPositionEnum.optional().nullable(),
 })
@@ -238,9 +245,9 @@ export const checkoutBrandingCustomizationSchema = z.object({
   .and(checkoutBrandingHeadingsSchema.optional().nullable())
 
 export const checkoutBrandingCornerRadiusSchema = z.object({
-  base: z.number().positive().optional().nullable(),
-  large: z.number().positive().optional().nullable(),
-  small: z.number().positive().optional().nullable(),
+  base: z.coerce.number().positive().optional().nullable(),
+  large: z.coerce.number().positive().optional().nullable(),
+  small: z.coerce.number().positive().optional().nullable(),
 })
 
 export const checkoutBrandingColorsSchema = z.object({
@@ -253,15 +260,19 @@ export const checkoutBrandingColorsSchema = z.object({
 
 export type CheckoutBrandingColorsFields = z.infer<typeof checkoutBrandingColorsSchema>
 
-export const checkoutBrandingDesignSystemSchema = z.object({
-  cornerRadius: checkoutBrandingCornerRadiusSchema.optional().nullable(),
-  typography: z.object({
-    primary: checkoutBrandingFontGroupSchema.optional().nullable(),
-    secondary: checkoutBrandingFontGroupSchema.optional().nullable(),
-    size: checkoutBrandingFontSizeSchema.optional().nullable(),
-  }).optional().nullable(),
+export const checkoutBrandingTypographySchema = z.object({
+  primary: checkoutBrandingFontGroupSchema.optional().nullable(),
+  secondary: checkoutBrandingFontGroupSchema.optional().nullable(),
+  size: checkoutBrandingFontSizeSchema.optional().nullable(),
 })
-  .and(checkoutBrandingColorsSchema.optional().nullable())
+
+export type CheckoutBrandingTypographyFields = z.infer<typeof checkoutBrandingTypographySchema>
+
+export const checkoutBrandingDesignSystemSchema = z.object({
+  colors: checkoutBrandingColorsSchema.optional().nullable(),
+  cornerRadius: checkoutBrandingCornerRadiusSchema.optional().nullable(),
+  typography: checkoutBrandingTypographySchema.optional().nullable(),
+})
 
 export const checkoutBrandingSchema = z.object({
   customizations: checkoutBrandingCustomizationSchema.nullable().optional(),
@@ -269,3 +280,8 @@ export const checkoutBrandingSchema = z.object({
 })
 
 export type CheckoutBrandingCornerRadiusFields = z.infer<typeof checkoutBrandingCornerRadiusSchema>
+
+export const checkoutBrandingFormData = zfd.formData({
+  checkoutProfileId: z.string().min(1),
+  checkoutBrandingInput: zfd.json(checkoutBrandingSchema),
+})

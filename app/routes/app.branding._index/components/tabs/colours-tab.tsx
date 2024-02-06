@@ -147,8 +147,6 @@ function Scheme ({ scheme }: { scheme: SchemeOptions }) {
   const iconName = `schemes.${scheme}.${selectedTab.id}.icon` as const
   const textName = `schemes.${scheme}.${selectedTab.id}.text` as const
 
-  console.log(accentName)
-
   return (
     <Bleed marginInline="300">
       <Tabs

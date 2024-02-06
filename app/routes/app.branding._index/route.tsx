@@ -1,28 +1,68 @@
-import type { LinksFunction } from '@remix-run/cloudflare'
-import { useFetcher, useNavigation } from '@remix-run/react'
-import { BlockStack, Card, FormLayout, Layout, Page, PageActions, Text } from '@shopify/polaris'
+import type { ActionFunctionArgs, LinksFunction } from '@remix-run/cloudflare';
+import { json } from '@remix-run/cloudflare'
+import { useFetcher, useNavigation, useSubmit } from '@remix-run/react'
+import { BlockStack, Card, Layout, Page, PageActions, Text } from '@shopify/polaris'
 import { TextFontIcon } from '@shopify/polaris-icons'
 import { TextField } from '~/components/text-field'
-import { useCheckoutBranding } from '~/routes/app.branding/route'
+import { useCheckoutBranding, useCheckoutBrandingData } from '~/routes/app.branding/route'
 import { CheckoutBrandingTabs } from '~/routes/app.branding._index/components/tabs'
 
 import styles from './styles.css'
+import { getContext } from '~/utils/context.server'
+import { checkoutBrandingFormData } from '~/routes/app.branding._index/schema'
+import { parseWithZod } from '@conform-to/zod'
+import { makeRequest } from '~/utils/graphql.server'
+import {
+  checkoutBrandingUpsertMutation
+} from '~/routes/app.branding._index/graphql/mutations/checkout-branding-upsert-mutation'
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: styles },
 ]
 
+export async function action ({ request }: ActionFunctionArgs) {
+  const { shopify } = getContext()
+  const { admin } = await shopify.authenticate.admin(request)
+
+  const submission = parseWithZod(await request.formData(), { schema: checkoutBrandingFormData })
+
+  if (submission.status !== 'success') {
+    return json(submission.reply(), {
+      status: submission.status === 'error' ? 400 : 200,
+    })
+  }
+
+  // TODO: Check for errors
+  await makeRequest(admin.graphql, checkoutBrandingUpsertMutation, {
+    variables: {
+      checkoutProfileId: submission.value.checkoutProfileId,
+      checkoutBrandingInput: submission.value.checkoutBrandingInput,
+    }
+  })
+
+  return json({ status: 'success', submission } as const)
+}
+
 export default function CheckoutBranding () {
   const fetcher = useFetcher()
   const navigation = useNavigation()
+  const submit = useSubmit()
 
   const checkoutBranding = useCheckoutBranding()
+  const checkoutBrandingData = useCheckoutBrandingData()
+
+  function handleSubmit () {
+    return submit({
+      checkoutProfileId: checkoutBrandingData.branding.profileId,
+      checkoutBrandingInput: JSON.stringify(checkoutBranding.toValues()),
+    }, { method: 'POST' })
+  }
 
   const primaryAction = {
     content: 'Save',
     disabled: !checkoutBranding.isDirty,
     loading: navigation.state === 'submitting',
-    onAction: checkoutBranding.handleSubmit,
+    onAction: handleSubmit,
   }
 
   return (
@@ -61,7 +101,7 @@ export default function CheckoutBranding () {
                 </Text>
 
                 <div>
-                  <FormLayout>
+                  <BlockStack gap="400">
                     <TextField
                       name="base"
                       control={checkoutBranding.forms.cornerRadiusForm.control}
@@ -69,11 +109,15 @@ export default function CheckoutBranding () {
                       type="number"
                       min="0"
                       autoComplete="off"
-                      helpText="The pixel value for base corner radiuses. It should be strictly positive."
+                      helpText="The pixel value for small corner radiuses. It should be strictly positive."
                       onChange={(value, field) => {
                         const number = parseInt(value, 10)
 
-                        field.onChange(number)
+                        if (Number.isNaN(number)) {
+                          return field.onChange(null)
+                        }
+
+                        return field.onChange(number)
                       }}
                     />
 
@@ -88,7 +132,11 @@ export default function CheckoutBranding () {
                       onChange={(value, field) => {
                         const number = parseInt(value, 10)
 
-                        field.onChange(number)
+                        if (Number.isNaN(number)) {
+                          return field.onChange(null)
+                        }
+
+                        return field.onChange(number)
                       }}
                     />
 
@@ -103,10 +151,14 @@ export default function CheckoutBranding () {
                       onChange={(value, field) => {
                         const number = parseInt(value, 10)
 
-                        field.onChange(number)
+                        if (Number.isNaN(number)) {
+                          return field.onChange(null)
+                        }
+
+                        return field.onChange(number)
                       }}
                     />
-                  </FormLayout>
+                  </BlockStack>
                 </div>
               </BlockStack>
             </BlockStack>

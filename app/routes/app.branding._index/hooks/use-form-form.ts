@@ -3,9 +3,10 @@ import { checkoutBrandingFormSchema } from '~/routes/app.branding._index/schema'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { BrandingFormHook } from '~/routes/app.branding._index/hooks/types'
+import { removeCleanFields } from '~/routes/app.branding._index/hooks/utils'
 
 export function useFormForm (): BrandingFormHook<CheckoutBrandingFormFields> {
-  const { control, getValues, formState, reset } = useForm<CheckoutBrandingFormFields>({
+  const { control, getValues, formState: { isDirty, dirtyFields }, reset } = useForm<CheckoutBrandingFormFields>({
     resolver: zodResolver(checkoutBrandingFormSchema),
     defaultValues: {
       control: {
@@ -47,12 +48,12 @@ export function useFormForm (): BrandingFormHook<CheckoutBrandingFormFields> {
 
   return {
     control,
-    formState,
+    isDirty,
     reset,
     toValues () {
       return {
         customizations: {
-          ...getValues(),
+          ...removeCleanFields(getValues(), dirtyFields),
         },
       }
     },

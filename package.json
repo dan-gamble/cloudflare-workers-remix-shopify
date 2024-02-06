@@ -28,8 +28,8 @@
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "^0.3.1",
-    "@conform-to/react": "^0.9.1",
-    "@conform-to/zod": "^0.9.1",
+    "@conform-to/react": "^1.0.0",
+    "@conform-to/zod": "^1.0.0",
     "@epic-web/cachified": "^4.0.0",
     "@epic-web/invariant": "^1.0.0",
     "@hookform/resolvers": "^3.3.4",
@@ -55,8 +55,10 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.50.0",
+    "ts-deepmerge": "^7.0.0",
     "validate-color": "^2.2.4",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "zod-form-data": "^2.0.2"
   },
   "devDependencies": {
     "@clack/prompts": "^0.7.0",

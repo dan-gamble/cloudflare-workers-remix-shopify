@@ -7,6 +7,7 @@ import { ButtonsTab } from '~/routes/app.branding._index/components/tabs/buttons
 import { FormTab } from '~/routes/app.branding._index/components/tabs/form-tab'
 import { HeadingsTab } from './headings-tab';
 import { ColoursTab } from '~/routes/app.branding._index/components/tabs/colours-tab'
+import { TypographyTab } from './typography-tab';
 
 // @ts-ignore
 const tabs: Array<TabProps & { component: () => ReactNode }> = [
@@ -45,13 +46,13 @@ const tabs: Array<TabProps & { component: () => ReactNode }> = [
   //   panelID: 'layout',
   //   component: LayoutTab,
   // },
-  // {
-  //   id: 'typography',
-  //   content: 'Typography',
-  //   accessibilityLabel: 'Typography',
-  //   panelID: 'typography',
-  //   component: TypographyTab,
-  // },
+  {
+    id: 'typography',
+    content: 'Typography',
+    accessibilityLabel: 'Typography',
+    panelID: 'typography',
+    component: TypographyTab,
+  },
 ]
 
 export function CheckoutBrandingTabs () {

@@ -4,6 +4,8 @@ import { useButtonsForm } from '~/routes/app.branding._index/hooks/use-buttons-f
 import { useFormForm } from '~/routes/app.branding._index/hooks/use-form-form'
 import { useHeadingsForm } from '~/routes/app.branding._index/hooks/use-headings-form'
 import { useColoursForm } from '~/routes/app.branding._index/hooks/use-colours-form'
+import { useTypographyForm } from '~/routes/app.branding._index/hooks/use-typography-form'
+import { merge } from 'ts-deepmerge'
 
 export function useBrandingForms () {
   const buttonsForm = useButtonsForm()
@@ -11,6 +13,7 @@ export function useBrandingForms () {
   const cornerRadiusForm = useCornerRadiusForm()
   const formForm = useFormForm()
   const headingsForm = useHeadingsForm()
+  const typographyForm = useTypographyForm()
 
   const forms = {
     buttonsForm,
@@ -18,21 +21,22 @@ export function useBrandingForms () {
     cornerRadiusForm,
     formForm,
     headingsForm,
+    typographyForm,
   }
 
   return {
     forms,
 
-    isDirty: Object.values(forms).some(form => form.formState.isDirty),
+    isDirty: Object.values(forms).some(form => form.isDirty),
 
-    handleSubmit () {
+    toValues () {
       const values = Object.values(forms)
+        .filter(form => form.isDirty)
         .map(form => form.toValues())
-        .reduce((acc, values) => ({ ...acc, ...values }), {})
-      console.log({ values })
-      const data = checkoutBrandingSchema.parse(values)
+        .reduce((acc, values) => merge(acc, values), {})
+      // TODO: Safe parse
 
-      console.log({ data })
+      return checkoutBrandingSchema.parse(values)
     },
 
     reset () {

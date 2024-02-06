@@ -7,13 +7,14 @@ import { makeRequest } from '~/utils/graphql.server'
 import { invariant } from '@epic-web/invariant'
 import { checkoutProfilesQuery } from '~/routes/app.branding/graphql/queries/checkout-profiles-query'
 import { brandingQuery } from '~/routes/app.branding/graphql/queries/branding-query'
-import type { CheckoutBrandingQuery, CheckoutProfilesQuery } from '~/types/admin.generated'
+import type { CheckoutBrandingQuery, CheckoutProfilesQuery, CustomFontFragment } from '~/types/admin.generated'
 import { useBrandingForms } from '~/routes/app.branding._index/hooks/use-branding-forms'
 import { combineServerTimings, makeTimings, time } from '~/utils/timing.server'
+import { hasDismissedCustomFontsBanner } from '~/routes/app.branding.dismiss-custom-fonts-banner'
 
 type FontDataContext = {
   shopifyFonts: Array<{ name: string }>;
-  customFonts: File[];
+  customFonts: CustomFontFragment[];
 }
 
 type Enum = {
@@ -56,6 +57,9 @@ type BrandingData = {
 type CheckoutBrandingContext = {
   data: BrandingData;
   branding: ReturnType<typeof useBrandingForms>;
+  state: {
+    hasDismissedCustomFontsBanner: boolean;
+  }
 }
 
 export async function loader ({ request }: LoaderFunctionArgs) {
@@ -70,6 +74,7 @@ export async function loader ({ request }: LoaderFunctionArgs) {
   const [
     shopifyFontFamilyNames,
     checkoutProfileData,
+    dismissedCustomFontsBanner,
   ] = await Promise.all([
     time(
       async () => {
@@ -93,6 +98,12 @@ export async function loader ({ request }: LoaderFunctionArgs) {
       },
       { timings, type: 'checkout profiles' },
     ),
+    time(
+      async () => {
+        return hasDismissedCustomFontsBanner(session.shop)
+      },
+      { timings, type: 'dismiss custom fonts banner' },
+    )
   ])
 
   invariant(checkoutProfileData?.data, 'No checkout profile data found')
@@ -118,12 +129,18 @@ export async function loader ({ request }: LoaderFunctionArgs) {
   )
   invariant(currentBranding?.data, 'No branding data found')
 
+  const customFonts = checkoutProfileData.data.customFonts.nodes.filter(
+    (node): node is CustomFontFragment => node.__typename === 'GenericFile'
+  )
+
   return json(
     {
       shopifyFontFamilyNames,
       checkoutProfileData: checkoutProfileData.data,
+      customFonts,
       checkoutProfileId,
       currentBranding,
+      hasDismissedCustomFontsBanner: dismissedCustomFontsBanner,
     },
     {
       headers: { 'Server-Timing': timings.toString() },
@@ -148,8 +165,7 @@ export default function Branding () {
       context={{
         data: {
           fonts: {
-            // TODO:
-            customFonts: [],
+            customFonts: data.customFonts as CustomFontFragment[],
             shopifyFonts: data.shopifyFontFamilyNames,
           },
           enums: {
@@ -229,6 +245,9 @@ export default function Branding () {
           },
         },
         branding,
+        state: {
+          hasDismissedCustomFontsBanner: data.hasDismissedCustomFontsBanner,
+        },
       } satisfies CheckoutBrandingContext}
     />
   )
@@ -240,4 +259,8 @@ export function useCheckoutBrandingData () {
 
 export function useCheckoutBranding () {
   return useOutletContext<CheckoutBrandingContext>().branding
+}
+
+export function useCheckoutBrandingState () {
+  return useOutletContext<CheckoutBrandingContext>().state
 }

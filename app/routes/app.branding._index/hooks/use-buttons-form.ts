@@ -7,9 +7,10 @@ import {
 } from '~/routes/app.branding._index/schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { BrandingFormHook } from '~/routes/app.branding._index/hooks/types'
+import { removeCleanFields } from '~/routes/app.branding._index/hooks/utils'
 
 export function useButtonsForm (): BrandingFormHook<CheckoutBrandingButtonsFields> {
-  const { control, getValues, formState, reset } = useForm<CheckoutBrandingButtonsFields>({
+  const { control, getValues, formState: { isDirty, dirtyFields }, reset } = useForm<CheckoutBrandingButtonsFields>({
     resolver: zodResolver(checkoutBrandingCornerRadiusSchema),
     defaultValues: {
       primaryButton: {
@@ -45,12 +46,12 @@ export function useButtonsForm (): BrandingFormHook<CheckoutBrandingButtonsField
 
   return {
     control,
-    formState,
+    isDirty,
     reset,
     toValues () {
       return {
         customizations: {
-          ...getValues(),
+          ...removeCleanFields(getValues(), dirtyFields),
         },
       }
     },

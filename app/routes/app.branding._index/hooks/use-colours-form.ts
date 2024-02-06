@@ -4,6 +4,7 @@ import { checkoutBrandingColorsSchema } from '~/routes/app.branding._index/schem
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
+import { removeCleanFields } from '~/routes/app.branding._index/hooks/utils'
 
 export enum SchemeOptions {
   Scheme1 = 'scheme1',
@@ -16,7 +17,7 @@ export function useColoursForm (): BrandingFormHook<CheckoutBrandingColorsFields
 } {
   const [currentlySelectedScheme, setCurrentlySelectedScheme] = useState<SchemeOptions>(SchemeOptions.Scheme1)
 
-  const { control, getValues, formState, reset } = useForm<CheckoutBrandingColorsFields>({
+  const { control, getValues, formState: { isDirty, dirtyFields }, reset } = useForm<CheckoutBrandingColorsFields>({
     resolver: zodResolver(checkoutBrandingColorsSchema),
     defaultValues: {
       global: {
@@ -106,13 +107,13 @@ export function useColoursForm (): BrandingFormHook<CheckoutBrandingColorsFields
     setCurrentlySelectedScheme,
 
     control,
-    formState,
+    isDirty,
     reset,
     toValues () {
       return {
         designSystem: {
           colors: {
-            ...getValues(),
+            ...removeCleanFields(getValues(), dirtyFields),
           },
         },
       }
