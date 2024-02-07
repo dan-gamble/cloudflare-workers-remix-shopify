@@ -40,6 +40,8 @@ export async function action ({ request }: ActionFunctionArgs) {
   await makeRequest(admin.graphql, checkoutBrandingUpsertMutation, {
     variables: {
       checkoutProfileId: submission.value.checkoutProfileId,
+      // TODO:
+      // @ts-ignore
       checkoutBrandingInput: submission.value.checkoutBrandingInput,
     },
   })

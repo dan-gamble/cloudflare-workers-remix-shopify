@@ -61,6 +61,7 @@ export function useTypographyForm (
     isDirty,
     reset,
     resetField,
+    // @ts-ignore
     toValues () {
       return {
         designSystem: {
@@ -70,6 +71,7 @@ export function useTypographyForm (
         },
       }
     },
+    // @ts-ignore
     toDirtyInputValues () {
       return {
         designSystem: {

@@ -41,8 +41,8 @@ export const checkoutBrandingHeaderAlignmentEnum = z.nativeEnum(CheckoutBranding
 export const checkoutBrandingHeaderPositionEnum = z.nativeEnum(CheckoutBrandingHeaderPosition)
 
 export const checkoutBrandingCustomFontSchema = z.object({
-  genericFileId: z.string(),
-  weight: z.coerce.number().min(100).max(900),
+  genericFileId: z.string().optional().nullable(),
+  weight: z.coerce.number().min(100).max(900).optional().nullable(),
 })
 
 export const checkoutBrandingCustomFontGroupSchema = z.object({
@@ -60,17 +60,9 @@ export const checkoutBrandingShopifyFontGroupSchema = z.object({
 
 export const checkoutBrandingFontGroupSchema = z
   .object({
-    customFontGroup: z.null(),
-    shopifyFontGroup: checkoutBrandingShopifyFontGroupSchema,
+    customFontGroup: checkoutBrandingCustomFontGroupSchema.optional().nullable(),
+    shopifyFontGroup: checkoutBrandingShopifyFontGroupSchema.optional().nullable(),
   })
-  .or(z.object({
-    customFontGroup: checkoutBrandingCustomFontGroupSchema,
-    shopifyFontGroup: z.null(),
-  }))
-  .or(z.object({
-    customFontGroup: z.null(),
-    shopifyFontGroup: z.null(),
-  }))
 
 export const checkoutBrandingFontSizeSchema = z.object({
   base: z
