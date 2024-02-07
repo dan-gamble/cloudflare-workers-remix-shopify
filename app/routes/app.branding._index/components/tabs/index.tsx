@@ -8,6 +8,7 @@ import { FormTab } from '~/routes/app.branding._index/components/tabs/form-tab'
 import { HeadingsTab } from './headings-tab';
 import { ColoursTab } from '~/routes/app.branding._index/components/tabs/colours-tab'
 import { TypographyTab } from './typography-tab';
+import { LayoutTab } from './layout-tab';
 
 // @ts-ignore
 const tabs: Array<TabProps & { component: () => ReactNode }> = [
@@ -39,13 +40,13 @@ const tabs: Array<TabProps & { component: () => ReactNode }> = [
     panelID: 'headings',
     component: HeadingsTab,
   },
-  // {
-  //   id: 'layout',
-  //   content: 'Layout',
-  //   accessibilityLabel: 'Layout',
-  //   panelID: 'layout',
-  //   component: LayoutTab,
-  // },
+  {
+    id: 'layout',
+    content: 'Layout',
+    accessibilityLabel: 'Layout',
+    panelID: 'layout',
+    component: LayoutTab,
+  },
   {
     id: 'typography',
     content: 'Typography',

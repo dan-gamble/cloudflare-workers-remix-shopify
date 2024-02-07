@@ -14,7 +14,7 @@ export function useCornerRadiusForm (): BrandingFormHook<CheckoutBrandingCornerR
       large: null,
     },
     mode: 'onBlur',
-    reValidateMode: 'onBlur',
+    reValidateMode: 'onChange',
   })
 
   return {

@@ -5,6 +5,7 @@ import { useFormForm } from '~/routes/app.branding._index/hooks/use-form-form'
 import { useHeadingsForm } from '~/routes/app.branding._index/hooks/use-headings-form'
 import { useColoursForm } from '~/routes/app.branding._index/hooks/use-colours-form'
 import { useTypographyForm } from '~/routes/app.branding._index/hooks/use-typography-form'
+import { useLayoutForm } from '~/routes/app.branding._index/hooks/use-layout-form'
 import { merge } from 'ts-deepmerge'
 
 export function useBrandingForms () {
@@ -13,6 +14,7 @@ export function useBrandingForms () {
   const cornerRadiusForm = useCornerRadiusForm()
   const formForm = useFormForm()
   const headingsForm = useHeadingsForm()
+  const layoutForm = useLayoutForm()
   const typographyForm = useTypographyForm()
 
   const forms = {
@@ -21,6 +23,7 @@ export function useBrandingForms () {
     cornerRadiusForm,
     formForm,
     headingsForm,
+    layoutForm,
     typographyForm,
   }
 

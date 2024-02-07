@@ -67,7 +67,7 @@ export function useTypographyForm (): BrandingFormHook<CheckoutBrandingTypograph
       },
     },
     mode: 'onBlur',
-    reValidateMode: 'onBlur',
+    reValidateMode: 'onChange',
   })
 
   return {
@@ -79,8 +79,6 @@ export function useTypographyForm (): BrandingFormHook<CheckoutBrandingTypograph
     control,
     isDirty,
     reset,
-    // @ts-ignore
-    // TODO:
     toValues () {
       return {
         designSystem: {

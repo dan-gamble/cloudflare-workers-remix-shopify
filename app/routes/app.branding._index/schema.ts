@@ -232,7 +232,7 @@ export const checkoutBrandingHeadingsSchema = z.object({
 
 export type CheckoutBrandingHeadingFields = z.infer<typeof checkoutBrandingHeadingsSchema>
 
-export const checkoutBrandingCustomizationSchema = z.object({
+export const checkoutBrandingLayoutSchema = z.object({
   favicon: checkoutBrandingImageSchema.optional().nullable(),
   global: checkoutBrandingGlobalSchema.optional().nullable(),
   header: checkoutBrandingHeaderSchema.optional().nullable(),
@@ -240,6 +240,10 @@ export const checkoutBrandingCustomizationSchema = z.object({
   merchandiseThumbnail: checkoutBrandingMerchandiseThumbnailSchema.optional().nullable(),
   orderSummary: checkoutBrandingOrderSummarySchema.optional().nullable(),
 })
+
+export type CheckoutBrandingLayoutFields = z.infer<typeof checkoutBrandingLayoutSchema>
+
+export const checkoutBrandingCustomizationSchema = checkoutBrandingLayoutSchema.optional().nullable()
   .and(checkoutBrandingButtonsSchema.optional().nullable())
   .and(checkoutBrandingFormSchema.optional().nullable())
   .and(checkoutBrandingHeadingsSchema.optional().nullable())
