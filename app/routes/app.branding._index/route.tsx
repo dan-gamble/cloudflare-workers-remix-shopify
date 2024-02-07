@@ -1,8 +1,8 @@
 import type { ActionFunctionArgs, LinksFunction } from '@remix-run/cloudflare'
 import { json } from '@remix-run/cloudflare'
 import { useFetcher, useNavigation, useSearchParams, useSubmit } from '@remix-run/react'
-import { BlockStack, Card, Layout, Page, PageActions, Select, Text } from '@shopify/polaris'
-import { TextFontIcon } from '@shopify/polaris-icons'
+import { BlockStack, Card, Icon, Layout, Page, PageActions, Select, Spinner, Text } from '@shopify/polaris'
+import { TextFontIcon, ViewIcon } from '@shopify/polaris-icons'
 import { TextField } from '~/components/text-field'
 import { useCheckoutBranding, useCheckoutBrandingData } from '~/routes/app.branding/route'
 import { CheckoutBrandingTabs } from '~/routes/app.branding._index/components/tabs'
@@ -15,6 +15,7 @@ import { makeRequest } from '~/utils/graphql.server'
 import {
   checkoutBrandingUpsertMutation,
 } from '~/routes/app.branding._index/graphql/mutations/checkout-branding-upsert-mutation'
+import { parseGid } from '@shopify/admin-graphql-api-utilities'
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: styles },
@@ -44,13 +45,15 @@ export async function action ({ request }: ActionFunctionArgs) {
 }
 
 export default function CheckoutBranding () {
-  const fetcher = useFetcher()
+  const updateShopifyFontFamilies = useFetcher()
   const navigation = useNavigation()
   const [, setSearchParams] = useSearchParams()
   const submit = useSubmit()
 
   const checkoutBranding = useCheckoutBranding()
   const checkoutBrandingData = useCheckoutBrandingData()
+
+  const isUpdatingShopifyFontFamilies = updateShopifyFontFamilies.state === 'loading' || updateShopifyFontFamilies.state === 'submitting'
 
   function handleSubmit () {
     return submit({
@@ -69,19 +72,38 @@ export default function CheckoutBranding () {
   return (
     <Page
       title="Checkout Branding"
+      titleMetadata={isUpdatingShopifyFontFamilies && <Spinner size="small" />}
       primaryAction={primaryAction}
       secondaryActions={[
         {
-          content: 'Update Shopify Font Families',
-          icon: TextFontIcon,
-          async onAction () {
-            fetcher.submit({}, {
-              action: '/app/update-shopify-font-families',
-              method: 'POST',
-            })
+          content: 'Preview',
+          icon: ViewIcon,
+          onAction: () => {
+            open(
+              `shopify:admin/settings/checkout/preview/profiles/${parseGid(checkoutBrandingData.branding.profileId)}`,
+              '_blank',
+            )
           },
-          loading: fetcher.state === 'loading' || fetcher.state === 'submitting',
         },
+      ]}
+      actionGroups={[
+        {
+          title: 'BAO',
+          actions: [
+            {
+              content: 'Update Shopify Font Families',
+              async onAction () {
+                updateShopifyFontFamilies.submit({}, {
+                  action: '/app/update-shopify-font-families',
+                  method: 'POST',
+                })
+              },
+              prefix: (
+                <Icon source={TextFontIcon} />
+              )
+            }
+          ]
+        }
       ]}
     >
       <Layout>
