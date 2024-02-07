@@ -68,7 +68,7 @@ export async function loader ({ request }: LoaderFunctionArgs) {
 
   const url = new URL(request.url)
 
-  const { cache, db, shopify } = getContext()
+  const { db, shopify } = getContext()
 
   const { admin, session } = await shopify.authenticate.admin(request)
 
@@ -89,13 +89,7 @@ export async function loader ({ request }: LoaderFunctionArgs) {
     ),
     time(
       async () => {
-        return cache.cachified({
-          ttl: 1000 * 60 * 5,
-          key: `${session.shop}:checkoutProfiles`,
-          async getFreshValue () {
-            return makeRequest(admin.graphql, checkoutProfilesQuery)
-          },
-        })
+        return makeRequest(admin.graphql, checkoutProfilesQuery)
       },
       { timings, type: 'checkout profiles' },
     ),
@@ -114,15 +108,9 @@ export async function loader ({ request }: LoaderFunctionArgs) {
 
   const currentBranding = await time(
     async () => {
-      return cache.cachified({
-        ttl: 1000 * 60 * 5,
-        key: `${session.shop}:checkoutBranding-${checkoutProfileId}`,
-        async getFreshValue () {
-          return makeRequest(admin.graphql, brandingQuery, {
-            variables: {
-              checkoutProfileId,
-            },
-          })
+      return makeRequest(admin.graphql, brandingQuery, {
+        variables: {
+          checkoutProfileId,
         },
       })
     },
