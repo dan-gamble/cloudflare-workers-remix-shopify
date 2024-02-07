@@ -10,7 +10,7 @@ import {
 import React from 'react'
 import type { FieldPath, FieldValues } from 'react-hook-form'
 import type { ImageFile } from '~/routes/app.files-manager._index/components/file-picker/types'
-import { ImageIcon, PlusCircleIcon } from '@shopify/polaris-icons'
+import { EditIcon, ImageIcon, PlusCircleIcon } from '@shopify/polaris-icons'
 import type { FieldPathValue } from 'react-hook-form/dist/types'
 import type { Maybe } from '~/types/admin.types'
 
@@ -22,7 +22,8 @@ type FilePickerActivatorProps<
   value: FieldPathValue<TFieldValues, TName>
   dirty: boolean
   onClick: () => void
-  onResetClick: (e: React.MouseEvent<HTMLButtonElement>) => void
+  onClearClick: (e: React.MouseEvent<HTMLButtonElement>) => void
+  onResetClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
   defaultImageUrl?: Maybe<string>
   helpText?: string
   activeFile?: ImageFile
@@ -39,7 +40,29 @@ export function FilePickerActivator<
       ? props.activeFile?.image?.thumbnail
       : props.defaultImageUrl
   })()
-  const showClear = !!(props.value && (props.activeFile || imageUrl))
+  const showClear = !!props.value
+  const showReset = typeof props.onResetClick === 'function' && props.dirty
+
+  function renderEnd () {
+    if (showReset) {
+      return (
+        <Button
+          // @ts-ignore
+          onClick={props.onResetClick}
+          variant="plain"
+          tone="critical"
+        >
+          Reset
+        </Button>
+      )
+    }
+
+    if (props.value) {
+      return <Icon source={EditIcon} tone="interactive" />
+    }
+
+    return <Icon source={PlusCircleIcon} tone="interactive" />
+  }
 
   return (
     <div onClick={props.onClick} style={{ cursor: 'pointer' }}>
@@ -77,6 +100,17 @@ export function FilePickerActivator<
               <Text variant="bodyMd" as="p" fontWeight="semibold">
                 {props.label}
               </Text>
+
+              {showClear && (
+                <Button
+                  variant="plain"
+                  tone="critical"
+                  // @ts-ignore
+                  onClick={props.onClearClick}
+                >
+                  Clear
+                </Button>
+              )}
             </InlineStack>
 
             <Text variant="bodyMd" as="p" tone="subdued">
@@ -85,18 +119,7 @@ export function FilePickerActivator<
           </Box>
 
           <div>
-            {showClear ? (
-              <Button
-                // @ts-ignore
-                onClick={props.onResetClick}
-                variant="plain"
-                tone="critical"
-              >
-                Reset
-              </Button>
-            ) : (
-              <Icon source={PlusCircleIcon} tone="interactive" />
-            )}
+            {renderEnd()}
           </div>
         </InlineGrid>
       </Box>

@@ -21,15 +21,16 @@ export function useLayoutForm (currentBranding: CurrentCheckoutBranding): Brandi
   setImageUrls: (imageUrls: ImageUrls) => void
 } {
   // TODO: Add some state to store the image URL's as we dont' want it in the form state
-  const [imageUrls, setImageUrls] = useState<ImageUrls>({
+  const loadedImageUrls: ImageUrls = {
     favicon: currentBranding?.customizations?.favicon?.image?.url,
     headerBanner: currentBranding?.customizations?.header?.banner?.image?.url,
     headerLogo: currentBranding?.customizations?.header?.logo?.image?.url,
     mainBackgroundImage: currentBranding?.customizations?.main?.backgroundImage?.image?.url,
     orderSummaryBackgroundImage: currentBranding?.customizations?.orderSummary?.backgroundImage?.image?.url,
-  })
+  }
+  const [imageUrls, setImageUrls] = useState<ImageUrls>(loadedImageUrls)
 
-  const { control, getValues, formState: { isDirty, dirtyFields }, reset } = useForm<CheckoutBrandingLayoutFields>({
+  const { control, getValues, formState: { isDirty, dirtyFields }, reset, resetField } = useForm<CheckoutBrandingLayoutFields>({
       resolver: zodResolver(checkoutBrandingLayoutSchema),
       defaultValues: {
         favicon: {
@@ -82,6 +83,7 @@ export function useLayoutForm (currentBranding: CurrentCheckoutBranding): Brandi
     control,
     isDirty,
     reset,
+    resetField,
     toValues () {
       return {
         customizations: {

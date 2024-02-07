@@ -18,7 +18,7 @@ export function useColoursForm (currentBranding: CurrentCheckoutBranding): Brand
 } {
   const [currentlySelectedScheme, setCurrentlySelectedScheme] = useState<SchemeOptions>(SchemeOptions.Scheme1)
 
-  const { control, getValues, formState: { isDirty, dirtyFields }, reset } = useForm<CheckoutBrandingColorsFields>({
+  const { control, getValues, formState: { isDirty, dirtyFields }, reset, resetField } = useForm<CheckoutBrandingColorsFields>({
     resolver: zodResolver(checkoutBrandingColorsSchema),
     defaultValues: {
       global: {
@@ -110,6 +110,7 @@ export function useColoursForm (currentBranding: CurrentCheckoutBranding): Brand
     control,
     isDirty,
     reset,
+    resetField,
     toValues () {
       return {
         designSystem: {

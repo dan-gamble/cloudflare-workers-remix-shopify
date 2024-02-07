@@ -7,7 +7,7 @@ import { removeCleanFields } from '~/routes/app.branding._index/hooks/utils'
 import type { CurrentCheckoutBranding } from '~/routes/app.branding/types'
 
 export function useFormForm (currentBranding: CurrentCheckoutBranding): BrandingFormHook<CheckoutBrandingFormFields> {
-  const { control, getValues, formState: { isDirty, dirtyFields }, reset } = useForm<CheckoutBrandingFormFields>({
+  const { control, getValues, formState: { isDirty, dirtyFields }, reset, resetField } = useForm<CheckoutBrandingFormFields>({
     resolver: zodResolver(checkoutBrandingFormSchema),
     defaultValues: {
       control: {
@@ -51,6 +51,7 @@ export function useFormForm (currentBranding: CurrentCheckoutBranding): Branding
     control,
     isDirty,
     reset,
+    resetField,
     toValues () {
       return {
         customizations: {

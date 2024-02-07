@@ -41,6 +41,7 @@ type FilePickerProps<
   helpText?: string
   baseQuery?: string
   defaultImageUrl?: Maybe<string>
+  onResetClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
 } & UseControllerProps<TFieldValues, TName>
 
 export function FilePicker<
@@ -98,7 +99,8 @@ export function FilePicker<
       defaultImageUrl={props.defaultImageUrl}
       activeFile={activeFile}
       onClick={() => setModalOpen(true)}
-      onResetClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+      onResetClick={props.onResetClick}
+      onClearClick={(e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         e.stopPropagation()
 

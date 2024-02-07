@@ -9,6 +9,7 @@ import { ColourSchemeSelectionEnum } from '~/routes/app.branding._index/componen
 import { SimpleBorderEnum } from '~/routes/app.branding._index/components/enums/simple-border-enum'
 import { FilePicker } from '~/routes/app.files-manager._index/components/file-picker/file-picker'
 import { RangeSlider } from '~/components/range-slider'
+import React from 'react'
 
 export function LayoutTab() {
   const checkoutBranding = useCheckoutBranding()
@@ -94,6 +95,12 @@ export function LayoutTab() {
                 helpText="The logo image (must not be of SVG format)."
                 baseQuery="status:ready media_type:Image -filename:*.svg used_in:none"
                 defaultImageUrl={checkoutBranding.forms.layoutForm.imageUrls.headerLogo ?? ''}
+                onResetClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+
+                  checkoutBranding.forms.layoutForm.resetField('header.logo.image.mediaImageId')
+                }}
               />
 
               <Box paddingInline="200">
@@ -151,6 +158,12 @@ export function LayoutTab() {
                 helpText="The background image of the main area (must not be of SVG format)."
                 baseQuery="status:ready media_type:Image -filename:*.svg used_in:none"
                 defaultImageUrl={checkoutBranding.forms.layoutForm.imageUrls.mainBackgroundImage ?? ''}
+                onResetClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+
+                  checkoutBranding.forms.layoutForm.resetField('main.backgroundImage.mediaImageId')
+                }}
               />
 
               <ColourSchemeSelectionEnum

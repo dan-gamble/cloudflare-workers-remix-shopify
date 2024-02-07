@@ -10,7 +10,7 @@ import { removeCleanFields } from '~/routes/app.branding._index/hooks/utils'
 import type { CurrentCheckoutBranding } from '~/routes/app.branding/types'
 
 export function useHeadingsForm (currentBranding: CurrentCheckoutBranding): BrandingFormHook<CheckoutBrandingHeadingFields> {
-  const { control, getValues, formState: { isDirty, dirtyFields }, reset } = useForm<CheckoutBrandingHeadingFields>({
+  const { control, getValues, formState: { isDirty, dirtyFields }, reset, resetField } = useForm<CheckoutBrandingHeadingFields>({
     resolver: zodResolver(checkoutBrandingHeadingsSchema),
     defaultValues: {
       headingLevel1: {
@@ -47,6 +47,7 @@ export function useHeadingsForm (currentBranding: CurrentCheckoutBranding): Bran
     control,
     isDirty,
     reset,
+    resetField,
     toValues () {
       return {
         customizations: {

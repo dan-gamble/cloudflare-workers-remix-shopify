@@ -38,7 +38,7 @@ export function useTypographyForm (
       : FontTypes.Shopify
   )
 
-  const { control, getValues, formState: { dirtyFields, isDirty }, reset } = useForm<CheckoutBrandingTypographyFields>({
+  const { control, getValues, formState: { dirtyFields, isDirty }, reset, resetField } = useForm<CheckoutBrandingTypographyFields>({
     resolver: zodResolver(checkoutBrandingTypographySchema),
     defaultValues: getDefaultValues(currentBranding, customFonts),
     mode: 'onBlur',
@@ -54,6 +54,7 @@ export function useTypographyForm (
     control,
     isDirty,
     reset,
+    resetField,
     toValues () {
       return {
         designSystem: {
