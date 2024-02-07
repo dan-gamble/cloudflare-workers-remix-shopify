@@ -10,6 +10,11 @@ export const brandingFragment = `#graphql
         cornerRadius
         labelPosition
       }
+      choiceList {
+        group {
+          spacing
+        }
+      }
       favicon {
         image {
           id

@@ -95,7 +95,11 @@ export function TypographyTab () {
                 label="Type"
                 options={[
                   { label: 'Shopify', value: FontTypes.Shopify },
-                  { label: 'Custom', value: FontTypes.Custom, disabled: !shouldShowCustomFontsBanner },
+                  {
+                    label: 'Custom',
+                    value: FontTypes.Custom,
+                    disabled: checkoutBrandingData.fonts.customFonts.length === 0,
+                  },
                 ]}
                 value={checkoutBranding.forms.typographyForm.secondaryFormType}
                 onChange={value => checkoutBranding.forms.typographyForm.setSecondaryFormType(value as FontTypes)}

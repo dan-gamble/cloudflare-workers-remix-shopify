@@ -11,6 +11,7 @@ import type { CheckoutBrandingQuery, CheckoutProfilesQuery, CustomFontFragment }
 import { useBrandingForms } from '~/routes/app.branding._index/hooks/use-branding-forms'
 import { combineServerTimings, makeTimings, time } from '~/utils/timing.server'
 import { hasDismissedCustomFontsBanner } from '~/routes/app.branding.dismiss-custom-fonts-banner'
+import type { CurrentCheckoutBranding } from '~/routes/app.branding/types'
 
 type FontDataContext = {
   shopifyFonts: Array<{ name: string }>;
@@ -158,7 +159,9 @@ export default function Branding () {
   const data = useLoaderData<typeof loader>()
   const { checkoutProfiles, ...enumValues } = data.checkoutProfileData
 
-  const branding = useBrandingForms()
+  const currentBranding = data?.currentBranding?.data?.checkoutBranding as CurrentCheckoutBranding
+
+  const branding = useBrandingForms(currentBranding, data.customFonts as CustomFontFragment[])
 
   return (
     <Outlet
@@ -241,7 +244,7 @@ export default function Branding () {
           branding: {
             profileId: data.checkoutProfileId,
             profiles: checkoutProfiles.nodes,
-            current: data?.currentBranding?.data?.checkoutBranding as CheckoutBrandingQuery['checkoutBranding'],
+            current: currentBranding,
           },
         },
         branding,

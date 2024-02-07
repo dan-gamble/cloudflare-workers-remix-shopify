@@ -4,14 +4,15 @@ import { checkoutBrandingCornerRadiusSchema } from '~/routes/app.branding._index
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { BrandingFormHook } from '~/routes/app.branding._index/hooks/types'
 import { removeCleanFields } from '~/routes/app.branding._index/hooks/utils'
+import type { CurrentCheckoutBranding } from '~/routes/app.branding/types'
 
-export function useCornerRadiusForm (): BrandingFormHook<CheckoutBrandingCornerRadiusFields> {
+export function useCornerRadiusForm (currentBranding: CurrentCheckoutBranding): BrandingFormHook<CheckoutBrandingCornerRadiusFields> {
   const { control, getValues, formState: { isDirty, dirtyFields }, reset } = useForm<CheckoutBrandingCornerRadiusFields>({
     resolver: zodResolver(checkoutBrandingCornerRadiusSchema),
     defaultValues: {
-      base: null,
-      small: null,
-      large: null,
+      base: currentBranding?.designSystem?.cornerRadius?.base,
+      small: currentBranding?.designSystem?.cornerRadius?.small,
+      large: currentBranding?.designSystem?.cornerRadius?.large,
     },
     mode: 'onBlur',
     reValidateMode: 'onChange',

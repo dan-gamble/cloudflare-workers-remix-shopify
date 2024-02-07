@@ -7,15 +7,20 @@ import { useColoursForm } from '~/routes/app.branding._index/hooks/use-colours-f
 import { useTypographyForm } from '~/routes/app.branding._index/hooks/use-typography-form'
 import { useLayoutForm } from '~/routes/app.branding._index/hooks/use-layout-form'
 import { merge } from 'ts-deepmerge'
+import type { CurrentCheckoutBranding } from '~/routes/app.branding/types'
+import type { CustomFontFragment } from '~/types/admin.generated'
 
-export function useBrandingForms () {
-  const buttonsForm = useButtonsForm()
-  const coloursForm = useColoursForm()
-  const cornerRadiusForm = useCornerRadiusForm()
-  const formForm = useFormForm()
-  const headingsForm = useHeadingsForm()
-  const layoutForm = useLayoutForm()
-  const typographyForm = useTypographyForm()
+export function useBrandingForms (
+  currentBranding: CurrentCheckoutBranding,
+  customFonts: CustomFontFragment[],
+) {
+  const buttonsForm = useButtonsForm(currentBranding)
+  const coloursForm = useColoursForm(currentBranding)
+  const cornerRadiusForm = useCornerRadiusForm(currentBranding)
+  const formForm = useFormForm(currentBranding)
+  const headingsForm = useHeadingsForm(currentBranding)
+  const layoutForm = useLayoutForm(currentBranding)
+  const typographyForm = useTypographyForm(currentBranding, customFonts)
 
   const forms = {
     buttonsForm,
