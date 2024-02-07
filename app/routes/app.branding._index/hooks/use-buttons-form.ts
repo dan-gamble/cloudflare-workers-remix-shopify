@@ -13,7 +13,7 @@ import type { CurrentCheckoutBranding } from '~/routes/app.branding/types'
 export function useButtonsForm (currentBranding: CurrentCheckoutBranding): BrandingFormHook<CheckoutBrandingButtonsFields> {
   const { control, getValues, formState: { isDirty, dirtyFields }, reset, resetField } = useForm<CheckoutBrandingButtonsFields>({
     resolver: zodResolver(checkoutBrandingCornerRadiusSchema),
-    defaultValues: {
+    values: {
       primaryButton: {
         background: currentBranding?.customizations?.primaryButton?.background,
         blockPadding: currentBranding?.customizations?.primaryButton?.blockPadding,

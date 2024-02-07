@@ -1,5 +1,5 @@
 import { useCornerRadiusForm } from '~/routes/app.branding._index/hooks/use-corner-radius-form'
-import { checkoutBrandingSchema } from '~/routes/app.branding._index/schema'
+import { checkoutBrandingInputSchema } from '~/routes/app.branding._index/schema'
 import { useButtonsForm } from '~/routes/app.branding._index/hooks/use-buttons-form'
 import { useFormForm } from '~/routes/app.branding._index/hooks/use-form-form'
 import { useHeadingsForm } from '~/routes/app.branding._index/hooks/use-headings-form'
@@ -44,7 +44,7 @@ export function useBrandingForms (
         .reduce((acc, values) => merge(acc, values), {})
       // TODO: Safe parse
 
-      return checkoutBrandingSchema.parse(values)
+      return checkoutBrandingInputSchema.parse(values)
     },
 
     reset () {

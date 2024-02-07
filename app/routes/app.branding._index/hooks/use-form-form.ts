@@ -9,7 +9,7 @@ import type { CurrentCheckoutBranding } from '~/routes/app.branding/types'
 export function useFormForm (currentBranding: CurrentCheckoutBranding): BrandingFormHook<CheckoutBrandingFormFields> {
   const { control, getValues, formState: { isDirty, dirtyFields }, reset, resetField } = useForm<CheckoutBrandingFormFields>({
     resolver: zodResolver(checkoutBrandingFormSchema),
-    defaultValues: {
+    values: {
       control: {
         border: currentBranding?.customizations?.control?.border,
         color: currentBranding?.customizations?.control?.color,

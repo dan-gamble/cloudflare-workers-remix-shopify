@@ -9,7 +9,7 @@ import type { CurrentCheckoutBranding } from '~/routes/app.branding/types'
 export function useCornerRadiusForm (currentBranding: CurrentCheckoutBranding): BrandingFormHook<CheckoutBrandingCornerRadiusFields> {
   const { control, getValues, formState: { isDirty, dirtyFields }, reset, resetField } = useForm<CheckoutBrandingCornerRadiusFields>({
     resolver: zodResolver(checkoutBrandingCornerRadiusSchema),
-    defaultValues: {
+    values: {
       base: currentBranding?.designSystem?.cornerRadius?.base,
       small: currentBranding?.designSystem?.cornerRadius?.small,
       large: currentBranding?.designSystem?.cornerRadius?.large,

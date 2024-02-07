@@ -20,7 +20,7 @@ export function useColoursForm (currentBranding: CurrentCheckoutBranding): Brand
 
   const { control, getValues, formState: { isDirty, dirtyFields }, reset, resetField } = useForm<CheckoutBrandingColorsFields>({
     resolver: zodResolver(checkoutBrandingColorsSchema),
-    defaultValues: {
+    values: {
       global: {
         accent: currentBranding?.designSystem?.colors?.global?.accent,
         brand: currentBranding?.designSystem?.colors?.global?.brand,

@@ -41,7 +41,7 @@ export const checkoutBrandingHeaderAlignmentEnum = z.nativeEnum(CheckoutBranding
 export const checkoutBrandingHeaderPositionEnum = z.nativeEnum(CheckoutBrandingHeaderPosition)
 
 export const checkoutBrandingCustomFontSchema = z.object({
-  genericFileId : z.string(),
+  genericFileId: z.string(),
   weight: z.coerce.number().min(100).max(900),
 })
 
@@ -58,10 +58,19 @@ export const checkoutBrandingShopifyFontGroupSchema = z.object({
   name: z.string(),
 })
 
-export const checkoutBrandingFontGroupSchema = z.object({
-  customFontGroup: checkoutBrandingCustomFontGroupSchema.optional().nullable(),
-  shopifyFontGroup: checkoutBrandingShopifyFontGroupSchema.optional().nullable(),
-})
+export const checkoutBrandingFontGroupSchema = z
+  .object({
+    customFontGroup: z.null(),
+    shopifyFontGroup: checkoutBrandingShopifyFontGroupSchema,
+  })
+  .or(z.object({
+    customFontGroup: checkoutBrandingCustomFontGroupSchema,
+    shopifyFontGroup: z.null(),
+  }))
+  .or(z.object({
+    customFontGroup: z.null(),
+    shopifyFontGroup: z.null(),
+  }))
 
 export const checkoutBrandingFontSizeSchema = z.object({
   base: z
@@ -278,14 +287,14 @@ export const checkoutBrandingDesignSystemSchema = z.object({
   typography: checkoutBrandingTypographySchema.optional().nullable(),
 })
 
-export const checkoutBrandingSchema = z.object({
+export const checkoutBrandingInputSchema = z.object({
   customizations: checkoutBrandingCustomizationSchema.nullable().optional(),
-  designSystem: checkoutBrandingDesignSystemSchema.nullable().optional()
+  designSystem: checkoutBrandingDesignSystemSchema.nullable().optional(),
 })
 
 export type CheckoutBrandingCornerRadiusFields = z.infer<typeof checkoutBrandingCornerRadiusSchema>
 
 export const checkoutBrandingFormData = zfd.formData({
   checkoutProfileId: z.string().min(1),
-  checkoutBrandingInput: zfd.json(checkoutBrandingSchema),
+  checkoutBrandingInput: zfd.json(checkoutBrandingInputSchema),
 })

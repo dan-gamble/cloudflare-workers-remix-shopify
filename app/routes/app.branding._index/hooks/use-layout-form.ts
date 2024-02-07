@@ -32,7 +32,7 @@ export function useLayoutForm (currentBranding: CurrentCheckoutBranding): Brandi
 
   const { control, getValues, formState: { isDirty, dirtyFields }, reset, resetField } = useForm<CheckoutBrandingLayoutFields>({
       resolver: zodResolver(checkoutBrandingLayoutSchema),
-      defaultValues: {
+      values: {
         favicon: {
           mediaImageId: currentBranding?.customizations?.favicon?.image?.id,
         },

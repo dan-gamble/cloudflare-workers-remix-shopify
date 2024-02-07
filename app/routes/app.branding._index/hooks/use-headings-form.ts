@@ -12,7 +12,7 @@ import type { CurrentCheckoutBranding } from '~/routes/app.branding/types'
 export function useHeadingsForm (currentBranding: CurrentCheckoutBranding): BrandingFormHook<CheckoutBrandingHeadingFields> {
   const { control, getValues, formState: { isDirty, dirtyFields }, reset, resetField } = useForm<CheckoutBrandingHeadingFields>({
     resolver: zodResolver(checkoutBrandingHeadingsSchema),
-    defaultValues: {
+    values: {
       headingLevel1: {
         typography: {
           font: currentBranding?.customizations?.headingLevel1?.typography?.font,

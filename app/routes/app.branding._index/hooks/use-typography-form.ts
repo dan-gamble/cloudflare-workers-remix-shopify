@@ -1,14 +1,20 @@
 import type { BrandingFormHook } from '~/routes/app.branding._index/hooks/types'
-import type { CheckoutBrandingTypographyFields } from '~/routes/app.branding._index/schema'
-import { checkoutBrandingTypographySchema } from '~/routes/app.branding._index/schema'
+import {
+ checkoutBrandingTypographySchema
+} from '~/routes/app.branding._index/schema';
+import type {
+  checkoutBrandingFontGroupSchema,
+  checkoutBrandingFontSizeSchema,
+  CheckoutBrandingTypographyFields
+} from '~/routes/app.branding._index/schema'
 import { useForm } from 'react-hook-form'
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { removeCleanFields } from '~/routes/app.branding._index/hooks/utils'
 import type { CurrentCheckoutBranding } from '~/routes/app.branding/types'
-import type { DefaultValues } from 'react-hook-form/dist/types/form'
 import type { Maybe } from '~/types/admin.types'
 import type { CustomFontFragment } from '~/types/admin.generated'
+import type { z } from 'zod'
 
 export enum FontTypes {
   Shopify = 'Shopify',
@@ -40,7 +46,7 @@ export function useTypographyForm (
 
   const { control, getValues, formState: { dirtyFields, isDirty }, reset, resetField } = useForm<CheckoutBrandingTypographyFields>({
     resolver: zodResolver(checkoutBrandingTypographySchema),
-    defaultValues: getDefaultValues(currentBranding, customFonts),
+    values: getInitialValues(currentBranding, customFonts),
     mode: 'onBlur',
     reValidateMode: 'onChange',
   })
@@ -67,18 +73,24 @@ export function useTypographyForm (
   }
 }
 
-function getDefaultValues (
+function getInitialValues (
   currentBranding: CurrentCheckoutBranding,
   customFonts: CustomFontFragment[],
-): DefaultValues<CheckoutBrandingTypographyFields> {
-  const defaultValues = {
+): CheckoutBrandingTypographyFields {
+  type InitialValues = {
+    primary: z.infer<typeof checkoutBrandingFontGroupSchema>
+    secondary: z.infer<typeof checkoutBrandingFontGroupSchema>
+    size: z.infer<typeof checkoutBrandingFontSizeSchema>
+  }
+
+  const initialValues: InitialValues = {
     primary: {
-      customFontGroup: {},
-      shopifyFontGroup: {},
+      customFontGroup: null,
+      shopifyFontGroup: null,
     },
     secondary: {
-      customFontGroup: {},
-      shopifyFontGroup: {},
+      customFontGroup: null,
+      shopifyFontGroup: null,
     },
     size: {
       base: currentBranding?.designSystem?.typography?.size?.base,
@@ -89,62 +101,66 @@ function getDefaultValues (
   const primaryFontIsCustom = isCustomFont(currentBranding?.designSystem?.typography?.primary?.base?.sources)
 
   if (primaryFontIsCustom) {
-    defaultValues.primary.customFontGroup = {
+    initialValues.primary.customFontGroup = {
       base: {
         genericFileId: getCustomFontId(
           currentBranding?.designSystem?.typography?.primary?.base?.sources as string,
           customFonts,
         ),
-        weight: currentBranding?.designSystem?.typography?.primary?.base?.weight,
+        weight: currentBranding?.designSystem?.typography?.primary?.base?.weight as number,
       },
       bold: {
         genericFileId: getCustomFontId(
           currentBranding?.designSystem?.typography?.primary?.bold?.sources as string,
           customFonts,
         ),
-        weight: currentBranding?.designSystem?.typography?.primary?.bold?.weight,
+        weight: currentBranding?.designSystem?.typography?.primary?.bold?.weight as number,
       },
       loadingStrategy: currentBranding?.designSystem?.typography?.primary?.loadingStrategy,
     }
+    initialValues.primary.shopifyFontGroup = null
   } else {
-    defaultValues.primary.shopifyFontGroup = {
+    initialValues.primary.customFontGroup = null
+    initialValues.primary.shopifyFontGroup = {
       baseWeight: currentBranding?.designSystem?.typography?.primary?.base?.weight,
       boldWeight: currentBranding?.designSystem?.typography?.primary?.bold?.weight,
       loadingStrategy: currentBranding?.designSystem?.typography?.primary?.loadingStrategy,
-      name: currentBranding?.designSystem?.typography?.primary?.name,
+      name: currentBranding?.designSystem?.typography?.primary?.name as string,
     }
   }
 
   const secondaryFontIsCustom = isCustomFont(currentBranding?.designSystem?.typography?.secondary?.base?.sources)
 
   if (secondaryFontIsCustom) {
-    defaultValues.secondary.customFontGroup = {
+    initialValues.secondary.customFontGroup = {
       base: {
         genericFileId: getCustomFontId(
           currentBranding?.designSystem?.typography?.secondary?.base?.sources as string,
           customFonts,
         ),
-        weight: currentBranding?.designSystem?.typography?.secondary?.base?.weight,
+        weight: currentBranding?.designSystem?.typography?.secondary?.base?.weight as number,
       },
       bold: {
         genericFileId: getCustomFontId(
           currentBranding?.designSystem?.typography?.secondary?.bold?.sources as string,
           customFonts,
         ),
-        weight: currentBranding?.designSystem?.typography?.secondary?.bold?.weight,
+        weight: currentBranding?.designSystem?.typography?.secondary?.bold?.weight as number,
       },
       loadingStrategy: currentBranding?.designSystem?.typography?.secondary?.loadingStrategy,
     }
+    initialValues.secondary.shopifyFontGroup = null
   } else {
-    defaultValues.secondary.shopifyFontGroup = {
+    initialValues.secondary.customFontGroup = null
+    initialValues.secondary.shopifyFontGroup = {
       baseWeight: currentBranding?.designSystem?.typography?.secondary?.base?.weight,
       boldWeight: currentBranding?.designSystem?.typography?.secondary?.bold?.weight,
       loadingStrategy: currentBranding?.designSystem?.typography?.secondary?.loadingStrategy,
-      name: currentBranding?.designSystem?.typography?.secondary?.name,
+      name: currentBranding?.designSystem?.typography?.secondary?.name as string,
     }
   }
 
-  return defaultValues
+  return initialValues
 }
 
 function isCustomFont (font: Maybe<string> | undefined) {
