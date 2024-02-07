@@ -12,6 +12,7 @@ import type { FieldPath, FieldValues } from 'react-hook-form'
 import type { ImageFile } from '~/routes/app.files-manager._index/components/file-picker/types'
 import { ImageIcon, PlusCircleIcon } from '@shopify/polaris-icons'
 import type { FieldPathValue } from 'react-hook-form/dist/types'
+import type { Maybe } from '~/types/admin.types'
 
 type FilePickerActivatorProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -22,7 +23,7 @@ type FilePickerActivatorProps<
   dirty: boolean
   onClick: () => void
   onResetClick: (e: React.MouseEvent<HTMLButtonElement>) => void
-  defaultImageUrl?: string
+  defaultImageUrl?: Maybe<string>
   helpText?: string
   activeFile?: ImageFile
 }

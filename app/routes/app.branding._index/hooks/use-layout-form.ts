@@ -5,9 +5,29 @@ import { useForm } from 'react-hook-form'
 import { removeCleanFields } from '~/routes/app.branding._index/hooks/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { CurrentCheckoutBranding } from '~/routes/app.branding/types'
+import { useState } from 'react'
+import type { Maybe } from '~/types/admin.types'
 
-export function useLayoutForm (currentBranding: CurrentCheckoutBranding): BrandingFormHook<CheckoutBrandingLayoutFields> {
+export type ImageUrls = {
+  favicon: Maybe<string> | undefined
+  headerBanner: Maybe<string> | undefined
+  headerLogo: Maybe<string> | undefined
+  mainBackgroundImage: Maybe<string> | undefined
+  orderSummaryBackgroundImage: Maybe<string> | undefined
+}
+
+export function useLayoutForm (currentBranding: CurrentCheckoutBranding): BrandingFormHook<CheckoutBrandingLayoutFields> & {
+  imageUrls: ImageUrls
+  setImageUrls: (imageUrls: ImageUrls) => void
+} {
   // TODO: Add some state to store the image URL's as we dont' want it in the form state
+  const [imageUrls, setImageUrls] = useState<ImageUrls>({
+    favicon: currentBranding?.customizations?.favicon?.image?.url,
+    headerBanner: currentBranding?.customizations?.header?.banner?.image?.url,
+    headerLogo: currentBranding?.customizations?.header?.logo?.image?.url,
+    mainBackgroundImage: currentBranding?.customizations?.main?.backgroundImage?.image?.url,
+    orderSummaryBackgroundImage: currentBranding?.customizations?.orderSummary?.backgroundImage?.image?.url,
+  })
 
   const { control, getValues, formState: { isDirty, dirtyFields }, reset } = useForm<CheckoutBrandingLayoutFields>({
       resolver: zodResolver(checkoutBrandingLayoutSchema),
@@ -56,6 +76,9 @@ export function useLayoutForm (currentBranding: CurrentCheckoutBranding): Brandi
   )
 
   return {
+    imageUrls,
+    setImageUrls,
+
     control,
     isDirty,
     reset,

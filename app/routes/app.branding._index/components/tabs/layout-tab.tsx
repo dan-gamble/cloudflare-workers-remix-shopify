@@ -29,7 +29,7 @@ export function LayoutTab() {
               label="Image"
               helpText="The favicon image (must be of PNG format)."
               baseQuery="status:ready media_type:Image filename:*.png used_in:none"
-              // defaultImageUrl={forms.layoutForm.fields.favicon.url.value ?? ''}
+              defaultImageUrl={checkoutBranding.forms.layoutForm.imageUrls.favicon}
             />
           </BlockStack>
         </BlockStack>
@@ -82,7 +82,7 @@ export function LayoutTab() {
               label="Banner"
               helpText="The background image of the header (must not be of SVG format)."
               baseQuery="status:ready media_type:Image -filename:*.svg used_in:none"
-              // defaultImageUrl={forms.layoutForm.fields.header.banner.url.value ?? ''}
+              defaultImageUrl={checkoutBranding.forms.layoutForm.imageUrls.headerBanner ?? ''}
             />
 
             <BlockStack gap="200">
@@ -93,7 +93,7 @@ export function LayoutTab() {
                 label="Logo"
                 helpText="The logo image (must not be of SVG format)."
                 baseQuery="status:ready media_type:Image -filename:*.svg used_in:none"
-                // defaultImageUrl={forms.layoutForm.fields.header.logo.image.url.value ?? ''}
+                defaultImageUrl={checkoutBranding.forms.layoutForm.imageUrls.headerLogo ?? ''}
               />
 
               <Box paddingInline="200">
@@ -150,7 +150,7 @@ export function LayoutTab() {
                 label="Background image"
                 helpText="The background image of the main area (must not be of SVG format)."
                 baseQuery="status:ready media_type:Image -filename:*.svg used_in:none"
-                // defaultImageUrl={forms.layoutForm.fields.main.backgroundImage.url.value ?? ''}
+                defaultImageUrl={checkoutBranding.forms.layoutForm.imageUrls.mainBackgroundImage ?? ''}
               />
 
               <ColourSchemeSelectionEnum
@@ -179,7 +179,7 @@ export function LayoutTab() {
                 label="Background image"
                 helpText="The background image of the order summary (must not be of SVG format)."
                 baseQuery="status:ready media_type:Image -filename:*.svg used_in:none"
-                // defaultImageUrl={forms.layoutForm.fields.orderSummary.backgroundImage.url.value ?? ''}
+                defaultImageUrl={checkoutBranding.forms.layoutForm.imageUrls.orderSummaryBackgroundImage ?? ''}
               />
 
               <ColourSchemeSelectionEnum

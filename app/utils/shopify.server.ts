@@ -34,8 +34,6 @@ export function createShopifyApp (env: Env, db: Database) {
     },
     hooks: {
       afterAuth: async ({ admin, session }) => {
-        console.log({ admin, session })
-
         shopify.registerWebhooks({ session })
 
         await setShopAppId(admin.graphql, db, session)

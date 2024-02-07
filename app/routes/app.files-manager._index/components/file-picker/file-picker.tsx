@@ -17,6 +17,7 @@ import {
 import { parseFileNameAndExtensionFromUrl } from '~/utils'
 import { useDebounce } from 'use-debounce'
 import { SearchIcon, SortIcon } from '@shopify/polaris-icons'
+import type { Maybe } from '~/types/admin.types';
 import { FileSortKeys } from '~/types/admin.types'
 import React, { useMemo, useState } from 'react'
 import type {
@@ -39,7 +40,7 @@ type FilePickerProps<
   placeHolderText?: string
   helpText?: string
   baseQuery?: string
-  defaultImageUrl?: string
+  defaultImageUrl?: Maybe<string>
 } & UseControllerProps<TFieldValues, TName>
 
 export function FilePicker<
