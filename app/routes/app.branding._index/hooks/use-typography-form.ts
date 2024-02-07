@@ -65,6 +65,15 @@ export function useTypographyForm (
       return {
         designSystem: {
           typography: {
+            ...getValues(),
+          },
+        },
+      }
+    },
+    toDirtyInputValues () {
+      return {
+        designSystem: {
+          typography: {
             ...removeCleanFields(getValues(), dirtyFields),
           },
         },

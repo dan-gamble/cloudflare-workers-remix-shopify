@@ -82,9 +82,32 @@ export function useLayoutForm (currentBranding: CurrentCheckoutBranding): Brandi
     toValues () {
       return {
         customizations: {
+          ...cleanupMediaImageIdFields(getValues()),
+        },
+      }
+    },
+    toDirtyInputValues () {
+      return {
+        customizations: {
           ...removeCleanFields(getValues(), dirtyFields),
         },
       }
     },
   }
+}
+
+function cleanupMediaImageIdFields (data: any): CheckoutBrandingLayoutFields {
+  console.log({ data })
+
+  for (const [key, value] of Object.entries(data)) {
+    if (typeof value === 'object' && !Array.isArray(value) && value != null) {
+      data[key] = cleanupMediaImageIdFields(value)
+    } else {
+      if (typeof value === 'string' && key === 'mediaImageId') {
+        data[key] = undefined
+      }
+    }
+  }
+
+  return data as CheckoutBrandingLayoutFields
 }

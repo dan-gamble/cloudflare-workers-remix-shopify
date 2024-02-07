@@ -37,9 +37,18 @@ export function useBrandingForms (
 
     isDirty: Object.values(forms).some(form => form.isDirty),
 
-    toValues () {
+    toDirtyInputValues () {
       const values = Object.values(forms)
         .filter(form => form.isDirty)
+        .map(form => form.toValues())
+        .reduce((acc, values) => merge(acc, values), {})
+      // TODO: Safe parse
+
+      return checkoutBrandingInputSchema.parse(values)
+    },
+
+    toValues () {
+      const values = Object.values(forms)
         .map(form => form.toValues())
         .reduce((acc, values) => merge(acc, values), {})
       // TODO: Safe parse

@@ -1,8 +1,8 @@
 import type { ActionFunctionArgs, LinksFunction } from '@remix-run/cloudflare'
 import { json } from '@remix-run/cloudflare'
-import { useFetcher, useNavigation, useSearchParams, useSubmit } from '@remix-run/react'
+import { useActionData, useFetcher, useNavigation, useSearchParams, useSubmit } from '@remix-run/react'
 import { BlockStack, Card, Icon, Layout, Page, PageActions, Select, Spinner, Text } from '@shopify/polaris'
-import { TextFontIcon, ViewIcon } from '@shopify/polaris-icons'
+import { ExportIcon, ImportIcon, TextFontIcon, ViewIcon } from '@shopify/polaris-icons'
 import { TextField } from '~/components/text-field'
 import { useCheckoutBranding, useCheckoutBrandingData } from '~/routes/app.branding/route'
 import { CheckoutBrandingTabs } from '~/routes/app.branding._index/components/tabs'
@@ -16,6 +16,9 @@ import {
   checkoutBrandingUpsertMutation,
 } from '~/routes/app.branding._index/graphql/mutations/checkout-branding-upsert-mutation'
 import { parseGid } from '@shopify/admin-graphql-api-utilities'
+import { useCallback, useEffect } from 'react'
+import { ExportModal } from '~/routes/app.branding._index/components/modals/export-modal'
+import { ImportModal } from '~/routes/app.branding._index/components/modals/import-modal'
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: styles },
@@ -45,9 +48,10 @@ export async function action ({ request }: ActionFunctionArgs) {
 }
 
 export default function CheckoutBranding () {
+  const actionData = useActionData<typeof action>()
   const updateShopifyFontFamilies = useFetcher()
   const navigation = useNavigation()
-  const [, setSearchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const submit = useSubmit()
 
   const checkoutBranding = useCheckoutBranding()
@@ -58,7 +62,7 @@ export default function CheckoutBranding () {
   function handleSubmit () {
     return submit({
       checkoutProfileId: checkoutBrandingData.branding.profileId,
-      checkoutBrandingInput: JSON.stringify(checkoutBranding.toValues()),
+      checkoutBrandingInput: JSON.stringify(checkoutBranding.toDirtyInputValues()),
     }, { method: 'POST' })
   }
 
@@ -68,6 +72,46 @@ export default function CheckoutBranding () {
     loading: navigation.state === 'submitting',
     onAction: handleSubmit,
   }
+
+  const openExportModal = useCallback(() => {
+    return setSearchParams(searchParams => {
+      searchParams.set('export', '')
+
+      return searchParams
+    })
+  }, [setSearchParams])
+
+  const closeExportModal = useCallback(() => {
+    return setSearchParams(searchParams => {
+      searchParams.delete('export')
+
+      return searchParams
+    })
+  }, [setSearchParams])
+
+  const openImportModal = useCallback(() => {
+    return setSearchParams(searchParams => {
+      searchParams.set('import', '')
+
+      return searchParams
+    })
+  }, [setSearchParams])
+
+  const closeImportModal = useCallback(() => {
+    return setSearchParams(searchParams => {
+      searchParams.delete('import')
+
+      return searchParams
+    })
+  }, [setSearchParams])
+
+  useEffect(() => {
+    if (actionData?.status === 'success') {
+      shopify.toast.show('Checkout branding has been updated')
+
+      closeImportModal()
+    }
+  }, [actionData?.status, closeImportModal])
 
   return (
     <Page
@@ -101,7 +145,23 @@ export default function CheckoutBranding () {
               prefix: (
                 <Icon source={TextFontIcon} />
               )
-            }
+            },
+            {
+              content: 'Export',
+              accessibilityLabel: 'Export',
+              onAction: openExportModal,
+              prefix: (
+                <Icon source={ExportIcon} />
+              ),
+            },
+            {
+              content: 'Import',
+              accessibilityLabel: 'Import',
+              onAction: openImportModal,
+              prefix: (
+                <Icon source={ImportIcon} />
+              ),
+            },
           ]
         }
       ]}
@@ -227,6 +287,53 @@ export default function CheckoutBranding () {
           <PageActions primaryAction={primaryAction} />
         </Layout.Section>
       </Layout>
+
+      <ExportModal
+        open={searchParams.has('export')}
+        title="Export"
+        onClose={closeExportModal}
+        primaryAction={{
+          content: 'Copy',
+          onAction: async () => {
+            await navigator.clipboard.writeText(
+              JSON.stringify(
+                checkoutBranding.toValues(),
+                null,
+                2,
+              ),
+            )
+
+            shopify.toast.show('Copied to clipboard')
+
+            closeExportModal()
+          },
+        }}
+        secondaryActions={[
+          {
+            content: 'Close',
+            onAction: closeExportModal,
+          },
+        ]}
+      />
+
+      <ImportModal
+        open={searchParams.has('import')}
+        title="Import"
+        onClose={closeImportModal}
+        loading={navigation.state === 'submitting'}
+        secondaryActions={[
+          {
+            content: 'Close',
+            onAction: closeImportModal,
+          },
+        ]}
+        onSubmit={(value) => {
+          submit({
+            checkoutProfileId: checkoutBrandingData.branding.profileId,
+            checkoutBrandingInput: value,
+          }, { method: 'POST' })
+        }}
+      />
     </Page>
   )
 }

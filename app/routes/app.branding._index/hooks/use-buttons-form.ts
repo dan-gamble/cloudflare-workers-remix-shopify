@@ -53,6 +53,13 @@ export function useButtonsForm (currentBranding: CurrentCheckoutBranding): Brand
     toValues () {
       return {
         customizations: {
+          ...getValues(),
+        }
+      }
+    },
+    toDirtyInputValues () {
+      return {
+        customizations: {
           ...removeCleanFields(getValues(), dirtyFields),
         },
       }

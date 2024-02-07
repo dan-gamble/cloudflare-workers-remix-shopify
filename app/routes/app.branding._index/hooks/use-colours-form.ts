@@ -115,6 +115,15 @@ export function useColoursForm (currentBranding: CurrentCheckoutBranding): Brand
       return {
         designSystem: {
           colors: {
+            ...getValues(),
+          },
+        },
+      }
+    },
+    toDirtyInputValues () {
+      return {
+        designSystem: {
+          colors: {
             ...removeCleanFields(getValues(), dirtyFields),
           },
         },

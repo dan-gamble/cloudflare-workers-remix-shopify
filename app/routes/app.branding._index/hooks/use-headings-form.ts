@@ -51,6 +51,13 @@ export function useHeadingsForm (currentBranding: CurrentCheckoutBranding): Bran
     toValues () {
       return {
         customizations: {
+          ...getValues(),
+        },
+      }
+    },
+    toDirtyInputValues () {
+      return {
+        customizations: {
           ...removeCleanFields(getValues(), dirtyFields),
         },
       }

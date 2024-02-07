@@ -12,4 +12,5 @@ export type BrandingFormHook<
   reset: UseFormReset<TFieldValues>;
   resetField: UseFormResetField<TFieldValues>
   toValues: () => CheckoutBrandingInput;
+  toDirtyInputValues: () => CheckoutBrandingInput;
 }

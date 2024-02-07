@@ -27,6 +27,15 @@ export function useCornerRadiusForm (currentBranding: CurrentCheckoutBranding): 
       return {
         designSystem: {
           cornerRadius: {
+            ...getValues(),
+          },
+        },
+      }
+    },
+    toDirtyInputValues () {
+      return {
+        designSystem: {
+          cornerRadius: {
             ...removeCleanFields(getValues(), dirtyFields),
           },
         },
