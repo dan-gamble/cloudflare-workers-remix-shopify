@@ -30,7 +30,13 @@ export function LayoutTab() {
               label="Image"
               helpText="The favicon image (must be of PNG format)."
               baseQuery="status:ready media_type:Image filename:*.png used_in:none"
-              defaultImageUrl={checkoutBranding.forms.layoutForm.imageUrls.favicon}
+              defaultImageUrl={checkoutBranding.forms.layoutForm.imageUrls.favicon ?? ''}
+              onResetClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                e.preventDefault()
+                e.stopPropagation()
+
+                checkoutBranding.forms.layoutForm.resetField('favicon.mediaImageId')
+              }}
             />
           </BlockStack>
         </BlockStack>
@@ -84,6 +90,12 @@ export function LayoutTab() {
               helpText="The background image of the header (must not be of SVG format)."
               baseQuery="status:ready media_type:Image -filename:*.svg used_in:none"
               defaultImageUrl={checkoutBranding.forms.layoutForm.imageUrls.headerBanner ?? ''}
+              onResetClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                e.preventDefault()
+                e.stopPropagation()
+
+                checkoutBranding.forms.layoutForm.resetField('header.banner.mediaImageId')
+              }}
             />
 
             <BlockStack gap="200">
@@ -193,6 +205,12 @@ export function LayoutTab() {
                 helpText="The background image of the order summary (must not be of SVG format)."
                 baseQuery="status:ready media_type:Image -filename:*.svg used_in:none"
                 defaultImageUrl={checkoutBranding.forms.layoutForm.imageUrls.orderSummaryBackgroundImage ?? ''}
+                onResetClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+
+                  checkoutBranding.forms.layoutForm.resetField('orderSummary.backgroundImage.mediaImageId')
+                }}
               />
 
               <ColourSchemeSelectionEnum

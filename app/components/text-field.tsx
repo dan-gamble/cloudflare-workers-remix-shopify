@@ -26,6 +26,8 @@ export function TextField<
     disabled: props.disabled,
   })
 
+  // console.log(field, fieldState)
+
   return (
     <ShopifyTextField
       {...props}
@@ -40,6 +42,8 @@ export function TextField<
       onBlur={event => {
         if (typeof props.onBlur === 'function') {
           return props.onBlur(event as React.FocusEvent<HTMLInputElement>, field)
+        } else {
+          return field.onBlur()
         }
       }}
       error={fieldState.error?.message}

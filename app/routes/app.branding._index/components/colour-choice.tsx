@@ -22,10 +22,12 @@ import { FlexItem } from '~/components/flex-item'
 
 type ColourChoiceProps<
   TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TFieldName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
 > = {
   label: string
   helpText?: string
+  onResetClick?: (name: TFieldName) => void
 } & UseControllerProps<TFieldValues, TName>
 
 export function ColourChoice<
@@ -36,7 +38,7 @@ export function ColourChoice<
   helpText,
   ...props
 }: ColourChoiceProps<TFieldValues, TName>) {
-  const { field } = useController<TFieldValues, TName>(props)
+  const { field, fieldState } = useController<TFieldValues, TName>(props)
 
   const [colour, setColour] = useState<HSBColor>({
     hue: 120,
@@ -45,7 +47,8 @@ export function ColourChoice<
   })
   const [popoverActive, setPopoverActive] = useState(false)
 
-  const showReset = !!field.value
+  const showClear = !!field.value
+  const showReset = fieldState.isDirty && typeof props.onResetClick === 'function'
 
   const mySetColour = (colour: HSBAColor) => {
     setColour(colour)
@@ -159,9 +162,28 @@ export function ColourChoice<
             field.value
               ? (
                 <>
-                  <Text variant="bodyMd" as="p" fontWeight="medium">
-                    {label}
-                  </Text>
+                  <InlineStack gap="200">
+                    <Text variant="bodyMd" as="p" fontWeight="medium">
+                      {label}
+                    </Text>
+
+                    {showClear && (
+                      <Button
+                        variant="plain"
+                        tone="critical"
+                        // @ts-ignore
+                        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+
+                          field.onChange(null)
+                          setPopoverActive(false)
+                        }}
+                      >
+                        Clear
+                      </Button>
+                    )}
+                  </InlineStack>
                   <Text variant="bodyMd" as="p" tone="subdued">
                     {helpText}
                   </Text>
@@ -187,20 +209,19 @@ export function ColourChoice<
           <div>
             {showReset
               ? (
-                <Button
-                  // @ts-ignore
-                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                    e.preventDefault()
-                    e.stopPropagation()
-
-                    field.onChange(null)
-                    setPopoverActive(false)
-                  }}
-                  variant="plain"
-                  tone="critical"
-                >
-                  Reset
-                </Button>
+                <div onClick={e => e.stopPropagation()}>
+                  <Button
+                    onClick={() => {
+                      if (typeof props.onResetClick === 'function') {
+                        props.onResetClick(props.name)
+                      }
+                    }}
+                    variant="plain"
+                    tone="critical"
+                  >
+                    Reset
+                  </Button>
+                </div>
               )
               : <Icon source={PlusCircleIcon} tone="interactive" />}
           </div>

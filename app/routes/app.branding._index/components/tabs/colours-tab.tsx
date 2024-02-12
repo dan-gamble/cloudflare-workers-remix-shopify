@@ -4,12 +4,17 @@ import { Bleed, BlockStack, Box, Button, ButtonGroup, Divider, Tabs, Text } from
 import { ColourChoice } from '~/routes/app.branding._index/components/colour-choice'
 import { SchemeOptions } from '~/routes/app.branding._index/hooks/use-colours-form'
 import { useState } from 'react'
+import type { FieldPath } from 'react-hook-form/dist/types/path'
+import type { CheckoutBrandingColorsFields } from '~/routes/app.branding._index/schema'
 
 export function ColoursTab () {
   const checkoutBranding = useCheckoutBranding()
 
-  // const activeScheme = checkoutBranding.forms.coloursForm.currentlySelectedScheme === SchemeOptions.Scheme1
-  //   ? checkoutBranding.forms.coloursForm.control
+  function onResetClick<
+    TFieldName extends FieldPath<CheckoutBrandingColorsFields> = FieldPath<CheckoutBrandingColorsFields>
+  > (name: TFieldName) {
+    return checkoutBranding.forms.coloursForm.resetField(name)
+  }
 
   return (
     <>
@@ -25,6 +30,7 @@ export function ColoursTab () {
               helpText="A color used for interaction, like links and focus states."
               name="global.accent"
               control={checkoutBranding.forms.coloursForm.control}
+              onResetClick={onResetClick}
             />
 
             <ColourChoice
@@ -32,6 +38,7 @@ export function ColoursTab () {
               helpText="A color strongly associated with the merchant, currently used for elements like primary and secondary buttons."
               name="global.brand"
               control={checkoutBranding.forms.coloursForm.control}
+              onResetClick={onResetClick}
             />
 
             <ColourChoice
@@ -39,6 +46,7 @@ export function ColoursTab () {
               helpText="A semantic color used for components that communicate critical content."
               name="global.critical"
               control={checkoutBranding.forms.coloursForm.control}
+              onResetClick={onResetClick}
             />
 
             <ColourChoice
@@ -46,6 +54,7 @@ export function ColoursTab () {
               helpText="A color used to highlight certain areas of the user interface."
               name="global.decorative"
               control={checkoutBranding.forms.coloursForm.control}
+              onResetClick={onResetClick}
             />
 
             <ColourChoice
@@ -53,6 +62,7 @@ export function ColoursTab () {
               helpText="A semantic color used for components that communicate informative content."
               name="global.info"
               control={checkoutBranding.forms.coloursForm.control}
+              onResetClick={onResetClick}
             />
 
             <ColourChoice
@@ -60,6 +70,7 @@ export function ColoursTab () {
               helpText="A semantic color used for components that communicate successful actions."
               name="global.success"
               control={checkoutBranding.forms.coloursForm.control}
+              onResetClick={onResetClick}
             />
 
             <ColourChoice
@@ -67,6 +78,7 @@ export function ColoursTab () {
               helpText="A semantic color used for components that display content that requires attention."
               name="global.warning"
               control={checkoutBranding.forms.coloursForm.control}
+              onResetClick={onResetClick}
             />
           </BlockStack>
         </BlockStack>
@@ -147,6 +159,12 @@ function Scheme ({ scheme }: { scheme: SchemeOptions }) {
   const iconName = `schemes.${scheme}.${selectedTab.id}.icon` as const
   const textName = `schemes.${scheme}.${selectedTab.id}.text` as const
 
+  function onResetClick<
+    TFieldName extends FieldPath<CheckoutBrandingColorsFields> = FieldPath<CheckoutBrandingColorsFields>
+  > (name: TFieldName) {
+    return checkoutBranding.forms.coloursForm.resetField(name)
+  }
+
   return (
     <Bleed marginInline="300">
       <Tabs
@@ -164,6 +182,7 @@ function Scheme ({ scheme }: { scheme: SchemeOptions }) {
               helpText="The color of accented objects (links and focused state)."
               name={accentName}
               control={checkoutBranding.forms.coloursForm.control}
+              onResetClick={onResetClick}
             />
 
             <ColourChoice
@@ -172,6 +191,7 @@ function Scheme ({ scheme }: { scheme: SchemeOptions }) {
               helpText="The color of the background."
               name={backgroundName}
               control={checkoutBranding.forms.coloursForm.control}
+              onResetClick={onResetClick}
             />
 
             <ColourChoice
@@ -180,6 +200,7 @@ function Scheme ({ scheme }: { scheme: SchemeOptions }) {
               helpText="The color of borders."
               name={borderName}
               control={checkoutBranding.forms.coloursForm.control}
+              onResetClick={onResetClick}
             />
 
             <ColourChoice
@@ -188,6 +209,7 @@ function Scheme ({ scheme }: { scheme: SchemeOptions }) {
               helpText="The decorative color for highlighting specific parts of the user interface."
               name={decorativeName}
               control={checkoutBranding.forms.coloursForm.control}
+              onResetClick={onResetClick}
             />
 
             <ColourChoice
@@ -196,6 +218,7 @@ function Scheme ({ scheme }: { scheme: SchemeOptions }) {
               helpText="The color of icons."
               name={iconName}
               control={checkoutBranding.forms.coloursForm.control}
+              onResetClick={onResetClick}
             />
 
             <ColourChoice
@@ -204,6 +227,7 @@ function Scheme ({ scheme }: { scheme: SchemeOptions }) {
               helpText="The color of text."
               name={textName}
               control={checkoutBranding.forms.coloursForm.control}
+              onResetClick={onResetClick}
             />
           </BlockStack>
         </Box>

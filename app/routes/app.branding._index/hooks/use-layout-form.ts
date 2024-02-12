@@ -97,8 +97,6 @@ export function useLayoutForm (currentBranding: CurrentCheckoutBranding): Brandi
 }
 
 function cleanupMediaImageIdFields (data: any): CheckoutBrandingLayoutFields {
-  console.log({ data })
-
   for (const [key, value] of Object.entries(data)) {
     if (typeof value === 'object' && !Array.isArray(value) && value != null) {
       data[key] = cleanupMediaImageIdFields(value)

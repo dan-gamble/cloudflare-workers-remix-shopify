@@ -48,12 +48,9 @@ export function useBrandingForms (
     },
 
     toValues () {
-      const values = Object.values(forms)
+      return Object.values(forms)
         .map(form => form.toValues())
         .reduce((acc, values) => merge(acc, values), {})
-      // TODO: Safe parse
-
-      return checkoutBrandingInputSchema.parse(values)
     },
 
     reset () {
