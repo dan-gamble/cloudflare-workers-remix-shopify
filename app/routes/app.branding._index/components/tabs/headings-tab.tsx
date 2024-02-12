@@ -21,30 +21,30 @@ export function HeadingsTab () {
             <BlockStack gap="400">
               <TypographyFontEnum
                 control={checkoutBranding.forms.headings.control}
-                name="headlkingLevel1.typography.font"
+                name="headingLevel1.typography.font"
               />
 
               <InlineGrid gap="300" columns={2}>
                 <TypographyKerningEnum
                   control={checkoutBranding.forms.headings.control}
-                  name="headlkingLevel1.typography.kerning"
+                  name="headingLevel1.typography.kerning"
                 />
 
                 <TypographyLetterCaseEnum
                   control={checkoutBranding.forms.headings.control}
-                  name="headlkingLevel1.typography.letterCase"
+                  name="headingLevel1.typography.letterCase"
                 />
               </InlineGrid>
 
               <InlineGrid gap="300" columns={2}>
                 <TypographySizeEnum
                   control={checkoutBranding.forms.headings.control}
-                  name="headlkingLevel1.typography.size"
+                  name="headingLevel1.typography.size"
                 />
 
                 <TypographyWeightEnum
                   control={checkoutBranding.forms.headings.control}
-                  name="headlkingLevel1.typography.weight"
+                  name="headingLevel1.typography.weight"
                 />
               </InlineGrid>
             </BlockStack>
@@ -64,30 +64,30 @@ export function HeadingsTab () {
             <BlockStack gap="400">
               <TypographyFontEnum
                 control={checkoutBranding.forms.headings.control}
-                name="headlkingLevel2.typography.font"
+                name="headingLevel2.typography.font"
               />
 
               <InlineGrid gap="300" columns={2}>
                 <TypographyKerningEnum
                   control={checkoutBranding.forms.headings.control}
-                  name="headlkingLevel2.typography.kerning"
+                  name="headingLevel2.typography.kerning"
                 />
 
                 <TypographyLetterCaseEnum
                   control={checkoutBranding.forms.headings.control}
-                  name="headlkingLevel2.typography.letterCase"
+                  name="headingLevel2.typography.letterCase"
                 />
               </InlineGrid>
 
               <InlineGrid gap="300" columns={2}>
                 <TypographySizeEnum
                   control={checkoutBranding.forms.headings.control}
-                  name="headlkingLevel2.typography.size"
+                  name="headingLevel2.typography.size"
                 />
 
                 <TypographyWeightEnum
                   control={checkoutBranding.forms.headings.control}
-                  name="headlkingLevel2.typography.weight"
+                  name="headingLevel2.typography.weight"
                 />
               </InlineGrid>
             </BlockStack>
@@ -107,30 +107,30 @@ export function HeadingsTab () {
             <BlockStack gap="400">
               <TypographyFontEnum
                 control={checkoutBranding.forms.headings.control}
-                name="headlkingLevel3.typography.font"
+                name="headingLevel3.typography.font"
               />
 
               <InlineGrid gap="300" columns={2}>
                 <TypographyKerningEnum
                   control={checkoutBranding.forms.headings.control}
-                  name="headlkingLevel3.typography.kerning"
+                  name="headingLevel3.typography.kerning"
                 />
 
                 <TypographyLetterCaseEnum
                   control={checkoutBranding.forms.headings.control}
-                  name="headlkingLevel3.typography.letterCase"
+                  name="headingLevel3.typography.letterCase"
                 />
               </InlineGrid>
 
               <InlineGrid gap="300" columns={2}>
                 <TypographySizeEnum
                   control={checkoutBranding.forms.headings.control}
-                  name="headlkingLevel3.typography.size"
+                  name="headingLevel3.typography.size"
                 />
 
                 <TypographyWeightEnum
                   control={checkoutBranding.forms.headings.control}
-                  name="headlkingLevel3.typography.weight"
+                  name="headingLevel3.typography.weight"
                 />
               </InlineGrid>
             </BlockStack>

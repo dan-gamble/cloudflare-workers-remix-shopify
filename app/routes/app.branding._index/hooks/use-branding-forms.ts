@@ -9,6 +9,7 @@ import { useLayoutForm } from '~/routes/app.branding._index/hooks/use-layout-for
 import { merge } from 'ts-deepmerge'
 import type { CurrentCheckoutBranding } from '~/routes/app.branding/types'
 import type { CustomFontFragment } from '~/types/admin.generated'
+import { usePreviewForm } from '~/routes/app.branding._index/hooks/use-preview-form'
 
 export function useBrandingForms (
   currentBranding: CurrentCheckoutBranding,
@@ -22,6 +23,8 @@ export function useBrandingForms (
   const layoutForm = useLayoutForm(currentBranding)
   const typographyForm = useTypographyForm(currentBranding, customFonts)
 
+  const previewForm = usePreviewForm(currentBranding)
+
   const forms = {
     buttons: buttonsForm,
     colours: coloursForm,
@@ -30,6 +33,8 @@ export function useBrandingForms (
     headings: headingsForm,
     layout: layoutForm,
     typography: typographyForm,
+
+    preview: previewForm,
   }
 
   return {
@@ -41,7 +46,11 @@ export function useBrandingForms (
       const values = Object.values(forms)
         .filter(form => form.isDirty)
         .map(form => form.toDirtyInputValues())
-        .reduce((acc, values) => merge(acc, values), {})
+        .reduce((acc, values) => {
+          console.log({ acc, values })
+
+          return merge(acc, values)
+        }, {})
       // TODO: Safe parse
 
       return checkoutBrandingInputSchema.parse(values)
@@ -50,7 +59,9 @@ export function useBrandingForms (
     toValues () {
       return Object.values(forms)
         .map(form => form.toValues())
-        .reduce((acc, values) => merge(acc, values), {})
+        .reduce((acc, values) => {
+          return merge(acc, values)
+        }, {})
     },
 
     reset () {

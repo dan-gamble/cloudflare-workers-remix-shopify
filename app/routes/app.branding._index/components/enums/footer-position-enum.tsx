@@ -3,17 +3,17 @@ import { useCheckoutBrandingData } from '~/routes/app.branding/route'
 import { SimpleEnum } from '~/routes/app.branding._index/components/enums/simple-enum'
 import type { FieldPath, FieldValues } from 'react-hook-form'
 
-export function CornerRadiusEnum<
+export function FooterPositionEnum<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
-> ({ label = 'Corner radius', ...props }: EnumProps<TFieldValues, TName>) {
+> ({ label = 'Position', ...props }: EnumProps<TFieldValues, TName>) {
   const { enums } = useCheckoutBrandingData()
 
   return (
     <SimpleEnum
       {...props}
       label={label}
-      enumValues={enums.cornerRadius.enumValues}
+      enumValues={enums.footerPosition.enumValues}
     />
   )
 }

@@ -4,7 +4,6 @@ import { restResources } from '@shopify/shopify-api/rest/admin/2024-01'
 import {
   AppDistribution,
   DeliveryMethod,
-  LATEST_API_VERSION,
   shopifyApp
 } from '@shopify/shopify-app-remix'
 import { KVSessionStorage } from '@shopify/shopify-app-session-storage-kv'
@@ -19,7 +18,8 @@ export function createShopifyApp (env: Env, db: Database) {
   const shopify = shopifyApp({
     apiKey: env.SHOPIFY_API_KEY,
     apiSecretKey: env.SHOPIFY_API_SECRET || '',
-    apiVersion: LATEST_API_VERSION,
+    // @ts-ignore
+    apiVersion: "2024-04",
     scopes: env.SCOPES?.split(','),
     appUrl: env.SHOPIFY_APP_URL || '',
     authPathPrefix: '/auth',

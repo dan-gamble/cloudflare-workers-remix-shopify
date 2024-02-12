@@ -1,11 +1,11 @@
-import { brandingFragment } from '~/routes/app.branding/graphql/fragments/branding-fragment'
+import { checkoutBrandingFragment } from '~/routes/app.branding._index/graphql/fragments/checkout-branding-fragment'
 
 export const brandingQuery = `#graphql
-  ${brandingFragment}
+  ${checkoutBrandingFragment}
 
   query checkoutBranding($checkoutProfileId: ID!) {
     checkoutBranding(checkoutProfileId: $checkoutProfileId) {
-      ...BrandingFragment
+      ...CheckoutBrandingFragment
     }
   }
 ` as const

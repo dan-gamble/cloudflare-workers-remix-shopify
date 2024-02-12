@@ -1,8 +1,12 @@
 import type { EnumProps } from '~/routes/app.branding._index/components/enums/index'
 import { Select } from '~/components/select'
 import { enumValuesToOptions } from '~/routes/app.branding._index/components/enums/utils'
+import type { FieldPath, FieldValues } from 'react-hook-form'
 
-export function SimpleEnum ({ control, enumValues, label, name }: EnumProps & { enumValues: { name: string }[] }) {
+export function SimpleEnum<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+> ({ control, enumValues, label, name }: EnumProps<TFieldValues, TName> & { enumValues: { name: string }[] }) {
   return (
     <Select
       control={control}

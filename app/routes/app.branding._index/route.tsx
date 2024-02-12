@@ -126,7 +126,7 @@ export default function CheckoutBranding () {
           icon: ViewIcon,
           onAction: () => {
             open(
-              `shopify:admin/settings/checkout/preview/profiles/${parseGid(checkoutBrandingData.branding.profileId)}`,
+              `shopify:admin/settings/checkout/editor/profiles/${parseGid(checkoutBrandingData.branding.profileId)}?page=checkout`,
               '_blank',
             )
           },

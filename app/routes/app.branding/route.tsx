@@ -7,7 +7,11 @@ import { makeRequest } from '~/utils/graphql.server'
 import { invariant } from '@epic-web/invariant'
 import { checkoutProfilesQuery } from '~/routes/app.branding/graphql/queries/checkout-profiles-query'
 import { brandingQuery } from '~/routes/app.branding/graphql/queries/branding-query'
-import type { CheckoutBrandingQuery, CheckoutProfilesQuery, CustomFontFragment } from '~/types/admin.generated'
+import type {
+  CheckoutBrandingQuery,
+  CheckoutProfileFragmentFragment,
+  CustomFontFragment,
+} from '~/types/admin.generated'
 import { useBrandingForms } from '~/routes/app.branding._index/hooks/use-branding-forms'
 import { combineServerTimings, makeTimings, time } from '~/utils/timing.server'
 import { hasDismissedCustomFontsBanner } from '~/routes/app.branding.dismiss-custom-fonts-banner'
@@ -24,16 +28,21 @@ type Enum = {
 }
 
 type EnumsContext = {
+  background: Enum;
   backgroundStyles: Enum;
   border: Enum;
+  borderStyle: Enum;
+  borderWidth: Enum;
   colorSelection: Enum;
   colorSchemeSelection: Enum;
   cornerRadius: Enum;
   fontLoadingStrategies: Enum;
+  footerPosition: Enum;
   globalCornerRadius: Enum;
   headerAlignment: Enum;
   headerPosition: Enum;
   labelPosition: Enum;
+  shadow: Enum;
   simpleBorder: Enum;
   spacing: Enum;
   spacingKeyword: Enum;
@@ -46,7 +55,7 @@ type EnumsContext = {
 
 type BrandingContext = {
   profileId: string;
-  profiles: CheckoutProfilesQuery['checkoutProfiles']['nodes'];
+  profiles: CheckoutProfileFragmentFragment[];
   current: CheckoutBrandingQuery['checkoutBranding'];
 }
 
@@ -54,6 +63,7 @@ type BrandingData = {
   fonts: FontDataContext;
   enums: EnumsContext;
   branding: BrandingContext;
+  sessionToken: string | undefined;
 }
 
 type CheckoutBrandingContext = {
@@ -131,6 +141,7 @@ export async function loader ({ request }: LoaderFunctionArgs) {
       checkoutProfileId,
       currentBranding,
       hasDismissedCustomFontsBanner: dismissedCustomFontsBanner,
+      sessionToken: request.headers.get('authorization')?.replace('Bearer ', ''),
     },
     {
       headers: { 'Server-Timing': timings.toString() },
@@ -161,6 +172,10 @@ export default function Branding () {
             shopifyFonts: data.shopifyFontFamilyNames,
           },
           enums: {
+            background: {
+              name: enumValues.background?.name ?? '',
+              enumValues: enumValues.background?.enumValues ?? [],
+            },
             backgroundStyles: {
               name: enumValues.backgroundStyles?.name ?? '',
               enumValues: enumValues.backgroundStyles?.enumValues ?? [],
@@ -168,6 +183,14 @@ export default function Branding () {
             border: {
               name: enumValues.border?.name ?? '',
               enumValues: enumValues.border?.enumValues ?? [],
+            },
+            borderStyle: {
+              name: enumValues.borderStyle?.name ?? '',
+              enumValues: enumValues.borderStyle?.enumValues ?? [],
+            },
+            borderWidth: {
+              name: enumValues.borderWidth?.name ?? '',
+              enumValues: enumValues.borderWidth?.enumValues ?? [],
             },
             colorSelection: {
               name: enumValues.colorSelection?.name ?? '',
@@ -185,6 +208,10 @@ export default function Branding () {
               name: enumValues.fontLoadingStrategies?.name ?? '',
               enumValues: enumValues.fontLoadingStrategies?.enumValues ?? [],
             },
+            footerPosition: {
+              name: enumValues.footerPosition?.name ?? '',
+              enumValues: enumValues.footerPosition?.enumValues ?? [],
+            },
             globalCornerRadius: {
               name: enumValues.globalCornerRadius?.name ?? '',
               enumValues: enumValues.globalCornerRadius?.enumValues ?? [],
@@ -200,6 +227,10 @@ export default function Branding () {
             labelPosition: {
               name: enumValues.labelPosition?.name ?? '',
               enumValues: enumValues.labelPosition?.enumValues ?? [],
+            },
+            shadow: {
+              name: enumValues.shadow?.name ?? '',
+              enumValues: enumValues.shadow?.enumValues ?? [],
             },
             simpleBorder: {
               name: enumValues.simpleBorder?.name ?? '',
@@ -236,9 +267,10 @@ export default function Branding () {
           },
           branding: {
             profileId: data.checkoutProfileId,
-            profiles: checkoutProfiles.nodes,
+            profiles: checkoutProfiles.nodes as CheckoutProfileFragmentFragment[],
             current: currentBranding,
           },
+          sessionToken: data.sessionToken,
         },
         branding,
         state: {

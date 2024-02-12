@@ -1,6 +1,12 @@
 export const checkoutBrandingFragment = `#graphql
   fragment CheckoutBrandingFragment on CheckoutBranding {
     customizations {
+      buyerJourney {
+        visibility
+      }
+      cartLink {
+        visibility
+      }
       checkbox {
         cornerRadius
       }
@@ -15,11 +21,22 @@ export const checkoutBrandingFragment = `#graphql
         cornerRadius
         labelPosition
       }
+      expressCheckout {
+        button {
+          cornerRadius
+        }
+      }
       favicon {
         image {
           id
           url
         }
+      }
+      footer {
+        content {
+          visibility
+        }
+        position
       }
       global {
         cornerRadius
@@ -42,6 +59,7 @@ export const checkoutBrandingFragment = `#graphql
             url
           }
           maxWidth
+          visibility
         }
         position
       }
@@ -80,6 +98,16 @@ export const checkoutBrandingFragment = `#graphql
           }
         }
         colorScheme
+        section {
+          background
+          border
+          borderStyle
+          borderWidth
+          colorScheme
+          cornerRadius
+          padding
+          shadow
+        }
       }
       merchandiseThumbnail {
         border
@@ -92,6 +120,16 @@ export const checkoutBrandingFragment = `#graphql
             id
             url
           }
+        }
+        section {
+          background
+          border
+          borderStyle
+          borderWidth
+          colorScheme
+          cornerRadius
+          padding
+          shadow
         }
       }
       primaryButton {

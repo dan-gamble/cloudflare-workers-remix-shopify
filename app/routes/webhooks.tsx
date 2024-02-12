@@ -9,6 +9,7 @@ export async function action ({ request }: ActionFunctionArgs) {
     await context.shopify.authenticate.webhook(request)
 
   switch (topic) {
+    // @ts-ignore
     case 'APP_UNINSTALLED':
       await AppUninstalledJob.dispatch(shop)
 

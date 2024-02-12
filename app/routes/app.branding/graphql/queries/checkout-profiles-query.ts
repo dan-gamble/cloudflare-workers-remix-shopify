@@ -10,12 +10,17 @@ export const checkoutProfilesQuery = `#graphql
     url
   }
 
-  query checkoutProfiles {
+fragment CheckoutProfileFragment on CheckoutProfile {
+  id
+  name
+  isPublished
+  editedAt
+}
+
+query checkoutProfiles {
     checkoutProfiles(first: 100) {
       nodes {
-        id
-        name
-        isPublished
+        ...CheckoutProfileFragment
       }
     }
 
@@ -31,6 +36,12 @@ export const checkoutProfilesQuery = `#graphql
       }
     }
 
+    background: __type(name: "CheckoutBrandingBackground") {
+      name
+      enumValues {
+        name
+      }
+    }
     backgroundStyles: __type(name: "CheckoutBrandingBackgroundStyle") {
       name
       enumValues {
@@ -38,6 +49,18 @@ export const checkoutProfilesQuery = `#graphql
       }
     }
     border: __type(name: "CheckoutBrandingBorder") {
+      name
+      enumValues {
+        name
+      }
+    }
+    borderStyle: __type(name: "CheckoutBrandingBorderStyle") {
+      name
+      enumValues {
+        name
+      }
+    }
+    borderWidth: __type(name: "CheckoutBrandingBorderWidth") {
       name
       enumValues {
         name
@@ -67,6 +90,12 @@ export const checkoutProfilesQuery = `#graphql
         name
       }
     }
+    footerPosition: __type(name: "CheckoutBrandingFooterPosition") {
+      name
+      enumValues {
+        name
+      }
+    }
     globalCornerRadius: __type(name: "CheckoutBrandingGlobalCornerRadius") {
       name
       enumValues {
@@ -86,6 +115,12 @@ export const checkoutProfilesQuery = `#graphql
       }
     }
     labelPosition: __type(name: "CheckoutBrandingLabelPosition") {
+      name
+      enumValues {
+        name
+      }
+    }
+    shadow: __type(name: "CheckoutBrandingShadow") {
       name
       enumValues {
         name

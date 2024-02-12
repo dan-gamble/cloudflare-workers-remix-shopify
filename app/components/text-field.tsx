@@ -26,8 +26,6 @@ export function TextField<
     disabled: props.disabled,
   })
 
-  // console.log(field, fieldState)
-
   return (
     <ShopifyTextField
       {...props}
