@@ -36,6 +36,7 @@ type EnumsContext = {
   labelPosition: Enum;
   simpleBorder: Enum;
   spacing: Enum;
+  spacingKeyword: Enum;
   typographyFont: Enum;
   typographyKerning: Enum;
   typographyLetterCase: Enum;
@@ -207,6 +208,10 @@ export default function Branding () {
             spacing: {
               name: enumValues.spacing?.name ?? '',
               enumValues: enumValues.spacing?.enumValues ?? [],
+            },
+            spacingKeyword: {
+              name: enumValues.spacingKeyword?.name ?? '',
+              enumValues: enumValues.spacingKeyword?.enumValues ?? [],
             },
             typographyFont: {
               name: enumValues.typographyFont?.name ?? '',

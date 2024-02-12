@@ -103,6 +103,12 @@ export const checkoutProfilesQuery = `#graphql
         name
       }
     }
+    spacingKeyword: __type(name: "CheckoutBrandingSpacingKeyword") {
+      name
+      enumValues {
+        name
+      }
+    }
     typographyFont: __type(name: "CheckoutBrandingTypographyFont") {
       name
       enumValues {

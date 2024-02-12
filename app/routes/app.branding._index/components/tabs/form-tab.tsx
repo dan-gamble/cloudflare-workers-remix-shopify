@@ -1,4 +1,4 @@
-import { Box, Divider, FormLayout, Text, BlockStack, InlineGrid } from '@shopify/polaris'
+import { Box, Divider, Text, BlockStack, InlineGrid } from '@shopify/polaris'
 import { CornerRadiusEnum } from '~/routes/app.branding._index/components/enums/corner-radius-enum'
 import { useCheckoutBranding } from '~/routes/app.branding/route'
 import { SimpleBorderEnum } from '~/routes/app.branding._index/components/enums/simple-border-enum'
@@ -9,6 +9,7 @@ import { TypographyKerningEnum } from '~/routes/app.branding._index/components/e
 import { TypographyLetterCaseEnum } from '~/routes/app.branding._index/components/enums/typography-letter-case-enum'
 import { TypographySizeEnum } from '~/routes/app.branding._index/components/enums/typography-size-enum'
 import { TypographyWeightEnum } from '~/routes/app.branding._index/components/enums/typography-weight-enum'
+import { SpacingKeywordEnum } from '~/routes/app.branding._index/components/enums/spacing-keyword-enum'
 
 export function FormTab () {
   const checkoutBranding = useCheckoutBranding()
@@ -22,13 +23,31 @@ export function FormTab () {
           <BlockStack gap="400">
             <Text as="p">The checkboxes customizations.</Text>
 
-            <FormLayout>
-              import
+            <BlockStack gap="400">
               <CornerRadiusEnum
                 control={checkoutBranding.forms.form.control}
                 name="checkbox.cornerRadius"
               />
-            </FormLayout>
+            </BlockStack>
+          </BlockStack>
+        </BlockStack>
+      </Box>
+
+      <Divider />
+
+      <Box padding="500">
+        <BlockStack gap="200">
+          <Text variant="headingSm" as="h3">Choice list</Text>
+
+          <BlockStack gap="400">
+            <Text as="p">The choice list customizations.</Text>
+
+            <BlockStack gap="400">
+              <SpacingKeywordEnum
+                control={checkoutBranding.forms.form.control}
+                name="choiceList.group.spacing"
+              />
+            </BlockStack>
           </BlockStack>
         </BlockStack>
       </Box>
@@ -42,8 +61,8 @@ export function FormTab () {
           <BlockStack gap="400">
             <Text as="p">The form controls customizations.</Text>
 
-            <FormLayout>
-              <FormLayout.Group>
+            <BlockStack gap="400">
+              <InlineGrid gap="300" columns={2}>
                 <SimpleBorderEnum
                   control={checkoutBranding.forms.form.control}
                   name="control.border"
@@ -63,8 +82,8 @@ export function FormTab () {
                   control={checkoutBranding.forms.form.control}
                   name="control.labelPosition"
                 />
-              </FormLayout.Group>
-            </FormLayout>
+              </InlineGrid>
+            </BlockStack>
           </BlockStack>
         </BlockStack>
       </Box>

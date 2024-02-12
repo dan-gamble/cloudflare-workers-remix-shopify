@@ -12,6 +12,13 @@ export function SimpleEnum ({ control, enumValues, label, name }: EnumProps & { 
         { label: '-', value: '' },
         ...enumValuesToOptions(enumValues),
       ]}
+      onChange={(value, field) => {
+        if (value === '') {
+          return field.onChange(null)
+        }
+
+        return field.onChange(value)
+      }}
     />
   )
 }

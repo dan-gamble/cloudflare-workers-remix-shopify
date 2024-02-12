@@ -28,6 +28,13 @@ export function ColourSchemeSelectionEnum({
       label={label}
       options={[{ label: '-', value: '' }, ...options]}
       {...props}
+      onChange={(value, field) => {
+        if (value === '') {
+          return field.onChange(null)
+        }
+
+        return field.onChange(value)
+      }}
     />
   )
 }

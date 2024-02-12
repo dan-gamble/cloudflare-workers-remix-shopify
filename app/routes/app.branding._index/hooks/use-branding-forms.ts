@@ -40,7 +40,7 @@ export function useBrandingForms (
     toDirtyInputValues () {
       const values = Object.values(forms)
         .filter(form => form.isDirty)
-        .map(form => form.toValues())
+        .map(form => form.toDirtyInputValues())
         .reduce((acc, values) => merge(acc, values), {})
       // TODO: Safe parse
 
