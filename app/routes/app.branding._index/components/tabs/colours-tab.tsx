@@ -13,7 +13,7 @@ export function ColoursTab () {
   function onResetClick<
     TFieldName extends FieldPath<CheckoutBrandingColorsFields> = FieldPath<CheckoutBrandingColorsFields>
   > (name: TFieldName) {
-    return checkoutBranding.forms.coloursForm.resetField(name)
+    return checkoutBranding.forms.colours.resetField(name)
   }
 
   return (
@@ -29,7 +29,7 @@ export function ColoursTab () {
               label="Accent"
               helpText="A color used for interaction, like links and focus states."
               name="global.accent"
-              control={checkoutBranding.forms.coloursForm.control}
+              control={checkoutBranding.forms.colours.control}
               onResetClick={onResetClick}
             />
 
@@ -37,7 +37,7 @@ export function ColoursTab () {
               label="Brand"
               helpText="A color strongly associated with the merchant, currently used for elements like primary and secondary buttons."
               name="global.brand"
-              control={checkoutBranding.forms.coloursForm.control}
+              control={checkoutBranding.forms.colours.control}
               onResetClick={onResetClick}
             />
 
@@ -45,7 +45,7 @@ export function ColoursTab () {
               label="Critical"
               helpText="A semantic color used for components that communicate critical content."
               name="global.critical"
-              control={checkoutBranding.forms.coloursForm.control}
+              control={checkoutBranding.forms.colours.control}
               onResetClick={onResetClick}
             />
 
@@ -53,7 +53,7 @@ export function ColoursTab () {
               label="Decorative"
               helpText="A color used to highlight certain areas of the user interface."
               name="global.decorative"
-              control={checkoutBranding.forms.coloursForm.control}
+              control={checkoutBranding.forms.colours.control}
               onResetClick={onResetClick}
             />
 
@@ -61,7 +61,7 @@ export function ColoursTab () {
               label="Info"
               helpText="A semantic color used for components that communicate informative content."
               name="global.info"
-              control={checkoutBranding.forms.coloursForm.control}
+              control={checkoutBranding.forms.colours.control}
               onResetClick={onResetClick}
             />
 
@@ -69,7 +69,7 @@ export function ColoursTab () {
               label="Success"
               helpText="A semantic color used for components that communicate successful actions."
               name="global.success"
-              control={checkoutBranding.forms.coloursForm.control}
+              control={checkoutBranding.forms.colours.control}
               onResetClick={onResetClick}
             />
 
@@ -77,7 +77,7 @@ export function ColoursTab () {
               label="Warning"
               helpText="A semantic color used for components that display content that requires attention."
               name="global.warning"
-              control={checkoutBranding.forms.coloursForm.control}
+              control={checkoutBranding.forms.colours.control}
               onResetClick={onResetClick}
             />
           </BlockStack>
@@ -93,21 +93,21 @@ export function ColoursTab () {
           <BlockStack gap="400">
             <ButtonGroup variant="segmented" fullWidth>
               <Button
-                pressed={checkoutBranding.forms.coloursForm.currentlySelectedScheme === SchemeOptions.Scheme1}
-                onClick={() => checkoutBranding.forms.coloursForm.setCurrentlySelectedScheme(SchemeOptions.Scheme1)}
+                pressed={checkoutBranding.forms.colours.currentlySelectedScheme === SchemeOptions.Scheme1}
+                onClick={() => checkoutBranding.forms.colours.setCurrentlySelectedScheme(SchemeOptions.Scheme1)}
               >
                 Scheme 1
               </Button>
 
               <Button
-                pressed={checkoutBranding.forms.coloursForm.currentlySelectedScheme === SchemeOptions.Scheme2}
-                onClick={() => checkoutBranding.forms.coloursForm.setCurrentlySelectedScheme(SchemeOptions.Scheme2)}
+                pressed={checkoutBranding.forms.colours.currentlySelectedScheme === SchemeOptions.Scheme2}
+                onClick={() => checkoutBranding.forms.colours.setCurrentlySelectedScheme(SchemeOptions.Scheme2)}
               >
                 Scheme 2
               </Button>
             </ButtonGroup>
 
-            <Scheme scheme={checkoutBranding.forms.coloursForm.currentlySelectedScheme} />
+            <Scheme scheme={checkoutBranding.forms.colours.currentlySelectedScheme} />
           </BlockStack>
         </BlockStack>
       </Box>
@@ -162,7 +162,7 @@ function Scheme ({ scheme }: { scheme: SchemeOptions }) {
   function onResetClick<
     TFieldName extends FieldPath<CheckoutBrandingColorsFields> = FieldPath<CheckoutBrandingColorsFields>
   > (name: TFieldName) {
-    return checkoutBranding.forms.coloursForm.resetField(name)
+    return checkoutBranding.forms.colours.resetField(name)
   }
 
   return (
@@ -181,7 +181,7 @@ function Scheme ({ scheme }: { scheme: SchemeOptions }) {
               label="Accent"
               helpText="The color of accented objects (links and focused state)."
               name={accentName}
-              control={checkoutBranding.forms.coloursForm.control}
+              control={checkoutBranding.forms.colours.control}
               onResetClick={onResetClick}
             />
 
@@ -190,7 +190,7 @@ function Scheme ({ scheme }: { scheme: SchemeOptions }) {
               label="Background"
               helpText="The color of the background."
               name={backgroundName}
-              control={checkoutBranding.forms.coloursForm.control}
+              control={checkoutBranding.forms.colours.control}
               onResetClick={onResetClick}
             />
 
@@ -199,7 +199,7 @@ function Scheme ({ scheme }: { scheme: SchemeOptions }) {
               label="Borders"
               helpText="The color of borders."
               name={borderName}
-              control={checkoutBranding.forms.coloursForm.control}
+              control={checkoutBranding.forms.colours.control}
               onResetClick={onResetClick}
             />
 
@@ -208,7 +208,7 @@ function Scheme ({ scheme }: { scheme: SchemeOptions }) {
               label="Decorative"
               helpText="The decorative color for highlighting specific parts of the user interface."
               name={decorativeName}
-              control={checkoutBranding.forms.coloursForm.control}
+              control={checkoutBranding.forms.colours.control}
               onResetClick={onResetClick}
             />
 
@@ -217,7 +217,7 @@ function Scheme ({ scheme }: { scheme: SchemeOptions }) {
               label="Icons"
               helpText="The color of icons."
               name={iconName}
-              control={checkoutBranding.forms.coloursForm.control}
+              control={checkoutBranding.forms.colours.control}
               onResetClick={onResetClick}
             />
 
@@ -226,7 +226,7 @@ function Scheme ({ scheme }: { scheme: SchemeOptions }) {
               label="Text"
               helpText="The color of text."
               name={textName}
-              control={checkoutBranding.forms.coloursForm.control}
+              control={checkoutBranding.forms.colours.control}
               onResetClick={onResetClick}
             />
           </BlockStack>

@@ -223,7 +223,7 @@ export default function CheckoutBranding () {
                     <BlockStack gap="400">
                       <TextField
                         name="base"
-                        control={checkoutBranding.forms.cornerRadiusForm.control}
+                        control={checkoutBranding.forms.cornerRadius.control}
                         label="Base"
                         type="number"
                         min="0"
@@ -242,7 +242,7 @@ export default function CheckoutBranding () {
 
                       <TextField
                         name="small"
-                        control={checkoutBranding.forms.cornerRadiusForm.control}
+                        control={checkoutBranding.forms.cornerRadius.control}
                         label="Small"
                         type="number"
                         min="0"
@@ -261,7 +261,7 @@ export default function CheckoutBranding () {
 
                       <TextField
                         name="large"
-                        control={checkoutBranding.forms.cornerRadiusForm.control}
+                        control={checkoutBranding.forms.cornerRadius.control}
                         label="Large"
                         type="number"
                         min="0"

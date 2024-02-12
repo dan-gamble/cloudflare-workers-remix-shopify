@@ -24,18 +24,18 @@ export function LayoutTab() {
 
           <BlockStack gap="400">
             <FilePicker
-              control={checkoutBranding.forms.layoutForm.control}
+              control={checkoutBranding.forms.layout.control}
               name="favicon.mediaImageId"
               key="Favicon"
               label="Image"
               helpText="The favicon image (must be of PNG format)."
               baseQuery="status:ready media_type:Image filename:*.png used_in:none"
-              defaultImageUrl={checkoutBranding.forms.layoutForm.imageUrls.favicon ?? ''}
+              defaultImageUrl={checkoutBranding.forms.layout.imageUrls.favicon ?? ''}
               onResetClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                 e.preventDefault()
                 e.stopPropagation()
 
-                checkoutBranding.forms.layoutForm.resetField('favicon.mediaImageId')
+                checkoutBranding.forms.layout.resetField('favicon.mediaImageId')
               }}
             />
           </BlockStack>
@@ -54,17 +54,17 @@ export function LayoutTab() {
             <BlockStack gap="400">
               <InlineGrid gap="300" columns={2}>
                 <CornerRadiusEnum
-                  control={checkoutBranding.forms.layoutForm.control}
+                  control={checkoutBranding.forms.layout.control}
                   name="global.cornerRadius"
                 />
 
                 <TypographyKerningEnum
-                  control={checkoutBranding.forms.layoutForm.control}
+                  control={checkoutBranding.forms.layout.control}
                   name="global.typography.kerning"
                 />
 
                 <TypographyLetterCaseEnum
-                  control={checkoutBranding.forms.layoutForm.control}
+                  control={checkoutBranding.forms.layout.control}
                   name="global.typography.letterCase"
                 />
               </InlineGrid>
@@ -83,42 +83,42 @@ export function LayoutTab() {
 
           <BlockStack gap="400">
             <FilePicker
-              control={checkoutBranding.forms.layoutForm.control}
+              control={checkoutBranding.forms.layout.control}
               name="header.banner.mediaImageId"
               key="Banner"
               label="Banner"
               helpText="The background image of the header (must not be of SVG format)."
               baseQuery="status:ready media_type:Image -filename:*.svg used_in:none"
-              defaultImageUrl={checkoutBranding.forms.layoutForm.imageUrls.headerBanner ?? ''}
+              defaultImageUrl={checkoutBranding.forms.layout.imageUrls.headerBanner ?? ''}
               onResetClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                 e.preventDefault()
                 e.stopPropagation()
 
-                checkoutBranding.forms.layoutForm.resetField('header.banner.mediaImageId')
+                checkoutBranding.forms.layout.resetField('header.banner.mediaImageId')
               }}
             />
 
             <BlockStack gap="200">
               <FilePicker
-                control={checkoutBranding.forms.layoutForm.control}
+                control={checkoutBranding.forms.layout.control}
                 name="header.logo.image.mediaImageId"
                 key="Logo"
                 label="Logo"
                 helpText="The logo image (must not be of SVG format)."
                 baseQuery="status:ready media_type:Image -filename:*.svg used_in:none"
-                defaultImageUrl={checkoutBranding.forms.layoutForm.imageUrls.headerLogo ?? ''}
+                defaultImageUrl={checkoutBranding.forms.layout.imageUrls.headerLogo ?? ''}
                 onResetClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                   e.preventDefault()
                   e.stopPropagation()
 
-                  checkoutBranding.forms.layoutForm.resetField('header.logo.image.mediaImageId')
+                  checkoutBranding.forms.layout.resetField('header.logo.image.mediaImageId')
                 }}
               />
 
               <Box paddingInline="200">
                 <RangeSlider
                   label="Max width"
-                  control={checkoutBranding.forms.layoutForm.control}
+                  control={checkoutBranding.forms.layout.control}
                   name="header.logo.maxWidth"
                   output
                   min={50}
@@ -139,12 +139,12 @@ export function LayoutTab() {
 
             <InlineGrid gap="300" columns={2}>
               <HeaderAlignmentEnum
-                control={checkoutBranding.forms.layoutForm.control}
+                control={checkoutBranding.forms.layout.control}
                 name="header.alignment"
               />
 
               <HeaderPositionEnum
-                control={checkoutBranding.forms.layoutForm.control}
+                control={checkoutBranding.forms.layout.control}
                 name="header.position"
               />
             </InlineGrid>
@@ -163,23 +163,23 @@ export function LayoutTab() {
           <BlockStack gap="400">
             <BlockStack gap="400">
               <FilePicker
-                control={checkoutBranding.forms.layoutForm.control}
+                control={checkoutBranding.forms.layout.control}
                 name="main.backgroundImage.mediaImageId"
                 key="Main Background Image"
                 label="Background image"
                 helpText="The background image of the main area (must not be of SVG format)."
                 baseQuery="status:ready media_type:Image -filename:*.svg used_in:none"
-                defaultImageUrl={checkoutBranding.forms.layoutForm.imageUrls.mainBackgroundImage ?? ''}
+                defaultImageUrl={checkoutBranding.forms.layout.imageUrls.mainBackgroundImage ?? ''}
                 onResetClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                   e.preventDefault()
                   e.stopPropagation()
 
-                  checkoutBranding.forms.layoutForm.resetField('main.backgroundImage.mediaImageId')
+                  checkoutBranding.forms.layout.resetField('main.backgroundImage.mediaImageId')
                 }}
               />
 
               <ColourSchemeSelectionEnum
-                control={checkoutBranding.forms.layoutForm.control}
+                control={checkoutBranding.forms.layout.control}
                 name="main.colorScheme"
               />
             </BlockStack>
@@ -198,23 +198,23 @@ export function LayoutTab() {
           <BlockStack gap="400">
             <BlockStack gap="400">
               <FilePicker
-                control={checkoutBranding.forms.layoutForm.control}
+                control={checkoutBranding.forms.layout.control}
                 name="orderSummary.backgroundImage.mediaImageId"
                 key="Order Summary Background Image"
                 label="Background image"
                 helpText="The background image of the order summary (must not be of SVG format)."
                 baseQuery="status:ready media_type:Image -filename:*.svg used_in:none"
-                defaultImageUrl={checkoutBranding.forms.layoutForm.imageUrls.orderSummaryBackgroundImage ?? ''}
+                defaultImageUrl={checkoutBranding.forms.layout.imageUrls.orderSummaryBackgroundImage ?? ''}
                 onResetClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                   e.preventDefault()
                   e.stopPropagation()
 
-                  checkoutBranding.forms.layoutForm.resetField('orderSummary.backgroundImage.mediaImageId')
+                  checkoutBranding.forms.layout.resetField('orderSummary.backgroundImage.mediaImageId')
                 }}
               />
 
               <ColourSchemeSelectionEnum
-                control={checkoutBranding.forms.layoutForm.control}
+                control={checkoutBranding.forms.layout.control}
                 name="orderSummary.colorScheme"
               />
             </BlockStack>
@@ -234,12 +234,12 @@ export function LayoutTab() {
             <BlockStack gap="400">
               <InlineGrid gap="300" columns={2}>
                 <SimpleBorderEnum
-                  control={checkoutBranding.forms.layoutForm.control}
+                  control={checkoutBranding.forms.layout.control}
                   name="merchandiseThumbnail.border"
                 />
 
                 <CornerRadiusEnum
-                  control={checkoutBranding.forms.layoutForm.control}
+                  control={checkoutBranding.forms.layout.control}
                   name="merchandiseThumbnail.cornerRadius"
                 />
               </InlineGrid>

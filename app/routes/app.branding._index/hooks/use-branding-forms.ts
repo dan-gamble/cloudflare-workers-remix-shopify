@@ -23,13 +23,13 @@ export function useBrandingForms (
   const typographyForm = useTypographyForm(currentBranding, customFonts)
 
   const forms = {
-    buttonsForm,
-    coloursForm,
-    cornerRadiusForm,
-    formForm,
-    headingsForm,
-    layoutForm,
-    typographyForm,
+    buttons: buttonsForm,
+    colours: coloursForm,
+    cornerRadius: cornerRadiusForm,
+    form: formForm,
+    headings: headingsForm,
+    layout: layoutForm,
+    typography: typographyForm,
   }
 
   return {

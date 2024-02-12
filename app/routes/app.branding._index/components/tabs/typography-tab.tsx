@@ -21,8 +21,8 @@ export function TypographyTab () {
 
   const [customFontsBannerDismissed, setCustomFontsBannerDismissed] = useState(false)
 
-  const PrimaryFontComponent = FontComponents[checkoutBranding.forms.typographyForm.primaryFormType]
-  const SecondaryFontComponent = FontComponents[checkoutBranding.forms.typographyForm.secondaryFormType]
+  const PrimaryFontComponent = FontComponents[checkoutBranding.forms.typography.primaryFormType]
+  const SecondaryFontComponent = FontComponents[checkoutBranding.forms.typography.secondaryFormType]
 
   const shouldShowCustomFontsBanner = (
     customFontsBannerDismissed === false &&
@@ -71,13 +71,13 @@ export function TypographyTab () {
                   disabled: checkoutBrandingData.fonts.customFonts.length === 0
                 },
               ]}
-              value={checkoutBranding.forms.typographyForm.primaryFormType}
-              onChange={value => checkoutBranding.forms.typographyForm.setPrimaryFormType(value as FontTypes)}
+              value={checkoutBranding.forms.typography.primaryFormType}
+              onChange={value => checkoutBranding.forms.typography.setPrimaryFormType(value as FontTypes)}
             />
 
             <PrimaryFontComponent
               lookupKey="primary"
-              key={checkoutBranding.forms.typographyForm.primaryFormType}
+              key={checkoutBranding.forms.typography.primaryFormType}
             />
           </BlockStack>
         </BlockStack>
@@ -101,13 +101,13 @@ export function TypographyTab () {
                     disabled: checkoutBrandingData.fonts.customFonts.length === 0,
                   },
                 ]}
-                value={checkoutBranding.forms.typographyForm.secondaryFormType}
-                onChange={value => checkoutBranding.forms.typographyForm.setSecondaryFormType(value as FontTypes)}
+                value={checkoutBranding.forms.typography.secondaryFormType}
+                onChange={value => checkoutBranding.forms.typography.setSecondaryFormType(value as FontTypes)}
               />
 
               <SecondaryFontComponent
                 lookupKey="secondary"
-                key={checkoutBranding.forms.typographyForm.secondaryFormType}
+                key={checkoutBranding.forms.typography.secondaryFormType}
               />
             </BlockStack>
           </BlockStack>
@@ -125,7 +125,7 @@ export function TypographyTab () {
 
             <BlockStack gap="400">
               <TextField
-                control={checkoutBranding.forms.typographyForm.control}
+                control={checkoutBranding.forms.typography.control}
                 name="size.base"
                 label="Base"
                 type="number"
@@ -150,7 +150,7 @@ export function TypographyTab () {
               />
 
               <TextField
-                control={checkoutBranding.forms.typographyForm.control}
+                control={checkoutBranding.forms.typography.control}
                 name="size.ratio"
                 label="Ratio"
                 type="number"

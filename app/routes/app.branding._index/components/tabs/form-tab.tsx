@@ -25,7 +25,7 @@ export function FormTab () {
             <FormLayout>
               import
               <CornerRadiusEnum
-                control={checkoutBranding.forms.formForm.control}
+                control={checkoutBranding.forms.form.control}
                 name="checkbox.cornerRadius"
               />
             </FormLayout>
@@ -45,22 +45,22 @@ export function FormTab () {
             <FormLayout>
               <FormLayout.Group>
                 <SimpleBorderEnum
-                  control={checkoutBranding.forms.formForm.control}
+                  control={checkoutBranding.forms.form.control}
                   name="control.border"
                 />
 
                 <ColourSelectionEnum
-                  control={checkoutBranding.forms.formForm.control}
+                  control={checkoutBranding.forms.form.control}
                   name="control.color"
                 />
 
                 <CornerRadiusEnum
-                  control={checkoutBranding.forms.formForm.control}
+                  control={checkoutBranding.forms.form.control}
                   name="control.cornerRadius"
                 />
 
                 <LabelPositionEnum
-                  control={checkoutBranding.forms.formForm.control}
+                  control={checkoutBranding.forms.form.control}
                   name="control.labelPosition"
                 />
               </FormLayout.Group>
@@ -79,7 +79,7 @@ export function FormTab () {
             <Text as="p">The selects customizations.</Text>
 
             <SimpleBorderEnum
-              control={checkoutBranding.forms.formForm.control}
+              control={checkoutBranding.forms.form.control}
               name="select.border"
             />
 
@@ -88,30 +88,30 @@ export function FormTab () {
 
               <BlockStack gap="400">
                 <TypographyFontEnum
-                  control={checkoutBranding.forms.buttonsForm.control}
+                  control={checkoutBranding.forms.buttons.control}
                   name="select.typography.font"
                 />
 
                 <InlineGrid gap="300" columns={2}>
                   <TypographyKerningEnum
-                    control={checkoutBranding.forms.buttonsForm.control}
+                    control={checkoutBranding.forms.buttons.control}
                     name="select.typography.kerning"
                   />
 
                   <TypographyLetterCaseEnum
-                    control={checkoutBranding.forms.buttonsForm.control}
+                    control={checkoutBranding.forms.buttons.control}
                     name="select.typography.letterCase"
                   />
                 </InlineGrid>
 
                 <InlineGrid gap="300" columns={2}>
                   <TypographySizeEnum
-                    control={checkoutBranding.forms.buttonsForm.control}
+                    control={checkoutBranding.forms.buttons.control}
                     name="select.typography.size"
                   />
 
                   <TypographyWeightEnum
-                    control={checkoutBranding.forms.buttonsForm.control}
+                    control={checkoutBranding.forms.buttons.control}
                     name="select.typography.weight"
                   />
                 </InlineGrid>
@@ -131,7 +131,7 @@ export function FormTab () {
             <Text as="p">The text field customizations.</Text>
 
             <SimpleBorderEnum
-              control={checkoutBranding.forms.formForm.control}
+              control={checkoutBranding.forms.form.control}
               name="textField.border"
             />
 
@@ -140,30 +140,30 @@ export function FormTab () {
 
               <BlockStack gap="400">
                 <TypographyFontEnum
-                  control={checkoutBranding.forms.buttonsForm.control}
+                  control={checkoutBranding.forms.buttons.control}
                   name="textField.typography.font"
                 />
 
                 <InlineGrid gap="300" columns={2}>
                   <TypographyKerningEnum
-                    control={checkoutBranding.forms.buttonsForm.control}
+                    control={checkoutBranding.forms.buttons.control}
                     name="textField.typography.kerning"
                   />
 
                   <TypographyLetterCaseEnum
-                    control={checkoutBranding.forms.buttonsForm.control}
+                    control={checkoutBranding.forms.buttons.control}
                     name="textField.typography.letterCase"
                   />
                 </InlineGrid>
 
                 <InlineGrid gap="300" columns={2}>
                   <TypographySizeEnum
-                    control={checkoutBranding.forms.buttonsForm.control}
+                    control={checkoutBranding.forms.buttons.control}
                     name="textField.typography.size"
                   />
 
                   <TypographyWeightEnum
-                    control={checkoutBranding.forms.buttonsForm.control}
+                    control={checkoutBranding.forms.buttons.control}
                     name="textField.typography.weight"
                   />
                 </InlineGrid>

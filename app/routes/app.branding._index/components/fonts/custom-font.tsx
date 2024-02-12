@@ -28,7 +28,7 @@ export function CustomFont ({
 
         <InlineGrid gap="300" columns={2}>
           <Select
-            control={checkoutBranding.forms.typographyForm.control}
+            control={checkoutBranding.forms.typography.control}
             name={baseGenericFileIdName}
             label="Font family"
             options={[
@@ -45,7 +45,7 @@ export function CustomFont ({
           />
 
           <TextField
-            control={checkoutBranding.forms.typographyForm.control}
+            control={checkoutBranding.forms.typography.control}
             name={baseWeightName}
             label="Font weight"
             type="number"
@@ -75,7 +75,7 @@ export function CustomFont ({
 
         <InlineGrid gap="300" columns={2}>
           <Select
-            control={checkoutBranding.forms.typographyForm.control}
+            control={checkoutBranding.forms.typography.control}
             name={boldGenericFileIdName}
             label="Font family"
             options={[
@@ -92,7 +92,7 @@ export function CustomFont ({
           />
 
           <TextField
-            control={checkoutBranding.forms.typographyForm.control}
+            control={checkoutBranding.forms.typography.control}
             name={boldWeightName}
             label="Font weight"
             type="number"
@@ -118,7 +118,7 @@ export function CustomFont ({
       </BlockStack>
 
       <Select
-        control={checkoutBranding.forms.typographyForm.control}
+        control={checkoutBranding.forms.typography.control}
         name={loadingStrategyName}
         label="Font loading strategy"
         options={[

@@ -26,19 +26,19 @@ export function ButtonsTab () {
 
             <BlockStack gap="400">
               <BackgroundStylesEnum
-                control={checkoutBranding.forms.buttonsForm.control}
+                control={checkoutBranding.forms.buttons.control}
                 name="primaryButton.background"
               />
 
               <InlineGrid gap="300" columns={2}>
                 <SpacingEnum
-                  control={checkoutBranding.forms.buttonsForm.control}
+                  control={checkoutBranding.forms.buttons.control}
                   name="primaryButton.blockPadding"
                   label="Block padding"
                 />
 
                 <SpacingEnum
-                  control={checkoutBranding.forms.buttonsForm.control}
+                  control={checkoutBranding.forms.buttons.control}
                   name="primaryButton.inlinePadding"
                   label="Inline padding"
                 />
@@ -46,12 +46,12 @@ export function ButtonsTab () {
 
               <InlineGrid gap="300" columns={2}>
                 <SimpleBorderEnum
-                  control={checkoutBranding.forms.buttonsForm.control}
+                  control={checkoutBranding.forms.buttons.control}
                   name="primaryButton.border"
                 />
 
                 <CornerRadiusEnum
-                  control={checkoutBranding.forms.buttonsForm.control}
+                  control={checkoutBranding.forms.buttons.control}
                   name="primaryButton.cornerRadius"
                 />
               </InlineGrid>
@@ -62,30 +62,30 @@ export function ButtonsTab () {
 
               <BlockStack gap="400">
                 <TypographyFontEnum
-                  control={checkoutBranding.forms.buttonsForm.control}
+                  control={checkoutBranding.forms.buttons.control}
                   name="primaryButton.typography.font"
                 />
 
                 <InlineGrid gap="300" columns={2}>
                   <TypographyKerningEnum
-                    control={checkoutBranding.forms.buttonsForm.control}
+                    control={checkoutBranding.forms.buttons.control}
                     name="primaryButton.typography.kerning"
                   />
 
                   <TypographyLetterCaseEnum
-                    control={checkoutBranding.forms.buttonsForm.control}
+                    control={checkoutBranding.forms.buttons.control}
                     name="primaryButton.typography.letterCase"
                   />
                 </InlineGrid>
 
                 <InlineGrid gap="300" columns={2}>
                   <TypographySizeEnum
-                    control={checkoutBranding.forms.buttonsForm.control}
+                    control={checkoutBranding.forms.buttons.control}
                     name="primaryButton.typography.size"
                   />
 
                   <TypographyWeightEnum
-                    control={checkoutBranding.forms.buttonsForm.control}
+                    control={checkoutBranding.forms.buttons.control}
                     name="primaryButton.typography.weight"
                   />
                 </InlineGrid>
@@ -108,19 +108,19 @@ export function ButtonsTab () {
 
             <BlockStack gap="400">
               <BackgroundStylesEnum
-                control={checkoutBranding.forms.buttonsForm.control}
+                control={checkoutBranding.forms.buttons.control}
                 name="secondaryButton.background"
               />
 
               <InlineGrid gap="300" columns={2}>
                 <SpacingEnum
-                  control={checkoutBranding.forms.buttonsForm.control}
+                  control={checkoutBranding.forms.buttons.control}
                   name="secondaryButton.blockPadding"
                   label="Block padding"
                 />
 
                 <SpacingEnum
-                  control={checkoutBranding.forms.buttonsForm.control}
+                  control={checkoutBranding.forms.buttons.control}
                   name="secondaryButton.inlinePadding"
                   label="Inline padding"
                 />
@@ -128,12 +128,12 @@ export function ButtonsTab () {
 
               <InlineGrid gap="300" columns={2}>
                 <SimpleBorderEnum
-                  control={checkoutBranding.forms.buttonsForm.control}
+                  control={checkoutBranding.forms.buttons.control}
                   name="secondaryButton.border"
                 />
 
                 <CornerRadiusEnum
-                  control={checkoutBranding.forms.buttonsForm.control}
+                  control={checkoutBranding.forms.buttons.control}
                   name="secondaryButton.cornerRadius"
                 />
               </InlineGrid>
@@ -144,30 +144,30 @@ export function ButtonsTab () {
 
               <BlockStack gap="400">
                 <TypographyFontEnum
-                  control={checkoutBranding.forms.buttonsForm.control}
+                  control={checkoutBranding.forms.buttons.control}
                   name="secondaryButton.typography.font"
                 />
 
                 <InlineGrid gap="300" columns={2}>
                   <TypographyKerningEnum
-                    control={checkoutBranding.forms.buttonsForm.control}
+                    control={checkoutBranding.forms.buttons.control}
                     name="secondaryButton.typography.kerning"
                   />
 
                   <TypographyLetterCaseEnum
-                    control={checkoutBranding.forms.buttonsForm.control}
+                    control={checkoutBranding.forms.buttons.control}
                     name="secondaryButton.typography.letterCase"
                   />
                 </InlineGrid>
 
                 <InlineGrid gap="300" columns={2}>
                   <TypographySizeEnum
-                    control={checkoutBranding.forms.buttonsForm.control}
+                    control={checkoutBranding.forms.buttons.control}
                     name="secondaryButton.typography.size"
                   />
 
                   <TypographyWeightEnum
-                    control={checkoutBranding.forms.buttonsForm.control}
+                    control={checkoutBranding.forms.buttons.control}
                     name="secondaryButton.typography.weight"
                   />
                 </InlineGrid>

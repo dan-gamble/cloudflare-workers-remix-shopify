@@ -22,7 +22,7 @@ export function ShopifyFont ({
       <BlockStack gap="400">
         <InlineGrid gap="300" columns={2}>
           <Select
-            control={checkoutBranding.forms.typographyForm.control}
+            control={checkoutBranding.forms.typography.control}
             name={fontFamilyName}
             label="Font family"
             options={
@@ -37,7 +37,7 @@ export function ShopifyFont ({
           />
 
           <Select
-            control={checkoutBranding.forms.typographyForm.control}
+            control={checkoutBranding.forms.typography.control}
             name={fontLoadingStrategyName}
             label="Font loading strategy"
             options={[
@@ -51,7 +51,7 @@ export function ShopifyFont ({
           />
 
           <TextField
-            control={checkoutBranding.forms.typographyForm.control}
+            control={checkoutBranding.forms.typography.control}
             name={baseWeightName}
             label="Base font weight"
             type="number"
@@ -75,7 +75,7 @@ export function ShopifyFont ({
           />
 
           <TextField
-            control={checkoutBranding.forms.typographyForm.control}
+            control={checkoutBranding.forms.typography.control}
             name={boldWeightName}
             label="Bold font weight"
             type="number"
