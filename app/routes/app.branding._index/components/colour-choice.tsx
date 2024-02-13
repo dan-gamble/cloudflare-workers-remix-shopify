@@ -1,5 +1,5 @@
-import type { HSBAColor, HSBColor} from '@shopify/polaris';
-import { InlineStack ,
+import type { HSBAColor, HSBColor } from '@shopify/polaris';
+import { Bleed , InlineStack ,
   Button,
   ColorPicker,
   FormLayout,
@@ -97,136 +97,138 @@ export function ColourChoice<
   )
 
   return (
-    <div
-      className="ColourChoice"
-      onClick={() => setPopoverActive(true)}
-    >
-      <InlineStack blockAlign="center" wrap={false} gap="400">
-        <div>
-          <Popover
-            active={popoverActive}
-            activator={activator}
-            onClose={() => setPopoverActive(false)}
-            sectioned
-          >
-            <FormLayout>
-              <BlockStack gap="200">
-                <div
-                  onClick={e => e.stopPropagation()}
-                >
-                  <ColorPicker
-                    fullWidth
-                    color={colour}
-                    onChange={mySetColour}
+    <Bleed marginInline="200">
+      <div
+        className="ColourChoice"
+        onClick={() => setPopoverActive(true)}
+      >
+        <InlineStack blockAlign="center" wrap={false} gap="400">
+          <div>
+            <Popover
+              active={popoverActive}
+              activator={activator}
+              onClose={() => setPopoverActive(false)}
+              sectioned
+            >
+              <FormLayout>
+                <BlockStack gap="200">
+                  <div
+                    onClick={e => e.stopPropagation()}
+                  >
+                    <ColorPicker
+                      fullWidth
+                      color={colour}
+                      onChange={mySetColour}
+                    />
+                  </div>
+
+                  <TextField
+                    label={label}
+                    autoComplete="off"
+                    {...props}
+                    onChange={value => {
+                      if (!value.startsWith('#')) {
+                        value = `#${value}`
+                      }
+
+                      value = value.slice(0, 7)
+
+                      if (validateColor(value)) {
+                        setColour(rgbToHsb(hexToRgb(value)))
+                      }
+
+                      return field.onChange(value)
+                    }}
+                    suffix={(
+                      <div
+                        style={{
+                          display: 'block',
+                          width: '20px',
+                          height: '20px',
+
+                          background: field.value ? field.value.toString() : '',
+                          border: `var(--p-border-width-025) solid var(--p-color-input-border)`,
+                          borderRadius: '50%',
+                        }}
+                      ></div>
+                    )}
                   />
-                </div>
+                </BlockStack>
+              </FormLayout>
+            </Popover>
+          </div>
 
-                <TextField
-                  label={label}
-                  autoComplete="off"
-                  {...props}
-                  onChange={value => {
-                    if (!value.startsWith('#')) {
-                      value = `#${value}`
-                    }
+          <FlexItem fill>
+            {
+              field.value
+                ? (
+                  <>
+                    <InlineStack gap="200">
+                      <Text variant="bodyMd" as="p" fontWeight="medium">
+                        {label}
+                      </Text>
 
-                    value = value.slice(0, 7)
+                      {showClear && (
+                        <Button
+                          variant="plain"
+                          tone="critical"
+                          // @ts-ignore
+                          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                            e.preventDefault()
+                            e.stopPropagation()
 
-                    if (validateColor(value)) {
-                      setColour(rgbToHsb(hexToRgb(value)))
-                    }
-
-                    return field.onChange(value)
-                  }}
-                  suffix={(
-                    <div
-                      style={{
-                        display: 'block',
-                        width: '20px',
-                        height: '20px',
-
-                        background: field.value ? field.value.toString() : '',
-                        border: `var(--p-border-width-025) solid var(--p-color-input-border)`,
-                        borderRadius: '50%',
-                      }}
-                    ></div>
-                  )}
-                />
-              </BlockStack>
-            </FormLayout>
-          </Popover>
-        </div>
-
-        <FlexItem fill>
-          {
-            field.value
-              ? (
-                <>
-                  <InlineStack gap="200">
-                    <Text variant="bodyMd" as="p" fontWeight="medium">
+                            field.onChange(null)
+                            setPopoverActive(false)
+                          }}
+                        >
+                          Clear
+                        </Button>
+                      )}
+                    </InlineStack>
+                    <Text variant="bodyMd" as="p" tone="subdued">
+                      {helpText}
+                    </Text>
+                    <Text variant="bodyMd" as="p">
+                      {field.value.toString()}
+                    </Text>
+                  </>
+                )
+                : (
+                  <>
+                    <Text variant="bodyMd" as="p" fontWeight="semibold">
                       {label}
                     </Text>
+                    <Text variant="bodyMd" as="p" tone="subdued">
+                      {helpText}
+                    </Text>
+                  </>
+                )
+            }
+          </FlexItem>
 
-                    {showClear && (
-                      <Button
-                        variant="plain"
-                        tone="critical"
-                        // @ts-ignore
-                        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                          e.preventDefault()
-                          e.stopPropagation()
-
-                          field.onChange(null)
-                          setPopoverActive(false)
-                        }}
-                      >
-                        Clear
-                      </Button>
-                    )}
-                  </InlineStack>
-                  <Text variant="bodyMd" as="p" tone="subdued">
-                    {helpText}
-                  </Text>
-                  <Text variant="bodyMd" as="p">
-                    {field.value.toString()}
-                  </Text>
-                </>
-              )
-              : (
-                <>
-                  <Text variant="bodyMd" as="p" fontWeight="semibold">
-                    {label}
-                  </Text>
-                  <Text variant="bodyMd" as="p" tone="subdued">
-                    {helpText}
-                  </Text>
-                </>
-              )
-          }
-        </FlexItem>
-
-        <FlexItem>
-          <div>
-            {showReset
-              ? (
-                <div onClick={e => e.stopPropagation()}>
-                  <Button
-                    onClick={() => {
-                      if (typeof props.onResetClick === 'function') {
-                        props.onResetClick(props.name)
-                      }
-                    }}
-                    variant="plain"
-                    tone="critical"
-                  >
-                    Reset
-                  </Button>
-                </div>
-              )
-              : <Icon source={PlusCircleIcon} tone="interactive" />}
-          </div>
-        </FlexItem>
-      </InlineStack>
-    </div>
+          <FlexItem>
+            <div>
+              {showReset
+                ? (
+                  <div onClick={e => e.stopPropagation()}>
+                    <Button
+                      onClick={() => {
+                        if (typeof props.onResetClick === 'function') {
+                          props.onResetClick(props.name)
+                        }
+                      }}
+                      variant="plain"
+                      tone="critical"
+                    >
+                      Reset
+                    </Button>
+                  </div>
+                )
+                : <Icon source={PlusCircleIcon} tone="interactive" />}
+            </div>
+          </FlexItem>
+        </InlineStack>
+      </div>
+    </Bleed>
   );
 }

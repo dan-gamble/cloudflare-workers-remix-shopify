@@ -10,10 +10,10 @@ import { SimpleBorderEnum } from '~/routes/app.branding._index/components/enums/
 import { FilePicker } from '~/routes/app.files-manager._index/components/file-picker/file-picker'
 import { RangeSlider } from '~/components/range-slider'
 import React from 'react'
-import { Checkbox } from '~/components/checkbox'
 import { FooterPositionEnum } from '~/routes/app.branding._index/components/enums/footer-position-enum'
 import { SectionBlock } from '~/routes/app.branding._index/components/section-block'
 import { GlobalCornerRadiusEnum } from '~/routes/app.branding._index/components/enums/global-corner-radius-enum'
+import { VisibilityEnum } from '~/routes/app.branding._index/components/enums/visibility-enum'
 
 export function LayoutTab() {
   const checkoutBranding = useCheckoutBranding()
@@ -25,7 +25,7 @@ export function LayoutTab() {
           <Text variant="headingSm" as="h3">Buyer journey</Text>
 
           <BlockStack gap="400">
-            <Checkbox
+            <VisibilityEnum
               label="Hide breadcrumbs"
               helpText="The customizations for the breadcrumbs that represent a buyer's journey to the checkout."
               control={checkoutBranding.forms.preview.control}
@@ -42,7 +42,7 @@ export function LayoutTab() {
           <Text variant="headingSm" as="h3">Cart link</Text>
 
           <BlockStack gap="400">
-            <Checkbox
+            <VisibilityEnum
               label="Hide link to cart"
               helpText={
                 <Text as="p">The input for checkout cart link customizations. For example, by setting the visibility field to <InlineCode>HIDDEN</InlineCode>, you can hide the cart icon in the header for one-page checkout, and the cart link in breadcrumbs in three-page checkout.</Text>
@@ -107,7 +107,7 @@ export function LayoutTab() {
           <Text variant="headingSm" as="h3">Footer</Text>
 
           <BlockStack gap="400">
-            <Checkbox
+            <VisibilityEnum
               label="Hide footer content"
               helpText="The visibility settings for footer content."
               control={checkoutBranding.forms.preview.control}
@@ -217,7 +217,7 @@ export function LayoutTab() {
               </Box>
             </BlockStack>
 
-            <Checkbox
+            <VisibilityEnum
               label="Hide logo"
               helpText="The visibility of the logo."
               control={checkoutBranding.forms.preview.control}
