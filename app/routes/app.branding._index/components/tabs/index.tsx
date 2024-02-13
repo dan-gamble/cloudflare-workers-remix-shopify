@@ -1,5 +1,5 @@
 import type { TabProps} from '@shopify/polaris';
-import { Card, Tabs } from '@shopify/polaris'
+import { Tabs } from '@shopify/polaris'
 import type { ReactNode} from 'react';
 import { useState } from 'react'
 import { useSearchParams } from '@remix-run/react'
@@ -63,21 +63,19 @@ export function CheckoutBrandingTabs () {
   const Component = tabs[selected].component
 
   return (
-    <Card padding="0">
-      <Tabs
-        tabs={tabs}
-        selected={selected}
-        onSelect={(selectedTabIndex) => {
-          setSelected(selectedTabIndex)
-          setSearchParams(params => {
-            params.set('tab', tabs[selectedTabIndex].id)
+    <Tabs
+      tabs={tabs}
+      selected={selected}
+      onSelect={(selectedTabIndex) => {
+        setSelected(selectedTabIndex)
+        setSearchParams(params => {
+          params.set('tab', tabs[selectedTabIndex].id)
 
-            return params
-          })
-        }}
-      >
-        <Component />
-      </Tabs>
-    </Card>
+          return params
+        })
+      }}
+    >
+      <Component />
+    </Tabs>
   )
 }

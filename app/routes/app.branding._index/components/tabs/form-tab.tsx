@@ -1,4 +1,4 @@
-import { Box, Divider, Text, BlockStack, InlineGrid } from '@shopify/polaris'
+import { Text, BlockStack, InlineGrid, Card } from '@shopify/polaris'
 import { CornerRadiusEnum } from '~/routes/app.branding._index/components/enums/corner-radius-enum'
 import { useCheckoutBranding } from '~/routes/app.branding/route'
 import { SimpleBorderEnum } from '~/routes/app.branding._index/components/enums/simple-border-enum'
@@ -15,8 +15,8 @@ export function FormTab () {
   const checkoutBranding = useCheckoutBranding()
 
   return (
-    <>
-      <Box paddingInline="500" paddingBlockStart="200" paddingBlockEnd="500">
+    <BlockStack gap="400">
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">Checkbox</Text>
 
@@ -31,11 +31,9 @@ export function FormTab () {
             </BlockStack>
           </BlockStack>
         </BlockStack>
-      </Box>
+      </Card>
 
-      <Divider />
-
-      <Box padding="500">
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">Choice list</Text>
 
@@ -50,11 +48,9 @@ export function FormTab () {
             </BlockStack>
           </BlockStack>
         </BlockStack>
-      </Box>
+      </Card>
 
-      <Divider />
-
-      <Box padding="500">
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">Control</Text>
 
@@ -86,11 +82,9 @@ export function FormTab () {
             </BlockStack>
           </BlockStack>
         </BlockStack>
-      </Box>
+      </Card>
 
-      <Divider />
-
-      <Box padding="500">
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">Select</Text>
 
@@ -138,11 +132,9 @@ export function FormTab () {
             </BlockStack>
           </BlockStack>
         </BlockStack>
-      </Box>
+      </Card>
 
-      <Divider />
-
-      <Box padding="500">
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">Text field</Text>
 
@@ -190,7 +182,7 @@ export function FormTab () {
             </BlockStack>
           </BlockStack>
         </BlockStack>
-      </Box>
-    </>
+      </Card>
+    </BlockStack>
   )
 }

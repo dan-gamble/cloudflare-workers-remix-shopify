@@ -1,4 +1,4 @@
-import { Box, Divider, Text, BlockStack, InlineGrid } from '@shopify/polaris'
+import { Text, BlockStack, InlineGrid, Card } from '@shopify/polaris'
 import { useCheckoutBranding } from '~/routes/app.branding/route'
 import { TypographyFontEnum } from '~/routes/app.branding._index/components/enums/typography-font-enum'
 import { TypographyKerningEnum } from '~/routes/app.branding._index/components/enums/typography-kerning-enum'
@@ -10,8 +10,8 @@ export function HeadingsTab () {
   const checkoutBranding = useCheckoutBranding()
 
   return (
-    <>
-      <Box paddingInline="500" paddingBlockStart="200" paddingBlockEnd="500">
+    <BlockStack gap="400">
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">Level 1</Text>
 
@@ -50,11 +50,9 @@ export function HeadingsTab () {
             </BlockStack>
           </BlockStack>
         </BlockStack>
-      </Box>
+      </Card>
 
-      <Divider />
-
-      <Box padding="500">
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">Level 2</Text>
 
@@ -93,11 +91,9 @@ export function HeadingsTab () {
             </BlockStack>
           </BlockStack>
         </BlockStack>
-      </Box>
+      </Card>
 
-      <Divider />
-
-      <Box padding="500">
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">Level 3</Text>
 
@@ -136,7 +132,7 @@ export function HeadingsTab () {
             </BlockStack>
           </BlockStack>
         </BlockStack>
-      </Box>
-    </>
+      </Card>
+    </BlockStack>
   )
 }

@@ -1,4 +1,4 @@
-import { BlockStack, Box, Divider, InlineCode, InlineGrid, Text } from '@shopify/polaris'
+import { BlockStack, Box, Card, InlineCode, InlineGrid, Text } from '@shopify/polaris'
 import { CornerRadiusEnum } from '~/routes/app.branding._index/components/enums/corner-radius-enum'
 import { useCheckoutBranding } from '~/routes/app.branding/route'
 import { TypographyKerningEnum } from '~/routes/app.branding._index/components/enums/typography-kerning-enum'
@@ -19,8 +19,8 @@ export function LayoutTab() {
   const checkoutBranding = useCheckoutBranding()
 
   return (
-    <>
-      <Box paddingInline="500" paddingBlockStart="200" paddingBlockEnd="500">
+    <BlockStack gap="400">
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">Buyer journey</Text>
 
@@ -33,11 +33,9 @@ export function LayoutTab() {
             />
           </BlockStack>
         </BlockStack>
-      </Box>
+      </Card>
 
-      <Divider />
-
-      <Box padding="500">
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">Cart link</Text>
 
@@ -52,11 +50,9 @@ export function LayoutTab() {
             />
           </BlockStack>
         </BlockStack>
-      </Box>
+      </Card>
 
-      <Divider />
-
-      <Box padding="500">
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">Express checkout</Text>
 
@@ -70,11 +66,9 @@ export function LayoutTab() {
             />
           </BlockStack>
         </BlockStack>
-      </Box>
+      </Card>
 
-      <Divider />
-
-      <Box padding="500">
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">
             Favicon
@@ -98,11 +92,9 @@ export function LayoutTab() {
             />
           </BlockStack>
         </BlockStack>
-      </Box>
+      </Card>
 
-      <Divider />
-
-      <Box padding="500">
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">Footer</Text>
 
@@ -120,11 +112,9 @@ export function LayoutTab() {
             />
           </BlockStack>
         </BlockStack>
-      </Box>
+      </Card>
 
-      <Divider />
-
-      <Box padding="500">
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">
             Global
@@ -151,11 +141,9 @@ export function LayoutTab() {
             </BlockStack>
           </BlockStack>
         </BlockStack>
-      </Box>
+      </Card>
 
-      <Divider />
-
-      <Box padding="500">
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">
             Header
@@ -237,11 +225,9 @@ export function LayoutTab() {
             </InlineGrid>
           </BlockStack>
         </BlockStack>
-      </Box>
+      </Card>
 
-      <Divider />
-
-      <Box padding="500">
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">
             Main
@@ -275,11 +261,9 @@ export function LayoutTab() {
             />
           </BlockStack>
         </BlockStack>
-      </Box>
+      </Card>
 
-      <Divider />
-
-      <Box padding="500">
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">
             Order summary
@@ -313,11 +297,9 @@ export function LayoutTab() {
             />
           </BlockStack>
         </BlockStack>
-      </Box>
+      </Card>
 
-      <Divider />
-
-      <Box padding="500">
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">
             Merchandise thumbnails
@@ -339,7 +321,7 @@ export function LayoutTab() {
             </BlockStack>
           </BlockStack>
         </BlockStack>
-      </Box>
-    </>
+      </Card>
+    </BlockStack>
   )
 }

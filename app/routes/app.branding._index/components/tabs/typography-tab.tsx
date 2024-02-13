@@ -1,4 +1,4 @@
-import { Banner, BlockStack, Box, Divider, Select, Text } from '@shopify/polaris'
+import { Banner, BlockStack, Card, Select, Text } from '@shopify/polaris'
 import { FontTypes } from '~/routes/app.branding._index/hooks/use-typography-form'
 import { TextField } from '~/components/text-field'
 import { useCheckoutBranding, useCheckoutBrandingData, useCheckoutBrandingState } from '~/routes/app.branding/route'
@@ -31,40 +31,30 @@ export function TypographyTab () {
   )
 
   return (
-    <>
+    <BlockStack gap="400">
       {shouldShowCustomFontsBanner && (
-        <Box paddingInline="500" paddingBlockStart="200">
-          <Banner
-            title="Custom Fonts"
-            action={{
-              content: 'Go to files',
-              url: 'shopify://admin/content/files',
-              target: '_top',
-            }}
-            tone="info"
-            onDismiss={() => {
-              setCustomFontsBannerDismissed(true)
+        <Banner
+          title="Custom Fonts"
+          action={{
+            content: 'Go to files',
+            url: 'shopify://admin/content/files',
+            target: '_top',
+          }}
+          tone="info"
+          onDismiss={() => {
+            setCustomFontsBannerDismissed(true)
 
-              dismisser.submit({}, {
-                action: '/app/branding/dismiss-custom-fonts-banner',
-                method: 'POST',
-              })
-            }}
-          >
-            <p>To be able to use a custom font with the Branding API please upload a .woff or .woff2 file under "Content {`->`} Files".</p>
-          </Banner>
-        </Box>
+            dismisser.submit({}, {
+              action: '/app/branding/dismiss-custom-fonts-banner',
+              method: 'POST',
+            })
+          }}
+        >
+          <p>To be able to use a custom font with the Branding API please upload a .woff or .woff2 file under "Content {`->`} Files".</p>
+        </Banner>
       )}
 
-      <Box {
-        ...shouldShowCustomFontsBanner
-          ? { padding: '500' }
-          : {
-            paddingInline: '500',
-            paddingBlockStart: '200',
-            paddingBlockEnd: '500',
-          }
-      }>
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">Primary font</Text>
 
@@ -89,11 +79,9 @@ export function TypographyTab () {
             />
           </BlockStack>
         </BlockStack>
-      </Box>
+      </Card>
 
-      <Divider />
-
-      <Box padding="500">
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">Secondary font</Text>
 
@@ -120,11 +108,9 @@ export function TypographyTab () {
             </BlockStack>
           </BlockStack>
         </BlockStack>
-      </Box>
+      </Card>
 
-      <Divider />
-
-      <Box padding="500">
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">Global</Text>
 
@@ -185,7 +171,7 @@ export function TypographyTab () {
             </BlockStack>
           </BlockStack>
         </BlockStack>
-      </Box>
-    </>
+      </Card>
+    </BlockStack>
   )
 }

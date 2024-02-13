@@ -1,6 +1,6 @@
 import { useCheckoutBranding } from '~/routes/app.branding/route'
-import type { TabProps} from '@shopify/polaris';
-import { Bleed, BlockStack, Box, Button, ButtonGroup, Divider, Tabs, Text } from '@shopify/polaris'
+import type { TabProps } from '@shopify/polaris';
+import { Card , Bleed, BlockStack, Box, Button, ButtonGroup, Tabs, Text } from '@shopify/polaris'
 import { ColourChoice } from '~/routes/app.branding._index/components/colour-choice'
 import { SchemeOptions } from '~/routes/app.branding._index/hooks/use-colours-form'
 import { useState } from 'react'
@@ -17,8 +17,8 @@ export function ColoursTab () {
   }
 
   return (
-    <>
-      <Box paddingInline="500" paddingBlockStart="200" paddingBlockEnd="500">
+    <BlockStack gap="400">
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">Global</Text>
 
@@ -82,11 +82,9 @@ export function ColoursTab () {
             />
           </BlockStack>
         </BlockStack>
-      </Box>
+      </Card>
 
-      <Divider />
-
-      <Box padding="500">
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">Schemes</Text>
 
@@ -110,8 +108,8 @@ export function ColoursTab () {
             <Scheme scheme={checkoutBranding.forms.colours.currentlySelectedScheme} />
           </BlockStack>
         </BlockStack>
-      </Box>
-    </>
+      </Card>
+    </BlockStack>
   )
 }
 

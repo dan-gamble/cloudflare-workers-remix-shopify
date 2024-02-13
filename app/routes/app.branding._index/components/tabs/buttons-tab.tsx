@@ -1,4 +1,4 @@
-import { BlockStack, Box, Divider, InlineGrid, Text } from '@shopify/polaris'
+import { BlockStack, Card, InlineGrid, Text } from '@shopify/polaris'
 import { BackgroundStylesEnum } from '~/routes/app.branding._index/components/enums/background-styles-enum'
 import { useCheckoutBranding } from '~/routes/app.branding/route'
 import { SpacingEnum } from '~/routes/app.branding._index/components/enums/spacing-enum'
@@ -14,8 +14,8 @@ export function ButtonsTab () {
   const checkoutBranding = useCheckoutBranding()
 
   return (
-    <>
-      <Box paddingInline="500" paddingBlockStart="200" paddingBlockEnd="500">
+    <BlockStack gap="400">
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">
             Primary button
@@ -58,6 +58,8 @@ export function ButtonsTab () {
             </BlockStack>
 
             <BlockStack gap="200">
+              <Text variant="headingSm" as="h4">Typography</Text>
+
               <Text as="p">The input fields to use to update the typography customizations.</Text>
 
               <BlockStack gap="400">
@@ -93,11 +95,9 @@ export function ButtonsTab () {
             </BlockStack>
           </BlockStack>
         </BlockStack>
-      </Box>
+      </Card>
 
-      <Divider />
-
-      <Box padding="500">
+      <Card>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">
             Secondary button
@@ -140,6 +140,8 @@ export function ButtonsTab () {
             </BlockStack>
 
             <BlockStack gap="200">
+              <Text variant="headingSm" as="h4">Typography</Text>
+
               <Text as="p">The input fields to use to update the typography customizations.</Text>
 
               <BlockStack gap="400">
@@ -175,7 +177,7 @@ export function ButtonsTab () {
             </BlockStack>
           </BlockStack>
         </BlockStack>
-      </Box>
-    </>
+      </Card>
+    </BlockStack>
   )
 }
