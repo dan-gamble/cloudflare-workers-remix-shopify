@@ -6,11 +6,9 @@
   "scripts": {
     "build": "remix build",
     "dev": "shopify app dev",
-    "dev:remix": "remix watch",
-    "dev:worker": "wrangler dev --experimental-json-config --site public --compatibility-flag nodejs_compat --live-reload --test-scheduled",
+    "start": "wrangler dev --site public --live-reload --test-scheduled",
     "dev:codegen": "npm run codegen -- --watch",
     "deploy": "wrangler deploy --experimental-json-config",
-    "start": "wrangler dev ./build/index.js --experimental-json-config",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "shopify": "shopify",
     "lint": "eslint . --fix",
@@ -22,7 +20,7 @@
     "shopify:dev": "remix build --sourcemap && concurrently \"npm:dev:*\"",
     "shopify:env": "shopify app env",
     "db:generate": "drizzle-kit generate:sqlite",
-    "db:migrate": "wrangler d1 execute DB --file=./app/utils/db/migrations/0000_certain_outlaw_kid.sql --experimental-json-config",
+    "db:migrate": "wrangler d1 execute DB --file=./app/utils/db/migrations/0001_melodic_storm.sql --experimental-json-config",
     "codegen": "graphql-codegen --config .graphqlrc.ts",
     "prepare": "husky install",
     "tunnel": "cloudflared tunnel --config .cloudflared/config.yml --url localhost:8787 run app-template-remix",
@@ -30,16 +28,18 @@
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "^0.3.1",
-    "@conform-to/react": "^0.9.1",
-    "@conform-to/zod": "^0.9.1",
+    "@conform-to/react": "^1.0.0",
+    "@conform-to/zod": "^1.0.0",
     "@epic-web/cachified": "^4.0.0",
     "@epic-web/invariant": "^1.0.0",
+    "@hookform/resolvers": "^3.3.4",
     "@remix-run/cloudflare": "^2.5.1",
     "@remix-run/css-bundle": "^2.5.1",
     "@remix-run/react": "^2.5.1",
     "@shopify/admin-api-client": "^0.2.2",
-    "@shopify/app": "^3.54.0",
-    "@shopify/cli": "^3.54.0",
+    "@shopify/admin-graphql-api-utilities": "^2.1.0",
+    "@shopify/app": "^3.55.2",
+    "@shopify/cli": "^3.55.2",
     "@shopify/polaris": "^12.11.1",
     "@shopify/react-i18n": "^7.8.0",
     "@shopify/shopify-api": "^9.0.2",
@@ -55,7 +55,12 @@
     "pino-pretty": "^10.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "zod": "^3.22.4"
+    "react-hook-form": "^7.50.0",
+    "ts-deepmerge": "^7.0.0",
+    "use-debounce": "^10.0.0",
+    "validate-color": "^2.2.4",
+    "zod": "^3.22.4",
+    "zod-form-data": "^2.0.2"
   },
   "devDependencies": {
     "@clack/prompts": "^0.7.0",
@@ -78,7 +83,7 @@
     "prettier": "^3.2.4",
     "prettier-plugin-sql": "^0.18.0",
     "typescript": "^5.3.3",
-    "wrangler": "3.25.0"
+    "wrangler": "3.26.0"
   },
   "engines": {
     "node": ">=18.0.0"

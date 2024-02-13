@@ -176,6 +176,8 @@ export type Abandonment = Node & {
   id: Scalars['ID']['output'];
   /** Whether the products in abandonment are available. */
   inventoryAvailable: Scalars['Boolean']['output'];
+  /** Whether the abandonment event comes from a custom storefront channel. */
+  isFromCustomStorefront: Scalars['Boolean']['output'];
   /** Whether the abandonment event comes from the Online Store sales channel. */
   isFromOnlineStore: Scalars['Boolean']['output'];
   /** Whether the abandonment event comes from the Shop app sales channel. */
@@ -2058,7 +2060,7 @@ export type CalculatedDraftOrder = {
   lineItemsSubtotalPrice: MoneyBag;
   /** The name of the selected market. */
   marketName: Scalars['String']['output'];
-  /** The selected market region country code for the draft order. */
+  /** The selected country code that determines the pricing of the draft order. */
   marketRegionCountryCode: CountryCode;
   /** Phone number assigned to draft order. */
   phone?: Maybe<Scalars['String']['output']>;
@@ -3094,6 +3096,16 @@ export type CheckoutBranding = {
   designSystem?: Maybe<CheckoutBrandingDesignSystem>;
 };
 
+/** The container background style. */
+export enum CheckoutBrandingBackground {
+  /** The Base background style. */
+  Base = 'BASE',
+  /** The Subdued background style. */
+  Subdued = 'SUBDUED',
+  /** The Transparent background style. */
+  Transparent = 'TRANSPARENT'
+}
+
 /** Possible values for the background style. */
 export enum CheckoutBrandingBackgroundStyle {
   /** The None background style. */
@@ -3110,6 +3122,26 @@ export enum CheckoutBrandingBorder {
   Full = 'FULL',
   /** The None border. */
   None = 'NONE'
+}
+
+/** The container border style. */
+export enum CheckoutBrandingBorderStyle {
+  /** The Base border style. */
+  Base = 'BASE',
+  /** The Dashed border style. */
+  Dashed = 'DASHED',
+  /** The Dotted border style. */
+  Dotted = 'DOTTED'
+}
+
+/** The container border width. */
+export enum CheckoutBrandingBorderWidth {
+  /** The Base border width. */
+  Base = 'BASE',
+  /** The Large 100 border width. */
+  Large_100 = 'LARGE_100',
+  /** The Large 200 border width. */
+  Large_200 = 'LARGE_200'
 }
 
 /** The buttons customizations. */
@@ -3180,6 +3212,44 @@ export type CheckoutBrandingButtonInput = {
   inlinePadding?: InputMaybe<CheckoutBrandingSpacing>;
   /** The typography style used for buttons. */
   typography?: InputMaybe<CheckoutBrandingTypographyStyleInput>;
+};
+
+/** The customizations for the breadcrumbs that represent a buyer's journey to the checkout. */
+export type CheckoutBrandingBuyerJourney = {
+  __typename?: 'CheckoutBrandingBuyerJourney';
+  /**
+   * An option to display or hide the breadcrumbs that represent the buyer's journey on 3-page checkout.
+   *
+   */
+  visibility?: Maybe<CheckoutBrandingVisibility>;
+};
+
+/**
+ * The input fields for updating breadcrumb customizations, which represent the buyer's journey to checkout.
+ *
+ */
+export type CheckoutBrandingBuyerJourneyInput = {
+  /**
+   * The visibility customizations for updating breadcrumbs, which represent the buyer's journey to checkout.
+   *
+   */
+  visibility?: InputMaybe<CheckoutBrandingVisibility>;
+};
+
+/** The customizations that you can make to cart links at checkout. */
+export type CheckoutBrandingCartLink = {
+  __typename?: 'CheckoutBrandingCartLink';
+  /** Whether the cart link is visible at checkout. */
+  visibility?: Maybe<CheckoutBrandingVisibility>;
+};
+
+/** The input fields for updating the cart link customizations at checkout. */
+export type CheckoutBrandingCartLinkInput = {
+  /**
+   * The input to update the visibility of cart links in checkout. This hides the cart icon on one-page and the cart link in the breadcrumbs/buyer journey on three-page checkout.
+   *
+   */
+  visibility?: InputMaybe<CheckoutBrandingVisibility>;
 };
 
 /** The checkboxes customizations. */
@@ -3453,36 +3523,67 @@ export type CheckoutBrandingControlInput = {
   labelPosition?: InputMaybe<CheckoutBrandingLabelPosition>;
 };
 
-/** Possible values for the corner radius. */
+/**
+ * The options for customizing the corner radius of checkout-related objects. Examples include the primary
+ * button, the name text fields and the sections within the main area (if they have borders).
+ * Refer to this complete [list](https://shopify.dev/docs/api/admin-graphql/latest/enums/CheckoutBrandingCornerRadius#fieldswith)
+ * for objects with customizable corner radii.
+ *
+ * The design system defines the corner radius pixel size for each option. Modify the defaults by setting the
+ * [designSystem.cornerRadius](https://shopify.dev/docs/api/admin-graphql/latest/input-objects/CheckoutBrandingDesignSystemInput#field-checkoutbrandingdesignsysteminput-cornerradius)
+ * input fields.
+ *
+ */
 export enum CheckoutBrandingCornerRadius {
-  /** The Base corner radius. */
+  /**
+   * The corner radius with a pixel value defined by designSystem.cornerRadius.base.
+   *
+   */
   Base = 'BASE',
-  /** The Large corner radius. */
+  /**
+   * The corner radius with a pixel value defined by designSystem.cornerRadius.large.
+   *
+   */
   Large = 'LARGE',
-  /** The None corner radius. */
+  /** The 0px corner radius (square corners). */
   None = 'NONE',
-  /** The Small corner radius. */
+  /**
+   * The corner radius with a pixel value defined by designSystem.cornerRadius.small.
+   *
+   */
   Small = 'SMALL'
 }
 
-/** The corner radius variables. */
+/**
+ * Define the pixel size of corner radius options.
+ *
+ */
 export type CheckoutBrandingCornerRadiusVariables = {
   __typename?: 'CheckoutBrandingCornerRadiusVariables';
-  /** The pixel value for base corner radiuses. */
+  /** The value in pixels for base corner radii. Example: 5. */
   base?: Maybe<Scalars['Int']['output']>;
-  /** The pixel value for large corner radiuses. */
+  /** The value in pixels for large corner radii. Example: 10. */
   large?: Maybe<Scalars['Int']['output']>;
-  /** The pixel value for small corner radiuses. */
+  /** The value in pixels for small corner radii. Example: 3. */
   small?: Maybe<Scalars['Int']['output']>;
 };
 
 /** The input fields used to update the corner radius variables. */
 export type CheckoutBrandingCornerRadiusVariablesInput = {
-  /** The pixel value for base corner radiuses. It should be strictly positive. */
+  /**
+   * The value in pixels for base corner radii. It should be greater than zero. Example: 5.
+   *
+   */
   base?: InputMaybe<Scalars['Int']['input']>;
-  /** The pixel value for large corner radiuses. It should be strictly positive. */
+  /**
+   * The value in pixels for large corner radii. It should be greater than zero. Example: 10.
+   *
+   */
   large?: InputMaybe<Scalars['Int']['input']>;
-  /** The pixel value for small corner radiuses. It should be strictly positive. */
+  /**
+   * The value in pixels for small corner radii. It should be greater than zero. Example: 3.
+   *
+   */
   small?: InputMaybe<Scalars['Int']['input']>;
 };
 
@@ -3522,14 +3623,25 @@ export type CheckoutBrandingCustomFontInput = {
 /** The customizations that apply to specific components or areas of the user interface. */
 export type CheckoutBrandingCustomizations = {
   __typename?: 'CheckoutBrandingCustomizations';
+  /** The customizations for the breadcrumbs that represent a buyer's journey to the checkout. */
+  buyerJourney?: Maybe<CheckoutBrandingBuyerJourney>;
+  /**
+   * The checkout cart link customizations. For example, by setting the visibility field to `HIDDEN`, you can hide the cart icon in the header for one-page checkout, and the cart link in breadcrumbs in three-page checkout.
+   *
+   */
+  cartLink?: Maybe<CheckoutBrandingCartLink>;
   /** The checkboxes customizations. */
   checkbox?: Maybe<CheckoutBrandingCheckbox>;
   /** The choice list customizations. */
   choiceList?: Maybe<CheckoutBrandingChoiceList>;
   /** The form controls customizations. */
   control?: Maybe<CheckoutBrandingControl>;
+  /** The express checkout customizations. */
+  expressCheckout?: Maybe<CheckoutBrandingExpressCheckout>;
   /** The favicon image. */
   favicon?: Maybe<CheckoutBrandingImage>;
+  /** The footer customizations. */
+  footer?: Maybe<CheckoutBrandingFooter>;
   /** The global customizations. */
   global?: Maybe<CheckoutBrandingGlobal>;
   /** The header customizations. */
@@ -3558,14 +3670,25 @@ export type CheckoutBrandingCustomizations = {
 
 /** The input fields used to update the components customizations. */
 export type CheckoutBrandingCustomizationsInput = {
+  /** The customizations for the breadcrumbs that represent a buyer's journey to the checkout. */
+  buyerJourney?: InputMaybe<CheckoutBrandingBuyerJourneyInput>;
+  /**
+   * The input for checkout cart link customizations. For example, by setting the visibility field to `HIDDEN`, you can hide the cart icon in the header for one-page checkout, and the cart link in breadcrumbs in three-page checkout.
+   *
+   */
+  cartLink?: InputMaybe<CheckoutBrandingCartLinkInput>;
   /** The checkboxes customizations. */
   checkbox?: InputMaybe<CheckoutBrandingCheckboxInput>;
   /** The choice list customizations. */
   choiceList?: InputMaybe<CheckoutBrandingChoiceListInput>;
   /** The form controls customizations. */
   control?: InputMaybe<CheckoutBrandingControlInput>;
+  /** The express checkout customizations. */
+  expressCheckout?: InputMaybe<CheckoutBrandingExpressCheckoutInput>;
   /** The favicon image (must be of PNG format). */
   favicon?: InputMaybe<CheckoutBrandingImageInput>;
+  /** The footer customizations. */
+  footer?: InputMaybe<CheckoutBrandingFooterInput>;
   /** The global customizations. */
   global?: InputMaybe<CheckoutBrandingGlobalInput>;
   /** The header customizations. */
@@ -3618,6 +3741,32 @@ export type CheckoutBrandingDesignSystemInput = {
   typography?: InputMaybe<CheckoutBrandingTypographyInput>;
 };
 
+/** The Express Checkout customizations. */
+export type CheckoutBrandingExpressCheckout = {
+  __typename?: 'CheckoutBrandingExpressCheckout';
+  /** The Express Checkout buttons customizations. */
+  button?: Maybe<CheckoutBrandingExpressCheckoutButton>;
+};
+
+/** The Express Checkout button customizations. */
+export type CheckoutBrandingExpressCheckoutButton = {
+  __typename?: 'CheckoutBrandingExpressCheckoutButton';
+  /** The corner radius used for the Express Checkout buttons. */
+  cornerRadius?: Maybe<CheckoutBrandingCornerRadius>;
+};
+
+/** The input fields to use to update the express checkout customizations. */
+export type CheckoutBrandingExpressCheckoutButtonInput = {
+  /** The corner radius used for Express Checkout buttons. */
+  cornerRadius?: InputMaybe<CheckoutBrandingCornerRadius>;
+};
+
+/** The input fields to use to update the Express Checkout customizations. */
+export type CheckoutBrandingExpressCheckoutInput = {
+  /** The Express Checkout buttons customizations. */
+  button?: InputMaybe<CheckoutBrandingExpressCheckoutButtonInput>;
+};
+
 /** A font. */
 export type CheckoutBrandingFont = {
   /** The font sources. */
@@ -3626,7 +3775,12 @@ export type CheckoutBrandingFont = {
   weight?: Maybe<Scalars['Int']['output']>;
 };
 
-/** A font group. */
+/**
+ * A font group. To learn more about updating fonts, refer to the
+ * [checkoutBrandingUpsert](https://shopify.dev/api/admin-graphql/unstable/mutations/checkoutBrandingUpsert)
+ * mutation and the checkout branding [tutorial](https://shopify.dev/docs/apps/checkout/styling).
+ *
+ */
 export type CheckoutBrandingFontGroup = {
   __typename?: 'CheckoutBrandingFontGroup';
   /** The base font. */
@@ -3639,7 +3793,12 @@ export type CheckoutBrandingFontGroup = {
   name?: Maybe<Scalars['String']['output']>;
 };
 
-/** The input fields used to update a font group. */
+/**
+ * The input fields used to update a font group. To learn more about updating fonts, refer to the
+ * [checkoutBrandingUpsert](https://shopify.dev/api/admin-graphql/unstable/mutations/checkoutBrandingUpsert)
+ * mutation and the checkout branding [tutorial](https://shopify.dev/docs/apps/checkout/styling).
+ *
+ */
 export type CheckoutBrandingFontGroupInput = {
   /** A custom font group. */
   customFontGroup?: InputMaybe<CheckoutBrandingCustomFontGroupInput>;
@@ -3682,24 +3841,80 @@ export type CheckoutBrandingFontSizeInput = {
   ratio?: InputMaybe<Scalars['Float']['input']>;
 };
 
+/** A container for the footer section customizations. */
+export type CheckoutBrandingFooter = {
+  __typename?: 'CheckoutBrandingFooter';
+  /** The footer content settings. */
+  content?: Maybe<CheckoutBrandingFooterContent>;
+  /** The footer position. */
+  position?: Maybe<CheckoutBrandingFooterPosition>;
+};
+
+/** The footer content customizations. */
+export type CheckoutBrandingFooterContent = {
+  __typename?: 'CheckoutBrandingFooterContent';
+  /** The visibility settings for footer content. */
+  visibility?: Maybe<CheckoutBrandingVisibility>;
+};
+
+/**
+ * The input fields for footer content customizations.
+ *
+ */
+export type CheckoutBrandingFooterContentInput = {
+  /** The visibility settings for footer content. */
+  visibility?: InputMaybe<CheckoutBrandingVisibility>;
+};
+
+/** The input fields when mutating the checkout footer settings. */
+export type CheckoutBrandingFooterInput = {
+  /** The input field for setting the footer content customizations. */
+  content?: InputMaybe<CheckoutBrandingFooterContentInput>;
+  /** The input field for setting the footer position customizations. */
+  position?: InputMaybe<CheckoutBrandingFooterPosition>;
+};
+
+/** Possible values for the footer position. */
+export enum CheckoutBrandingFooterPosition {
+  /** The End footer position. */
+  End = 'END',
+  /** The Inline footer position. */
+  Inline = 'INLINE'
+}
+
 /** The global customizations. */
 export type CheckoutBrandingGlobal = {
   __typename?: 'CheckoutBrandingGlobal';
-  /** The global corner radius. */
+  /**
+   * The global corner radius setting that overrides all other [corner radius](https://shopify.dev/docs/api/admin-graphql/latest/enums/CheckoutBrandingCornerRadius)
+   * customizations.
+   *
+   */
   cornerRadius?: Maybe<CheckoutBrandingGlobalCornerRadius>;
   /** The global typography customizations. */
   typography?: Maybe<CheckoutBrandingTypographyStyleGlobal>;
 };
 
-/** Possible values for the corner radius. */
+/**
+ * Possible choices to override corner radius customizations on all applicable objects. Note that this selection
+ * can only be used to set the override to `NONE` (0px).
+ *
+ * For more customizations options, set the [corner radius](https://shopify.dev/docs/api/admin-graphql/latest/enums/CheckoutBrandingCornerRadius)
+ * selection on specific objects while leaving the global corner radius unset.
+ *
+ */
 export enum CheckoutBrandingGlobalCornerRadius {
-  /** The None corner radius. */
+  /** Set the global corner radius override to 0px (square corners). */
   None = 'NONE'
 }
 
 /** The input fields used to update the global customizations. */
 export type CheckoutBrandingGlobalInput = {
-  /** The global corner radius. */
+  /**
+   * Select a global corner radius setting that overrides all other [corner radii](https://shopify.dev/docs/api/admin-graphql/latest/enums/CheckoutBrandingCornerRadius)
+   * customizations.
+   *
+   */
   cornerRadius?: InputMaybe<CheckoutBrandingGlobalCornerRadius>;
   /** The global typography customizations. */
   typography?: InputMaybe<CheckoutBrandingTypographyStyleGlobalInput>;
@@ -3804,6 +4019,8 @@ export type CheckoutBrandingLogo = {
   image?: Maybe<Image>;
   /** The maximum width of the logo. */
   maxWidth?: Maybe<Scalars['Int']['output']>;
+  /** The visibility of the logo. */
+  visibility?: Maybe<CheckoutBrandingVisibility>;
 };
 
 /** The input fields used to update the logo customizations. */
@@ -3812,6 +4029,8 @@ export type CheckoutBrandingLogoInput = {
   image?: InputMaybe<CheckoutBrandingImageInput>;
   /** The maximum width of the logo. */
   maxWidth?: InputMaybe<Scalars['Int']['input']>;
+  /** The visibility of the logo. */
+  visibility?: InputMaybe<CheckoutBrandingVisibility>;
 };
 
 /** The main container customizations. */
@@ -3821,6 +4040,8 @@ export type CheckoutBrandingMain = {
   backgroundImage?: Maybe<CheckoutBrandingImage>;
   /** The selected color scheme of the main container. */
   colorScheme?: Maybe<CheckoutBrandingColorSchemeSelection>;
+  /** The settings for the main sections. */
+  section?: Maybe<CheckoutBrandingMainSection>;
 };
 
 /** The input fields used to update the main container customizations. */
@@ -3829,6 +4050,49 @@ export type CheckoutBrandingMainInput = {
   backgroundImage?: InputMaybe<CheckoutBrandingImageInput>;
   /** The selected color scheme for the main container of the checkout. */
   colorScheme?: InputMaybe<CheckoutBrandingColorSchemeSelection>;
+  /** The settings for the main sections. */
+  section?: InputMaybe<CheckoutBrandingMainSectionInput>;
+};
+
+/** The main sections customizations. */
+export type CheckoutBrandingMainSection = {
+  __typename?: 'CheckoutBrandingMainSection';
+  /** The background style of the main sections. */
+  background?: Maybe<CheckoutBrandingBackground>;
+  /** The border for the main sections. */
+  border?: Maybe<CheckoutBrandingSimpleBorder>;
+  /** The border style of the main sections. */
+  borderStyle?: Maybe<CheckoutBrandingBorderStyle>;
+  /** The border width of the main sections. */
+  borderWidth?: Maybe<CheckoutBrandingBorderWidth>;
+  /** The selected color scheme of the main sections. */
+  colorScheme?: Maybe<CheckoutBrandingColorSchemeSelection>;
+  /** The corner radius of the main sections. */
+  cornerRadius?: Maybe<CheckoutBrandingCornerRadius>;
+  /** The padding of the main sections. */
+  padding?: Maybe<CheckoutBrandingSpacingKeyword>;
+  /** The shadow of the main sections. */
+  shadow?: Maybe<CheckoutBrandingShadow>;
+};
+
+/** The input fields used to update the main sections customizations. */
+export type CheckoutBrandingMainSectionInput = {
+  /** The background style of the main sections. */
+  background?: InputMaybe<CheckoutBrandingBackground>;
+  /** The border for the main sections. */
+  border?: InputMaybe<CheckoutBrandingSimpleBorder>;
+  /** The border style of the main sections. */
+  borderStyle?: InputMaybe<CheckoutBrandingBorderStyle>;
+  /** The border width of the main sections. */
+  borderWidth?: InputMaybe<CheckoutBrandingBorderWidth>;
+  /** The selected color scheme for the main sections. */
+  colorScheme?: InputMaybe<CheckoutBrandingColorSchemeSelection>;
+  /** The corner radius of the main sections. */
+  cornerRadius?: InputMaybe<CheckoutBrandingCornerRadius>;
+  /** The padding of the main sections. */
+  padding?: InputMaybe<CheckoutBrandingSpacingKeyword>;
+  /** The shadow of the main sections. */
+  shadow?: InputMaybe<CheckoutBrandingShadow>;
 };
 
 /** The merchandise thumbnails customizations. */
@@ -3851,18 +4115,63 @@ export type CheckoutBrandingMerchandiseThumbnailInput = {
 /** The order summary customizations. */
 export type CheckoutBrandingOrderSummary = {
   __typename?: 'CheckoutBrandingOrderSummary';
-  /** The background image of the order summary. */
+  /** The background image of the order summary container. */
   backgroundImage?: Maybe<CheckoutBrandingImage>;
-  /** The selected color scheme. */
+  /** The selected color scheme of the order summary container. */
   colorScheme?: Maybe<CheckoutBrandingColorSchemeSelection>;
+  /** The settings for the order summary sections. */
+  section?: Maybe<CheckoutBrandingOrderSummarySection>;
 };
 
-/** The input fields used to update the order summary customizations. */
+/** The input fields used to update the order summary container customizations. */
 export type CheckoutBrandingOrderSummaryInput = {
-  /** The background image of the order summary (must not be of SVG format). */
+  /** The background image of the order summary container (must not be of SVG format). */
   backgroundImage?: InputMaybe<CheckoutBrandingImageInput>;
-  /** The selected color scheme for the order summary area of the checkout. */
+  /** The selected color scheme for the order summary container of the checkout. */
   colorScheme?: InputMaybe<CheckoutBrandingColorSchemeSelection>;
+  /** The settings for the order summary sections. */
+  section?: InputMaybe<CheckoutBrandingOrderSummarySectionInput>;
+};
+
+/** The order summary sections customizations. */
+export type CheckoutBrandingOrderSummarySection = {
+  __typename?: 'CheckoutBrandingOrderSummarySection';
+  /** The background style of the order summary sections. */
+  background?: Maybe<CheckoutBrandingBackground>;
+  /** The border for the order summary sections. */
+  border?: Maybe<CheckoutBrandingSimpleBorder>;
+  /** The border style of the order summary sections. */
+  borderStyle?: Maybe<CheckoutBrandingBorderStyle>;
+  /** The border width of the order summary sections. */
+  borderWidth?: Maybe<CheckoutBrandingBorderWidth>;
+  /** The selected color scheme of the order summary sections. */
+  colorScheme?: Maybe<CheckoutBrandingColorSchemeSelection>;
+  /** The corner radius of the order summary sections. */
+  cornerRadius?: Maybe<CheckoutBrandingCornerRadius>;
+  /** The padding of the order summary sections. */
+  padding?: Maybe<CheckoutBrandingSpacingKeyword>;
+  /** The shadow of the order summary sections. */
+  shadow?: Maybe<CheckoutBrandingShadow>;
+};
+
+/** The input fields used to update the order summary sections customizations. */
+export type CheckoutBrandingOrderSummarySectionInput = {
+  /** The background style of the order summary sections. */
+  background?: InputMaybe<CheckoutBrandingBackground>;
+  /** The border for the order summary sections. */
+  border?: InputMaybe<CheckoutBrandingSimpleBorder>;
+  /** The border style of the order summary sections. */
+  borderStyle?: InputMaybe<CheckoutBrandingBorderStyle>;
+  /** The border width of the order summary sections. */
+  borderWidth?: InputMaybe<CheckoutBrandingBorderWidth>;
+  /** The selected color scheme for the order summary sections. */
+  colorScheme?: InputMaybe<CheckoutBrandingColorSchemeSelection>;
+  /** The corner radius of the order summary sections. */
+  cornerRadius?: InputMaybe<CheckoutBrandingCornerRadius>;
+  /** The padding of the order summary sections. */
+  padding?: InputMaybe<CheckoutBrandingSpacingKeyword>;
+  /** The shadow of the order summary sections. */
+  shadow?: InputMaybe<CheckoutBrandingShadow>;
 };
 
 /** The selects customizations. */
@@ -3881,6 +4190,20 @@ export type CheckoutBrandingSelectInput = {
   /** The typography customizations used for selects. */
   typography?: InputMaybe<CheckoutBrandingTypographyStyleInput>;
 };
+
+/** The container shadow. */
+export enum CheckoutBrandingShadow {
+  /** The Base shadow. */
+  Base = 'BASE',
+  /** The Large 100 shadow. */
+  Large_100 = 'LARGE_100',
+  /** The Large 200 shadow. */
+  Large_200 = 'LARGE_200',
+  /** The Small 100 shadow. */
+  Small_100 = 'SMALL_100',
+  /** The Small 200 shadow. */
+  Small_200 = 'SMALL_200'
+}
 
 /** A Shopify font. */
 export type CheckoutBrandingShopifyFont = CheckoutBrandingFont & {
@@ -3976,14 +4299,21 @@ export type CheckoutBrandingTextFieldInput = {
   typography?: InputMaybe<CheckoutBrandingTypographyStyleInput>;
 };
 
-/** The typography settings. */
+/**
+ * The typography settings used for checkout-related text. Use these settings to customize the
+ * font family and size for primary and secondary text elements.
+ *
+ * Refer to the [typography tutorial](https://shopify.dev/docs/apps/checkout/styling/customize-typography)
+ * for further information on typography customization.
+ *
+ */
 export type CheckoutBrandingTypography = {
   __typename?: 'CheckoutBrandingTypography';
   /** A font group used for most components such as text, buttons and form controls. */
   primary?: Maybe<CheckoutBrandingFontGroup>;
   /** A font group used for heading components by default. */
   secondary?: Maybe<CheckoutBrandingFontGroup>;
-  /** The font size. */
+  /** The font size design system (base size in pixels and scaling between different sizes). */
   size?: Maybe<CheckoutBrandingFontSize>;
 };
 
@@ -3995,7 +4325,11 @@ export enum CheckoutBrandingTypographyFont {
   Secondary = 'SECONDARY'
 }
 
-/** The input fields used to update the typography. */
+/**
+ * The input fields used to update the typography. Refer to the [typography tutorial](https://shopify.dev/docs/apps/checkout/styling/customize-typography)
+ * for more information on how to set these fields.
+ *
+ */
 export type CheckoutBrandingTypographyInput = {
   /** A font group used for most components such as text, buttons and form controls. */
   primary?: InputMaybe<CheckoutBrandingFontGroupInput>;
@@ -4027,21 +4361,29 @@ export enum CheckoutBrandingTypographyLetterCase {
   Upper = 'UPPER'
 }
 
-/** Possible values for the font size. */
+/**
+ * Possible choices for the font size.
+ *
+ * Note that the value in pixels of these settings can be customized with the
+ * [typography size](https://shopify.dev/docs/api/admin-graphql/latest/input-objects/CheckoutBrandingFontSizeInput)
+ * object. Refer to the [typography tutorial](https://shopify.dev/docs/apps/checkout/styling/customize-typography)
+ * for more information.
+ *
+ */
 export enum CheckoutBrandingTypographySize {
-  /** The base font size. */
+  /** The base font size. Example: 14px. */
   Base = 'BASE',
-  /** The extra extra large font size. */
+  /** The extra extra large font size. Example: 24px. */
   ExtraExtraLarge = 'EXTRA_EXTRA_LARGE',
-  /** The extra large font size. */
+  /** The extra large font size. Example: 21px. */
   ExtraLarge = 'EXTRA_LARGE',
-  /** The extra small font size. */
+  /** The extra small font size. Example: 10px. */
   ExtraSmall = 'EXTRA_SMALL',
-  /** The large font size. */
+  /** The large font size. Example: 17px. */
   Large = 'LARGE',
-  /** The medium font size. */
+  /** The medium font size. Example: 15px. */
   Medium = 'MEDIUM',
-  /** The small font size. */
+  /** The small font size. Example: 12px. */
   Small = 'SMALL'
 }
 
@@ -4123,6 +4465,14 @@ export type CheckoutBrandingUpsertUserError = DisplayableError & {
 export enum CheckoutBrandingUpsertUserErrorCode {
   /** Unexpected internal error happened. */
   InternalError = 'INTERNAL_ERROR'
+}
+
+/** Possible visibility states. */
+export enum CheckoutBrandingVisibility {
+  /** The Hidden visibility setting. */
+  Hidden = 'HIDDEN',
+  /** The Visible visibility setting. */
+  Visible = 'VISIBLE'
 }
 
 /** A checkout profile defines the branding settings and the UI extensions for a store's checkout. A checkout profile could be published or draft. A store might have at most one published checkout profile, which is used to render their live checkout. The store could also have multiple draft profiles that were created, previewed, and published using the admin checkout editor. */
@@ -10246,6 +10596,8 @@ export enum DeliveryLocationLocalPickupSettingsErrorCode {
 /** The delivery method used by a fulfillment order. */
 export type DeliveryMethod = Node & {
   __typename?: 'DeliveryMethod';
+  /** The Additional information to consider when performing the delivery. */
+  additionalInformation?: Maybe<DeliveryMethodAdditionalInformation>;
   /** The branded promise that was presented to the buyer during checkout.  For example: Shop Promise. */
   brandedPromise?: Maybe<DeliveryBrandedPromise>;
   /** A globally-unique ID. */
@@ -10258,6 +10610,18 @@ export type DeliveryMethod = Node & {
   minDeliveryDateTime?: Maybe<Scalars['DateTime']['output']>;
   /** A reference to the shipping method. */
   serviceCode?: Maybe<Scalars['String']['output']>;
+};
+
+/**
+ * Additional information included on a delivery method that will help during the delivery process.
+ *
+ */
+export type DeliveryMethodAdditionalInformation = {
+  __typename?: 'DeliveryMethodAdditionalInformation';
+  /** The delivery instructions to follow when performing the delivery. */
+  instructions?: Maybe<Scalars['String']['output']>;
+  /** The phone number to contact when performing the delivery. */
+  phone?: Maybe<Scalars['String']['output']>;
 };
 
 /**
@@ -13024,7 +13388,7 @@ export type DraftOrder = CommentEventSubject & HasEvents & HasLocalizationExtens
   localizationExtensions: LocalizationExtensionConnection;
   /** The name of the selected market. */
   marketName: Scalars['String']['output'];
-  /** The selected market region country code for the draft order. */
+  /** The selected country code that determines the pricing of the draft order. */
   marketRegionCountryCode: CountryCode;
   /** Returns a metafield by namespace and key that belongs to the resource. */
   metafield?: Maybe<Metafield>;
@@ -13525,7 +13889,7 @@ export type DraftOrderInput = {
   lineItems?: InputMaybe<Array<DraftOrderLineItemInput>>;
   /** The localization extensions attached to the draft order. For example, Tax IDs. */
   localizationExtensions?: InputMaybe<Array<LocalizationExtensionInput>>;
-  /** The selected market region country code for the draft order. */
+  /** The selected country code that determines the pricing of the draft order. */
   marketRegionCountryCode?: InputMaybe<CountryCode>;
   /**
    * Metafields attached to the draft order.
@@ -17129,7 +17493,9 @@ export enum FulfillmentOrderSortKeys {
    * Don't use this sort key when no search query is specified.
    *
    */
-  Relevance = 'RELEVANCE'
+  Relevance = 'RELEVANCE',
+  /** Sort by the `updated_at` value. */
+  UpdatedAt = 'UPDATED_AT'
 }
 
 /** The input fields for the split applied to the fulfillment order. */
@@ -17429,6 +17795,11 @@ export type FulfillmentService = {
   /**
    * Whether the fulfillment service uses the [fulfillment order based workflow](https://shopify.dev/apps/fulfillment/fulfillment-service-apps/manage-fulfillments) for managing fulfillments.
    *
+   * As the migration is now finished, the `fulfillmentOrdersOptIn` property is [deprecated](
+   * https://shopify.dev/changelog/deprecation-of-the-fulfillmentservice-fulfillmentordersoptin-field)
+   * and is always set to `true` on correctly functioning fulfillment services.
+   *
+   * @deprecated Migration period ended. All correctly functioning fulfillment services have `fulfillmentOrdersOptIn` set to `true`.
    */
   fulfillmentOrdersOptIn: Scalars['Boolean']['output'];
   /** Human-readable unique identifier for this fulfillment service. */
@@ -19800,7 +20171,7 @@ export type LineItem = Node & {
   product?: Maybe<Product>;
   /** The number of variant units ordered. */
   quantity: Scalars['Int']['output'];
-  /** The line item's quantity, minus the removed quantity. */
+  /** The line item's quantity, minus the refunded quantity. */
   refundableQuantity: Scalars['Int']['output'];
   /** Whether physical shipping is required for the variant. */
   requiresShipping: Scalars['Boolean']['output'];
@@ -19966,7 +20337,7 @@ export type LineItemMutable = Node & {
   product?: Maybe<Product>;
   /** The number of variant units ordered. */
   quantity: Scalars['Int']['output'];
-  /** The line item's quantity, minus the removed quantity. */
+  /** The line item's quantity, minus the refunded quantity. */
   refundableQuantity: Scalars['Int']['output'];
   /** Whether physical shipping is required for the variant. */
   requiresShipping: Scalars['Boolean']['output'];
@@ -21735,20 +22106,20 @@ export enum MarketUserErrorCode {
 export type MarketWebPresence = Node & {
   __typename?: 'MarketWebPresence';
   /**
-   * The ISO codes for the alternate locales. When a domain is used, these locales will be
+   * The ShopLocale object for the alternate locales. When a domain is used, these locales will be
    * available as language-specific subfolders. For example, if English is an
    * alternate locale, and `example.ca` is the market’s domain, then
    * `example.ca/en` will load in English.
    *
    */
-  alternateLocales: Array<Scalars['String']['output']>;
+  alternateLocales: Array<ShopLocale>;
   /**
-   * The ISO code for the default locale. When a domain is used, this is the locale that will
+   * The ShopLocale object for the default locale. When a domain is used, this is the locale that will
    * be used when the domain root is accessed. For example, if French is the default locale,
    * and `example.ca` is the market’s domain, then `example.ca` will load in French.
    *
    */
-  defaultLocale: Scalars['String']['output'];
+  defaultLocale: ShopLocale;
   /**
    * The web presence’s domain.
    * This field will be null if `subfolderSuffix` isn't null.
@@ -23925,7 +24296,7 @@ export enum MetafieldOwnerType {
  * The resource referenced by the metafield value.
  *
  */
-export type MetafieldReference = Collection | GenericFile | MediaImage | Metaobject | OnlineStorePage | Product | ProductVariant | Video;
+export type MetafieldReference = Collection | GenericFile | MediaImage | Metaobject | Model3d | OnlineStorePage | Product | ProductVariant | Video;
 
 /**
  * An auto-generated type for paginating through multiple MetafieldReferences.
@@ -25188,7 +25559,18 @@ export type Mutation = {
   catalogDelete?: Maybe<CatalogDeletePayload>;
   /** Updates an existing catalog. */
   catalogUpdate?: Maybe<CatalogUpdatePayload>;
-  /** Updates the checkout branding settings for a [checkout profile](https://shopify.dev/api/admin-graphql/unstable/queries/checkoutProfile). If the settings don't exist, then new settings are created. The checkout branding settings applied to a published checkout profile will be immediately visible within the store's checkout. The checkout branding settings applied to a draft checkout profile could be previewed within the admin checkout editor. */
+  /**
+   * Updates the checkout branding settings for a
+   * [checkout profile](https://shopify.dev/api/admin-graphql/unstable/queries/checkoutProfile).
+   *
+   * If the settings don't exist, then new settings are created. The checkout branding settings applied to a
+   * published checkout profile will be immediately visible within the store's checkout. The checkout branding
+   * settings applied to a draft checkout profile could be previewed within the admin checkout editor.
+   *
+   * To learn more about updating checkout branding settings, refer to the checkout branding
+   * [tutorial](https://shopify.dev/docs/apps/checkout/styling).
+   *
+   */
   checkoutBrandingUpsert?: Maybe<CheckoutBrandingUpsertPayload>;
   /** Adds products to a collection. */
   collectionAddProducts?: Maybe<CollectionAddProductsPayload>;
@@ -25923,6 +26305,8 @@ export type Mutation = {
    *
    */
   orderOpen?: Maybe<OrderOpenPayload>;
+  /** Create a risk assessment for an order. */
+  orderRiskAssessmentCreate?: Maybe<OrderRiskAssessmentCreatePayload>;
   /** Updates the fields of an order. */
   orderUpdate?: Maybe<OrderUpdatePayload>;
   /** Activates and deactivates payment customizations. */
@@ -27757,7 +28141,6 @@ export type MutationFulfillmentOrdersSetFulfillmentDeadlineArgs = {
 /** The schema's entry point for all mutation operations. */
 export type MutationFulfillmentServiceCreateArgs = {
   callbackUrl: Scalars['URL']['input'];
-  fulfillmentOrdersOptIn: Scalars['Boolean']['input'];
   inventoryManagement?: InputMaybe<Scalars['Boolean']['input']>;
   name: Scalars['String']['input'];
   permitsSkuSharing?: InputMaybe<Scalars['Boolean']['input']>;
@@ -27775,8 +28158,8 @@ export type MutationFulfillmentServiceDeleteArgs = {
 /** The schema's entry point for all mutation operations. */
 export type MutationFulfillmentServiceUpdateArgs = {
   callbackUrl?: InputMaybe<Scalars['URL']['input']>;
-  fulfillmentOrdersOptIn?: InputMaybe<Scalars['Boolean']['input']>;
   id: Scalars['ID']['input'];
+  inventoryManagement?: InputMaybe<Scalars['Boolean']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   permitsSkuSharing?: InputMaybe<Scalars['Boolean']['input']>;
   trackingSupport?: InputMaybe<Scalars['Boolean']['input']>;
@@ -28286,6 +28669,12 @@ export type MutationOrderMarkAsPaidArgs = {
 /** The schema's entry point for all mutation operations. */
 export type MutationOrderOpenArgs = {
   input: OrderOpenInput;
+};
+
+
+/** The schema's entry point for all mutation operations. */
+export type MutationOrderRiskAssessmentCreateArgs = {
+  orderRiskAssessmentInput: OrderRiskAssessmentCreateInput;
 };
 
 
@@ -29906,6 +30295,7 @@ export type Order = CommentEventSubject & HasEvents & HasLocalizationExtensions 
    * Use the [`FulfillmentOrder`](https://shopify.dev/api/admin-graphql/latest/objects/fulfillmentorder)
    * object for up to date fulfillment location information.
    *
+   * @deprecated Use `fulfillmentOrders` to get the fulfillment location for the order
    */
   physicalLocation?: Maybe<Location>;
   /** The PO number associated with the order. */
@@ -29981,9 +30371,17 @@ export type Order = CommentEventSubject & HasEvents & HasLocalizationExtensions 
   returnStatus: OrderReturnStatus;
   /** A list of returns for the order. */
   returns: ReturnConnection;
-  /** The fraud risk level of the order. */
+  /** The risk characteristics for the order. */
+  risk: OrderRiskSummary;
+  /**
+   * The fraud risk level of the order.
+   * @deprecated This field is deprecated in version 2024-04. Please use OrderRiskAssessment.riskLevel
+   */
   riskLevel: OrderRiskLevel;
-  /** A list of risks associated with the order. */
+  /**
+   * A list of risks associated with the order.
+   * @deprecated This field is deprecated in version 2024-04. Please use OrderRiskAssessment
+   */
   risks: Array<OrderRisk>;
   /** The mailing address of the customer. */
   shippingAddress?: Maybe<MailingAddress>;
@@ -31180,20 +31578,93 @@ export enum OrderReturnStatus {
   ReturnRequested = 'RETURN_REQUESTED'
 }
 
-/** Represents a fraud check on an order. */
+/**
+ * Represents a fraud check on an order.
+ * As of version 2024-04 this resource is deprecated. Risk Assessments can be queried via the
+ * [OrderRisk Assessments API](https://shopify.dev/api/admin-graphql/2024-04/objects/OrderRiskAssessment).
+ *
+ */
 export type OrderRisk = {
   __typename?: 'OrderRisk';
-  /** Whether the risk level is shown in the Shopify admin. If false, then this order risk is ignored when Shopify determines the overall risk level for the order. */
+  /**
+   * Whether the risk level is shown in the Shopify admin. If false, then this order risk is ignored when Shopify determines the overall risk level for the order.
+   * @deprecated This field is deprecated in version 2024-04
+   */
   display: Scalars['Boolean']['output'];
   /**
    * The likelihood that an order is fraudulent, based on this order risk.
    *
    * The level can be set by Shopify risk analysis or by an app.
    *
+   * @deprecated This field is deprecated in version 2024-04. Please use OrderRiskAssessment.riskLevel
    */
   level?: Maybe<OrderRiskLevel>;
-  /** The risk message that's shown to the merchant in the Shopify admin. */
+  /**
+   * The risk message that's shown to the merchant in the Shopify admin.
+   * @deprecated This field is deprecated in version 2024-04
+   */
   message?: Maybe<Scalars['String']['output']>;
+};
+
+/** The risk assessments for an order. */
+export type OrderRiskAssessment = {
+  __typename?: 'OrderRiskAssessment';
+  /** Optional facts used to describe the risk assessment. */
+  facts: Array<RiskFact>;
+  /** The app that provided the assessment, `null` if the assessment was provided by Shopify. */
+  provider?: Maybe<App>;
+  /** The likelihood that the order is fraudulent, based on this risk assessment. */
+  riskLevel: RiskAssessmentResult;
+};
+
+/** The input fields for an order risk assessment. */
+export type OrderRiskAssessmentCreateInput = {
+  /** The list of facts used to determine the fraud assessment. */
+  facts: Array<OrderRiskAssessmentFactInput>;
+  /** The ID of the order receiving the fraud assessment. */
+  orderId: Scalars['ID']['input'];
+  /** The risk level of the fraud assessment. */
+  riskLevel: RiskAssessmentResult;
+};
+
+/** Return type for `orderRiskAssessmentCreate` mutation. */
+export type OrderRiskAssessmentCreatePayload = {
+  __typename?: 'OrderRiskAssessmentCreatePayload';
+  /** The order risk assessment created. */
+  orderRiskAssessment?: Maybe<OrderRiskAssessment>;
+  /** The list of errors that occurred from executing the mutation. */
+  userErrors: Array<OrderRiskAssessmentCreateUserError>;
+};
+
+/** An error that occurs during the execution of `OrderRiskAssessmentCreate`. */
+export type OrderRiskAssessmentCreateUserError = DisplayableError & {
+  __typename?: 'OrderRiskAssessmentCreateUserError';
+  /** The error code. */
+  code?: Maybe<OrderRiskAssessmentCreateUserErrorCode>;
+  /** The path to the input field that caused the error. */
+  field?: Maybe<Array<Scalars['String']['output']>>;
+  /** The error message. */
+  message: Scalars['String']['output'];
+};
+
+/** Possible error codes that can be returned by `OrderRiskAssessmentCreateUserError`. */
+export enum OrderRiskAssessmentCreateUserErrorCode {
+  /** The input value is invalid. */
+  Invalid = 'INVALID',
+  /** The record with the ID used as the input value couldn't be found. */
+  NotFound = 'NOT_FOUND',
+  /** The order is marked as fulfilled and can no longer accept new risk assessments. */
+  OrderAlreadyFulfilled = 'ORDER_ALREADY_FULFILLED',
+  /** Too many facts were provided for the risk assessment. */
+  TooManyFacts = 'TOO_MANY_FACTS'
+}
+
+/** The input fields to create a fact on an order risk assessment. */
+export type OrderRiskAssessmentFactInput = {
+  /** A description of the fact. Large values are truncated to 256 characters. */
+  description: Scalars['String']['input'];
+  /** Indicates whether the fact is a negative, neutral or positive contributor with regards to risk. */
+  sentiment: RiskFactSentiment;
 };
 
 /** The likelihood that an order is fraudulent. */
@@ -31205,6 +31676,27 @@ export enum OrderRiskLevel {
   /** There is a medium level of risk that this order is fraudulent. */
   Medium = 'MEDIUM'
 }
+
+/** List of possible values for an OrderRiskRecommendation recommendation. */
+export enum OrderRiskRecommendationResult {
+  /** Recommends fulfilling the order. */
+  Accept = 'ACCEPT',
+  /** Recommends cancelling the order. */
+  Cancel = 'CANCEL',
+  /** Recommends investigating the order by contacting buyers. */
+  Investigate = 'INVESTIGATE',
+  /** There is no recommended action for the order. */
+  None = 'NONE'
+}
+
+/** Summary of risk characteristics for an order. */
+export type OrderRiskSummary = {
+  __typename?: 'OrderRiskSummary';
+  /** The list of risk assessments for the order. */
+  assessments: Array<OrderRiskAssessment>;
+  /** The recommendation for the order based on the results of the risk assessments. This suggests the action the merchant should take with regards to its risk of fraud. */
+  recommendation: OrderRiskRecommendationResult;
+};
 
 /** The set of valid sort keys for the Order query. */
 export enum OrderSortKeys {
@@ -31438,13 +31930,6 @@ export type OrderTransaction = Node & {
   paymentMethod?: Maybe<PaymentMethods>;
   /** Date and time when the transaction was processed. */
   processedAt?: Maybe<Scalars['DateTime']['output']>;
-  /**
-   * The transaction receipt that the payment gateway attaches to the transaction.
-   * The value of this field depends on which payment gateway processed the transaction.
-   *
-   * @deprecated Use `receiptJson` instead.
-   */
-  receipt?: Maybe<Scalars['String']['output']>;
   /**
    * The transaction receipt that the payment gateway attaches to the transaction.
    * The value of this field depends on which payment gateway processed the transaction.
@@ -34196,6 +34681,7 @@ export type ProductMediaArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  query?: InputMaybe<Scalars['String']['input']>;
   reverse?: InputMaybe<Scalars['Boolean']['input']>;
   sortKey?: InputMaybe<ProductMediaSortKeys>;
 };
@@ -36240,7 +36726,9 @@ export type PubSubWebhookSubscriptionCreateUserError = DisplayableError & {
 /** Possible error codes that can be returned by `PubSubWebhookSubscriptionCreateUserError`. */
 export enum PubSubWebhookSubscriptionCreateUserErrorCode {
   /** Invalid parameters provided. */
-  InvalidParameters = 'INVALID_PARAMETERS'
+  InvalidParameters = 'INVALID_PARAMETERS',
+  /** Address for this topic has already been taken. */
+  Taken = 'TAKEN'
 }
 
 /**
@@ -37172,7 +37660,14 @@ export type QueryRoot = {
    * @deprecated Use `publications` instead.
    */
   channels: ChannelConnection;
-  /** Returns the checkout branding settings for a checkout profile. */
+  /**
+   * Returns the visual customizations for checkout for a given checkout profile.
+   *
+   * To learn more about updating checkout branding settings, refer to the
+   * [checkoutBrandingUpsert](https://shopify.dev/api/admin-graphql/unstable/mutations/checkoutBrandingUpsert)
+   * mutation and the checkout branding [tutorial](https://shopify.dev/docs/apps/checkout/styling).
+   *
+   */
   checkoutBranding?: Maybe<CheckoutBranding>;
   /** A checkout profile on a shop. */
   checkoutProfile?: Maybe<CheckoutProfile>;
@@ -40551,6 +41046,39 @@ export enum ReverseFulfillmentOrderThirdPartyConfirmationStatus {
   Rejected = 'REJECTED'
 }
 
+/** List of possible values for a RiskAssessment result. */
+export enum RiskAssessmentResult {
+  /** Indicates a high likelihood that the order is fraudulent. */
+  High = 'HIGH',
+  /** Indicates a low likelihood that the order is fraudulent. */
+  Low = 'LOW',
+  /** Indicates a medium likelihood that the order is fraudulent. */
+  Medium = 'MEDIUM',
+  /** Indicates that the risk assessment will not provide a recommendation for the order. */
+  None = 'NONE',
+  /** Indicates that the risk assessment is still pending. */
+  Pending = 'PENDING'
+}
+
+/** A risk fact belongs to a single risk assessment and serves to provide additional context for an assessment. Risk facts are not necessarily tied to the result of the recommendation. */
+export type RiskFact = {
+  __typename?: 'RiskFact';
+  /** A description of the fact. */
+  description: Scalars['String']['output'];
+  /** Indicates whether the fact is a negative, neutral or positive contributor with regards to risk. */
+  sentiment: RiskFactSentiment;
+};
+
+/** List of possible values for a RiskFact sentiment. */
+export enum RiskFactSentiment {
+  /** A negative contributor that increases the risk. */
+  Negative = 'NEGATIVE',
+  /** A neutral contributor with regards to risk. */
+  Neutral = 'NEUTRAL',
+  /** A positive contributor that lowers the risk. */
+  Positive = 'POSITIVE'
+}
+
 /** A row count represents rows on background operation. */
 export type RowCount = {
   __typename?: 'RowCount';
@@ -42603,7 +43131,10 @@ export type ShippingLine = {
    * @deprecated Use `discountedPriceSet` instead.
    */
   discountedPrice: MoneyV2;
-  /** The pre-tax shipping price with discounts applied. */
+  /**
+   * The shipping price after applying discounts. If the parent order.taxesIncluded field is true, then this price includes taxes. If not, it's the pre-tax price.
+   *
+   */
   discountedPriceSet: MoneyBag;
   /** A globally-unique ID. */
   id?: Maybe<Scalars['ID']['output']>;
@@ -49325,9 +49856,10 @@ export enum WebhookSubscriptionSortKeys {
  * The supported topics for webhook subscriptions. You can use webhook subscriptions to receive
  * notifications about particular events in a shop.
  *
- * You don't create webhook subscriptions to
- * [mandatory webhooks](https://shopify.dev/apps/webhooks/configuration/mandatory-webhooks).
- * Instead, you configure mandatory webhooks in your Partner Dashboard as part of your app setup.
+ * You create mandatory webhooks either via the
+ * [Partner Dashboard](https://shopify.dev/apps/webhooks/configuration/mandatory-webhooks#subscribe-to-privacy-webhooks)
+ * or by updating the
+ * [app configuration TOML](https://shopify.dev/apps/tools/cli/configuration#app-configuration-file-example).
  *
  */
 export enum WebhookSubscriptionTopic {
@@ -49574,6 +50106,15 @@ export enum WebhookSubscriptionTopic {
   OrdersPaid = 'ORDERS_PAID',
   /** The webhook topic for `orders/partially_fulfilled` events. Occurs whenever an order is partially fulfilled. Requires at least one of the following scopes: read_orders, read_marketplace_orders. */
   OrdersPartiallyFulfilled = 'ORDERS_PARTIALLY_FULFILLED',
+  /**
+   * The webhook topic for `orders/risk_assessment_changed` events. Triggers when a new risk assessment is available on the order.
+   * This can be the first or a subsequent risk assessment.
+   * New risk assessments can be provided until the order is marked as fulfilled.
+   * Includes the risk level, risk facts and the provider. Does not include the risk recommendation for the order.
+   * The order and shop are identified in the headers.
+   *  Requires the `read_orders` scope.
+   */
+  OrdersRiskAssessmentChanged = 'ORDERS_RISK_ASSESSMENT_CHANGED',
   /** The webhook topic for `orders/shopify_protect_eligibility_changed` events. Occurs whenever Shopify Protect's eligibility for an order is changed. Requires the `read_orders` scope. */
   OrdersShopifyProtectEligibilityChanged = 'ORDERS_SHOPIFY_PROTECT_ELIGIBILITY_CHANGED',
   /** The webhook topic for `orders/updated` events. Occurs whenever an order is updated. Requires at least one of the following scopes: read_orders, read_marketplace_orders, read_buyer_membership_orders. */
@@ -49792,3 +50333,110 @@ export type DeliveryProfileUpdatePayload = {
   /** The list of errors that occurred from executing the mutation. */
   userErrors: Array<UserError>;
 };
+
+/** One possible value for a given Enum. Enum values are unique values, not a placeholder for a string or numeric value. However an Enum value is returned in a JSON response as a string. */
+export type __EnumValue = {
+  __typename?: '__EnumValue';
+  name: Scalars['String']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  isDeprecated: Scalars['Boolean']['output'];
+  deprecationReason?: Maybe<Scalars['String']['output']>;
+};
+
+/** Object and Interface types are described by a list of Fields, each of which has a name, potentially a list of arguments, and a return type. */
+export type __Field = {
+  __typename?: '__Field';
+  name: Scalars['String']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  args: Array<__InputValue>;
+  type: __Type;
+  isDeprecated: Scalars['Boolean']['output'];
+  deprecationReason?: Maybe<Scalars['String']['output']>;
+};
+
+
+/** Object and Interface types are described by a list of Fields, each of which has a name, potentially a list of arguments, and a return type. */
+export type __FieldArgsArgs = {
+  includeDeprecated?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** Arguments provided to Fields or Directives and the input fields of an InputObject are represented as Input Values which describe their type and optionally a default value. */
+export type __InputValue = {
+  __typename?: '__InputValue';
+  name: Scalars['String']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  type: __Type;
+  /** A GraphQL-formatted string representing the default value for this input value. */
+  defaultValue?: Maybe<Scalars['String']['output']>;
+  isDeprecated: Scalars['Boolean']['output'];
+  deprecationReason?: Maybe<Scalars['String']['output']>;
+};
+
+/**
+ * The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.
+ *
+ * Depending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name, description and optional `specifiedByURL`, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.
+ */
+export type __Type = {
+  __typename?: '__Type';
+  kind: __TypeKind;
+  name?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  specifiedByURL?: Maybe<Scalars['String']['output']>;
+  fields?: Maybe<Array<__Field>>;
+  interfaces?: Maybe<Array<__Type>>;
+  possibleTypes?: Maybe<Array<__Type>>;
+  enumValues?: Maybe<Array<__EnumValue>>;
+  inputFields?: Maybe<Array<__InputValue>>;
+  ofType?: Maybe<__Type>;
+};
+
+
+/**
+ * The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.
+ *
+ * Depending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name, description and optional `specifiedByURL`, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.
+ */
+export type __TypeFieldsArgs = {
+  includeDeprecated?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+/**
+ * The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.
+ *
+ * Depending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name, description and optional `specifiedByURL`, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.
+ */
+export type __TypeEnumValuesArgs = {
+  includeDeprecated?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+/**
+ * The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.
+ *
+ * Depending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name, description and optional `specifiedByURL`, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.
+ */
+export type __TypeInputFieldsArgs = {
+  includeDeprecated?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** An enum describing what kind of type a given `__Type` is. */
+export enum __TypeKind {
+  /** Indicates this type is a scalar. */
+  Scalar = 'SCALAR',
+  /** Indicates this type is an object. `fields` and `interfaces` are valid fields. */
+  Object = 'OBJECT',
+  /** Indicates this type is an interface. `fields`, `interfaces`, and `possibleTypes` are valid fields. */
+  Interface = 'INTERFACE',
+  /** Indicates this type is a union. `possibleTypes` is a valid field. */
+  Union = 'UNION',
+  /** Indicates this type is an enum. `enumValues` is a valid field. */
+  Enum = 'ENUM',
+  /** Indicates this type is an input object. `inputFields` is a valid field. */
+  InputObject = 'INPUT_OBJECT',
+  /** Indicates this type is a list. `ofType` is a valid field. */
+  List = 'LIST',
+  /** Indicates this type is a non-null. `ofType` is a valid field. */
+  NonNull = 'NON_NULL'
+}

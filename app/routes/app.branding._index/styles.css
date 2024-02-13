@@ -1,0 +1,11 @@
+.ColourChoice {
+  position: relative;
+
+  padding: var(--p-space-200);
+
+  border-radius: var(--p-border-radius-300);
+  cursor: pointer;
+}
+.ColourChoice:hover {
+  background-color: var(--p-color-bg-surface-hover);
+}
