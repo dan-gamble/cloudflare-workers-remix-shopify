@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs, LinksFunction } from '@remix-run/cloudflare'
 import { json } from '@remix-run/cloudflare'
-import { useActionData, useFetcher, useNavigation, useSearchParams, useSubmit } from '@remix-run/react'
+import { useActionData, useFetcher, useNavigation, useSubmit } from '@remix-run/react'
 import { Banner, BlockStack, Card, Icon, Layout, Page, PageActions, Select, Spinner, Text } from '@shopify/polaris'
 import { ExportIcon, ImportIcon, TextFontIcon, ViewIcon } from '@shopify/polaris-icons'
 import { TextField } from '~/components/text-field'
@@ -20,6 +20,7 @@ import { useCallback, useEffect } from 'react'
 import { ExportModal } from '~/routes/app.branding._index/components/modals/export-modal'
 import { ImportModal } from '~/routes/app.branding._index/components/modals/import-modal'
 import { invariant } from '@epic-web/invariant'
+import { useShopifySearchParams } from '~/hooks/use-shopify-search-params'
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: styles },
@@ -54,7 +55,7 @@ export default function CheckoutBranding () {
   const actionData = useActionData<typeof action>()
   const updateShopifyFontFamilies = useFetcher()
   const navigation = useNavigation()
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useShopifySearchParams()
   const submit = useSubmit()
 
   const checkoutBranding = useCheckoutBranding()
