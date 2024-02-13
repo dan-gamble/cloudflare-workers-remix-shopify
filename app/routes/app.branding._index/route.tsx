@@ -1,7 +1,7 @@
 import type { ActionFunctionArgs, LinksFunction } from '@remix-run/cloudflare'
 import { json } from '@remix-run/cloudflare'
 import { useActionData, useFetcher, useNavigation, useSearchParams, useSubmit } from '@remix-run/react'
-import { BlockStack, Card, Icon, Layout, Page, PageActions, Select, Spinner, Text } from '@shopify/polaris'
+import { Banner, BlockStack, Card, Icon, Layout, Page, PageActions, Select, Spinner, Text } from '@shopify/polaris'
 import { ExportIcon, ImportIcon, TextFontIcon, ViewIcon } from '@shopify/polaris-icons'
 import { TextField } from '~/components/text-field'
 import { useCheckoutBranding, useCheckoutBrandingData } from '~/routes/app.branding/route'
@@ -19,6 +19,7 @@ import { parseGid } from '@shopify/admin-graphql-api-utilities'
 import { useCallback, useEffect } from 'react'
 import { ExportModal } from '~/routes/app.branding._index/components/modals/export-modal'
 import { ImportModal } from '~/routes/app.branding._index/components/modals/import-modal'
+import { invariant } from '@epic-web/invariant'
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: styles },
@@ -60,6 +61,9 @@ export default function CheckoutBranding () {
   const checkoutBrandingData = useCheckoutBrandingData()
 
   const isUpdatingShopifyFontFamilies = updateShopifyFontFamilies.state === 'loading' || updateShopifyFontFamilies.state === 'submitting'
+
+  const currentCheckoutProfile = checkoutBrandingData.branding.profiles.find(profile => profile.id === checkoutBrandingData.branding.profileId)
+  invariant(currentCheckoutProfile, 'Current checkout profile not found')
 
   function handleSubmit () {
     return submit({
@@ -189,7 +193,7 @@ export default function CheckoutBranding () {
                       options={[
                         ...checkoutBrandingData.branding.profiles.map(profile => (
                           {
-                            label: profile.name,
+                            label: `${profile.name}${profile.isPublished ? ' (published)' : ''}`,
                             value: profile.id,
                           }
                         )),
@@ -203,6 +207,15 @@ export default function CheckoutBranding () {
                         })
                       }}
                     />
+
+                    {currentCheckoutProfile.isPublished && (
+                      <Banner
+                        title="Warning"
+                        tone="warning"
+                      >
+                        <Text as="p">You are editing the <Text as="span" fontWeight="bold">published</Text> checkout profile</Text>
+                      </Banner>
+                    )}
                   </BlockStack>
                 </BlockStack>
               </Card>
