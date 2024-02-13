@@ -18,7 +18,7 @@ export function ColoursTab () {
 
   return (
     <>
-      <Box padding="500">
+      <Box paddingInline="500" paddingBlockStart="200" paddingBlockEnd="500">
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">Global</Text>
 

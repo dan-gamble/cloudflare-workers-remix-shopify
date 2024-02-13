@@ -47,8 +47,6 @@ export function useBrandingForms (
         .filter(form => form.isDirty)
         .map(form => form.toDirtyInputValues())
         .reduce((acc, values) => {
-          console.log({ acc, values })
-
           return merge(acc, values)
         }, {})
       // TODO: Safe parse

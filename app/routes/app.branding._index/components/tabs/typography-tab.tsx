@@ -56,7 +56,15 @@ export function TypographyTab () {
         </Box>
       )}
 
-      <Box padding="500">
+      <Box {
+        ...shouldShowCustomFontsBanner
+          ? { padding: '500' }
+          : {
+            paddingInline: '500',
+            paddingBlockStart: '200',
+            paddingBlockEnd: '500',
+          }
+      }>
         <BlockStack gap="200">
           <Text variant="headingSm" as="h3">Primary font</Text>
 
